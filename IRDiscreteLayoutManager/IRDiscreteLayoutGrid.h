@@ -7,7 +7,8 @@
 //
 
 
-//	The layout grid.  By design, the layout grid is only a dummy holder for intelligent layout areas.  The layout areas determine their own position, and the grid only manages them like a herd of cats
+//	The layout grid.  By design, the layout grid is only a dummy holder for intelligent layout areas.  The layout areas determine their own position, and the grid only manages them like a herd of cats.
+//	The validator block takes an incoming item, and checks if it is suitabble for the layout area.  Generally, it always returns YES, though it might return NO if the view returned by layout area’s display block is specialized for some kind of contents.
 
 @class IRDiscreteLayoutGrid;
 
@@ -16,6 +17,7 @@
 
 typedef BOOL (^IRDiscreteLayoutItemValidatorBlock) (IRDiscreteLayoutGrid *self, id anItem);
 typedef CGRect (^IRDiscreteLayoutItemLayoutBlock) (IRDiscreteLayoutGrid *self, id anItem);
+typedef id (^IRDiscreteLayoutItemDisplayBlock) (IRDiscreteLayoutGrid *self, id anItem);
 
 #endif
 

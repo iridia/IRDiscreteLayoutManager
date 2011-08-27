@@ -36,7 +36,13 @@
 
 @protocol IRDiscreteLayoutManagerDelegate <NSObject>
 
+@optional
+
 - (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager nextGridForContentsUsingGrid:(IRDiscreteLayoutGrid *)proposedGrid;
+
+//	Not implemented: manager uses its own determination
+//	Returns nil: manager stops layout immediately
+//	Returns anything: manager uses returned grid
 
 @end
 
