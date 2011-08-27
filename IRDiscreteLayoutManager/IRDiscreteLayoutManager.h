@@ -43,11 +43,12 @@
 
 @optional
 
-- (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager nextGridForContentsUsingGrid:(IRDiscreteLayoutGrid *)proposedGrid;
-
+//	For overriding the upcoming layout grid.
 //	Not implemented: manager uses its own determination
 //	Returns nil: manager stops layout immediately
 //	Returns anything: manager uses returned grid
+
+- (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager nextGridForContentsUsingGrid:(IRDiscreteLayoutGrid *)proposedGrid;
 
 @end
 
