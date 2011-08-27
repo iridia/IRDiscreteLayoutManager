@@ -60,6 +60,12 @@
 
 }
 
+- (NSUInteger) numberOfLayoutAreas {
+
+	return [self.layoutAreaNames count];
+	
+}
+
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName {
 
 	NSParameterAssert(self.prototype);

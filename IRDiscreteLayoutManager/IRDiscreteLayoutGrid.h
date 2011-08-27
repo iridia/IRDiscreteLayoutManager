@@ -32,6 +32,7 @@ typedef id (^IRDiscreteLayoutItemDisplayBlock) (IRDiscreteLayoutGrid *self, id a
 @property (nonatomic, readonly, retain) NSArray *layoutAreaNames;
 
 - (void) registerLayoutAreaNamed:(NSString *)aName validatorBlock:(IRDiscreteLayoutItemValidatorBlock)aValidatorBlock layoutBlock:(IRDiscreteLayoutItemLayoutBlock)aLayoutBlock;
+- (NSUInteger) numberOfLayoutAreas;
 
 - (IRDiscreteLayoutGrid *) instantiatedGrid;
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName;
