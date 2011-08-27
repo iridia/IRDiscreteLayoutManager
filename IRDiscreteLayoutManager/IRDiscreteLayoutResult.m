@@ -12,6 +12,30 @@
 
 @synthesize grids;
 
++ (IRDiscreteLayoutResult *) resultWithGrids:(NSArray *)grids {
+
+	return [[[self alloc] initWithGrids:grids] autorelease];
+
+}
+
+- (id) init {
+
+	return [self initWithGrids:nil];
+
+}
+
+- (IRDiscreteLayoutResult *) initWithGrids:(NSArray *)newGrids {
+
+	self = [super init];
+	if (!self)
+		return nil;
+		
+	self.grids = newGrids;
+	
+	return self;
+
+}
+
 - (void) dealloc {
 
 	[grids release];

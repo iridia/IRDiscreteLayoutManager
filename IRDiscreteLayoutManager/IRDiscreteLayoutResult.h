@@ -10,6 +10,9 @@
 
 @interface IRDiscreteLayoutResult : NSObject
 
++ (IRDiscreteLayoutResult *) resultWithGrids:(NSArray *)grids;
+- (IRDiscreteLayoutResult *) initWithGrids:(NSArray *)grids;
+
 @property (nonatomic, readwrite, retain) NSArray *grids;
 
 @end

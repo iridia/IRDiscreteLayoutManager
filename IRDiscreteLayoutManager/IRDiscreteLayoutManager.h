@@ -20,6 +20,8 @@
 @property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDelegate> delegate;
 @property (nonatomic, readwrite, retain) IRDiscreteLayoutResult *result;
 
+- (IRDiscreteLayoutResult *) calculatedResult;
+
 @end
 
 
