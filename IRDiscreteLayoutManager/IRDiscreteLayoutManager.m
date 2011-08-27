@@ -27,38 +27,33 @@
 	NSMutableArray *grids = [NSMutableArray array];
 	NSUInteger numberOfItems = [self.dataSource numberOfItemsForLayoutManager:self];
 	
-	BOOL delegateHandlesGridOverride = [self.delegate respondsToSelector:@selector(layoutManager:nextGridForContentsUsingGrid:)];
-	
-	
+	__block IRDiscreteLayoutGrid *currentGrid = nil;
+	__block NSMutableArray *currentItems = nil;
+	__block BOOL stop = NO;
+
 	IRDiscreteLayoutGrid * (^randomGrid)() = ^ {
-	
-		NSLog(@"%s TBD", __PRETTY_FUNCTION__);
-	
-		return (IRDiscreteLayoutGrid *)nil;
-	
+		
+		NSUInteger randomIndex = (arc4random() % [self.delegate numberOfLayoutGridsForLayoutManager:self]);
+		return [self.delegate layoutManager:self layoutGridAtIndex:randomIndex];
+		
 	};
 	
 	IRDiscreteLayoutGrid * (^nextGridPrototype)() = ^ {
 	
 		IRDiscreteLayoutGrid *tentativeGrid = randomGrid();
-	
-		if (!delegateHandlesGridOverride)
+		if (![self.delegate respondsToSelector:@selector(layoutManager:nextGridForContentsUsingGrid:)])
 			return tentativeGrid;
-		else
-			return [self.delegate layoutManager:self nextGridForContentsUsingGrid:tentativeGrid];
-	
+		
+		return [self.delegate layoutManager:self nextGridForContentsUsingGrid:tentativeGrid];
+			
 	};
-	
-	
-	__block IRDiscreteLayoutGrid *currentGrid = nil;
-	__block NSMutableArray *currentItems = nil;
-	__block BOOL stop = NO;
-	
+		
 	void (^stashGridAndItems)() = ^ {
 		
 		[currentItems enumerateObjectsUsingBlock: ^ (id<IRDiscreteLayoutItem> anItem, NSUInteger idx, BOOL *stop) {
 			[currentGrid setLayoutItem:anItem forAreaNamed:[currentGrid.layoutAreaNames objectAtIndex:idx]];
 		}];
+		
 		currentItems = nil;
 
 		[grids addObject:currentGrid];
@@ -83,7 +78,6 @@
 	};
 	
 	stashGridAndItems();
-	
 	
 	return [IRDiscreteLayoutResult resultWithGrids:grids];
 
