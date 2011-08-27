@@ -7,8 +7,8 @@
 //
 
 #import "IRDiscreteLayoutItem.h"
+#import "IRDiscreteLayoutGrid.h"
 
-@class IRDiscreteLayoutGrid;
 @class IRDiscreteLayoutManager;
 @class IRDiscreteLayoutResult;
 
