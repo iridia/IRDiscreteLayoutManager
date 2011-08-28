@@ -75,6 +75,11 @@
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName {
 
 	NSParameterAssert(self.prototype);
+
+	IRDiscreteLayoutGridAreaValidatorBlock validatorBlock = [self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName];
+	if (validatorBlock)
+		if (!validatorBlock(self, aLayoutItem))
+			[NSException raise:NSInternalInconsistencyException format:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName];
 	
 	[self.layoutAreaNamesToLayoutItems setObject:aLayoutItem forKey:anAreaName];
 
