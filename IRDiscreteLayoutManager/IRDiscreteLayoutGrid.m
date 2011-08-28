@@ -96,7 +96,7 @@
 
 }
 
-- (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutItemLayoutBlock layoutBlock, IRDiscreteLayoutItemValidatorBlock validatorBlock))aBlock {
+- (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock))aBlock {
 	
 	if (!aBlock)
 		return;
@@ -143,7 +143,7 @@ CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize
 
 }
 
-IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask) {
+IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask) {
 
 	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
 	
@@ -156,9 +156,9 @@ IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMa
 
 }
 
-IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY) {
+IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY) {
 
-	return IRDiscreteLayoutGridLayoutBlockForConstantSizeMake(
+	return IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake(
 		(CGRect){ unitsOffsetX, unitsOffsetY, unitsSpanX, unitsSpanY },
 		(CGSize){ totalUnitsX, totalUnitsY }, 
 		UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight

@@ -12,12 +12,12 @@
 
 @class IRDiscreteLayoutGrid;
 
-#ifndef __IRDiscreteLayoutGrid_ItemUsing__
-#define __IRDiscreteLayoutGrid_ItemUsing__
+#ifndef __IRDiscreteLayoutGridAreaBlocks__
+#define __IRDiscreteLayoutGridAreaBlocks__
 
-typedef BOOL (^IRDiscreteLayoutItemValidatorBlock) (IRDiscreteLayoutGrid *self, id anItem);
-typedef CGRect (^IRDiscreteLayoutItemLayoutBlock) (IRDiscreteLayoutGrid *self, id anItem);
-typedef id (^IRDiscreteLayoutItemDisplayBlock) (IRDiscreteLayoutGrid *self, id anItem);
+typedef BOOL (^IRDiscreteLayoutGridAreaValidatorBlock) (IRDiscreteLayoutGrid *self, id anItem);
+typedef CGRect (^IRDiscreteLayoutGridAreaLayoutBlock) (IRDiscreteLayoutGrid *self, id anItem);
+typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, id anItem);
 
 #endif
 
@@ -32,7 +32,7 @@ typedef id (^IRDiscreteLayoutItemDisplayBlock) (IRDiscreteLayoutGrid *self, id a
 
 //	Prototypes are all that matters.  They can’t have layout items associated with their layout areas, instead they mainly work with understanding their layout areas only.
 + (IRDiscreteLayoutGrid *) prototype;
-- (void) registerLayoutAreaNamed:(NSString *)aName validatorBlock:(IRDiscreteLayoutItemValidatorBlock)aValidatorBlock layoutBlock:(IRDiscreteLayoutItemLayoutBlock)aLayoutBlock;
+- (void) registerLayoutAreaNamed:(NSString *)aName validatorBlock:(IRDiscreteLayoutGridAreaValidatorBlock)aValidatorBlock layoutBlock:(IRDiscreteLayoutGridAreaLayoutBlock)aLayoutBlock;
 - (NSUInteger) numberOfLayoutAreas;
 
 //	The -instantiatedGrid returned from a prototype is a grid that can be populated with stuff, and usually its layout areas can’t be changed.
@@ -42,7 +42,7 @@ typedef id (^IRDiscreteLayoutItemDisplayBlock) (IRDiscreteLayoutGrid *self, id a
 
 //	Generally, these enumerators always work no matter if the grid is a prototype or not.
 - (void) enumerateLayoutAreaNamesWithBlock:(void(^)(NSString *anAreaName))aBlock;
-- (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutItemLayoutBlock layoutBlock, IRDiscreteLayoutItemValidatorBlock validatorBlock))aBlock;
+- (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock))aBlock;
 
 @end
 
@@ -51,6 +51,6 @@ typedef id (^IRDiscreteLayoutItemDisplayBlock) (IRDiscreteLayoutGrid *self, id a
 
 extern CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize newBounds, UIViewAutoresizing autoresizingMask);
 
-extern IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask);
+extern IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask);
 
-extern IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY);
+extern IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY);
