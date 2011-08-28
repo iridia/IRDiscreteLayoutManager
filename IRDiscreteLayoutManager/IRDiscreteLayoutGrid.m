@@ -23,6 +23,12 @@
 @synthesize layoutAreaNames;
 @synthesize layoutAreaNamesToLayoutBlocks, layoutAreaNamesToValidatorBlocks, layoutAreaNamesToLayoutItems;
 
++ (IRDiscreteLayoutGrid *) prototype {
+
+	return [[[self alloc] init] autorelease];
+
+}
+
 - (IRDiscreteLayoutGrid *) instantiatedGrid {
 
 	NSParameterAssert(!self.prototype);
