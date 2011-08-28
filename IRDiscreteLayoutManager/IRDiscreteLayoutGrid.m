@@ -91,7 +91,7 @@
 }
 
 - (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutItemLayoutBlock layoutBlock, IRDiscreteLayoutItemValidatorBlock validatorBlock))aBlock {
-
+	
 	if (!aBlock)
 		return;
 
@@ -114,12 +114,48 @@
 
 
 
-IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, int autoresizingMask) {
+CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize newBounds, UIViewAutoresizing autoresizingMask) {
+
+	//	Three in the morning, not the best time to reinvent the wheel.
+	//	So I stole all the autoresizing code in UIView.
+	
+	static UIView *referenceBoundingView = nil;
+	static UIView *referenceInnerView = nil;
+	static dispatch_once_t onceToken = 0;
+	dispatch_once(&onceToken, ^{
+		referenceBoundingView = [[UIView alloc] initWithFrame:CGRectZero];
+		referenceInnerView = [[UIView alloc] initWithFrame:CGRectZero];
+		[referenceBoundingView addSubview:referenceInnerView];
+	});
+	
+	referenceBoundingView.frame = (CGRect){ CGPointZero, originalBounds };
+	referenceInnerView.frame = originalRect;
+	referenceInnerView.autoresizingMask = autoresizingMask;
+	referenceBoundingView.frame = (CGRect){ CGPointZero, newBounds };
+	
+  return referenceInnerView.frame;
+
+}
+
+IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask) {
 
 	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
 	
-		return CGRectZero;
+	  if (CGSizeEqualToSize(defaultBounds, self.contentSize))
+			return size;
+		else
+			return IRAutoresizedRectMake(size, defaultBounds, self.contentSize, autoresizingMask);
 	
 	} copy] autorelease];
 
 }
+
+IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY) {
+
+	return IRDiscreteLayoutGridLayoutBlockForConstantSizeMake(
+		(CGRect){ unitsOffsetX, unitsOffsetY, unitsSpanX, unitsSpanY },
+		(CGSize){ totalUnitsX, totalUnitsY }, 
+		UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight
+	);
+
+};

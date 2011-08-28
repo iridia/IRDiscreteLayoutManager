@@ -46,11 +46,14 @@ typedef id (^IRDiscreteLayoutItemDisplayBlock) (IRDiscreteLayoutGrid *self, id a
 
 
 
-//	Helpers for layout blocks that latch on a certain content size, or a certain proportion in an unit rect.  The IRDiscreteLayoutGrid_LayoutBlockForProportions() is simply something that latches on the former using a unit rect of (0, 0, horizontalUnits, verticalUnits) for convenience.
+//	Helpers returning layout blocks that latch on a certain content size, or a certain proportion in an unit rect.
+//	The layout blocks simply look at the grid’s contentSize, and reutrn a rect that shows up correctly.
 
-extern IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, int autoresizingMask);
+extern CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize newBounds, UIViewAutoresizing autoresizingMask);
 
-extern IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForProportionsMake (NSUInteger horizontalUnits, NSUInteger verticalUnits, NSUInteger horizontalSpan, NSUInteger verticalSpan);
+extern IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask);
+
+extern IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY);
 
 
 
