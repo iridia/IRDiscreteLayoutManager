@@ -12,8 +12,8 @@
 
 @class IRDiscreteLayoutGrid;
 
-#ifndef __IRDiscreteLayoutItem__
-#define __IRDiscreteLayoutItem__
+#ifndef __IRDiscreteLayoutGrid_ItemUsing__
+#define __IRDiscreteLayoutGrid_ItemUsing__
 
 typedef BOOL (^IRDiscreteLayoutItemValidatorBlock) (IRDiscreteLayoutGrid *self, id anItem);
 typedef CGRect (^IRDiscreteLayoutItemLayoutBlock) (IRDiscreteLayoutGrid *self, id anItem);
