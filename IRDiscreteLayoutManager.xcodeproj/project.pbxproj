@@ -38,6 +38,7 @@
 		FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IRDiscreteLayoutTests.h; sourceTree = "<group>"; };
 		FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IRDiscreteLayoutTests.m; sourceTree = "<group>"; };
 		FF2BFEF1140AC72300604E8D /* IRDiscreteLayoutTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IRDiscreteLayoutTests-Prefix.pch"; sourceTree = "<group>"; };
+		FF2BFF27140AC82100604E8D /* IRCommitSHA.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = IRCommitSHA.sh; path = IRDiscreteLayoutShared/IRCommitSHA.sh; sourceTree = "<group>"; };
 		FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIRDiscreteLayoutManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF55E1991407CE8400D8F3C7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FF55E19D1407CE8400D8F3C7 /* IRDiscreteLayoutManager-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IRDiscreteLayoutManager-Prefix.pch"; sourceTree = "<group>"; };
@@ -102,6 +103,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FF2BFF28140AC82600604E8D /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FF2BFF27140AC82100604E8D /* IRCommitSHA.sh */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
 		FF55E18B1407CE8400D8F3C7 = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +126,7 @@
 				FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */,
 				FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */,
 				FF55E19C1407CE8400D8F3C7 /* Supporting Files */,
+				FF2BFF28140AC82600604E8D /* Shared */,
 				FF2BFEE7140AC72300604E8D /* Tests */,
 				FF55E1981407CE8400D8F3C7 /* Frameworks */,
 				FF55E1971407CE8400D8F3C7 /* Products */,
@@ -179,6 +189,7 @@
 				FF2BFEDC140AC72300604E8D /* Frameworks */,
 				FF2BFEDD140AC72300604E8D /* Resources */,
 				FF2BFEDE140AC72300604E8D /* ShellScript */,
+				FF2BFF29140AC84800604E8D /* Embed Commit SHA */,
 			);
 			buildRules = (
 			);
@@ -196,6 +207,7 @@
 				FF55E1921407CE8400D8F3C7 /* Sources */,
 				FF55E1931407CE8400D8F3C7 /* Frameworks */,
 				FF55E1941407CE8400D8F3C7 /* Headers */,
+				FF2BFF25140AC7F800604E8D /* Embed Commit SHA */,
 			);
 			buildRules = (
 			);
@@ -257,6 +269,34 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		FF2BFF25140AC7F800604E8D /* Embed Commit SHA */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Commit SHA";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/Users/evadne/Works/Code/iridia-IRDiscreteLayoutManager/IRDiscreteLayoutShared/IRCommitSHA.sh";
+		};
+		FF2BFF29140AC84800604E8D /* Embed Commit SHA */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Commit SHA";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/Users/evadne/Works/Code/iridia-IRDiscreteLayoutManager/IRDiscreteLayoutShared/IRCommitSHA.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 

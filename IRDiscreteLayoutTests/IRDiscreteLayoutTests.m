@@ -13,6 +13,8 @@
 - (void) setUp {
 
   [super setUp];
+  
+  //  NSLog(@"Running from %@", [[[NSBundle bundleForClass:[self class]] infoDictionary] objectForKey:@"IRCommitSHA"]);
 
 }
 
@@ -21,5 +23,11 @@
   [super tearDown];
   
 }
+
+- (void) testFoo {
+
+  NSLog(@"Hello world.");
+
+} 
 
 @end
