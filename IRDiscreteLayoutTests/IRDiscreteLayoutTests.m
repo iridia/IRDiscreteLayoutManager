@@ -8,13 +8,25 @@
 
 #import "IRDiscreteLayoutTests.h"
 
+
+@interface IRDiscreteLayoutTests () <IRDiscreteLayoutManagerDelegate, IRDiscreteLayoutManagerDataSource>
+
+@property (nonatomic, readwrite, retain) IRDiscreteLayoutManager *layoutManager;
+
+@end
+
+
 @implementation IRDiscreteLayoutTests
+
+@synthesize layoutManager;
 
 - (void) setUp {
 
   [super setUp];
   
-  //  NSLog(@"Running from %@", [[[NSBundle bundleForClass:[self class]] infoDictionary] objectForKey:@"IRCommitSHA"]);
+  self.layoutManager = [[[IRDiscreteLayoutManager alloc] init] autorelease];
+  self.layoutManager.delegate = self;
+  self.layoutManager.dataSource = self;
 
 }
 
@@ -22,6 +34,32 @@
   
   [super tearDown];
   
+  self.layoutManager = nil;
+  
+}
+
+- (NSUInteger) numberOfItemsForLayoutManager:(IRDiscreteLayoutManager *)manager {
+
+  return 0;
+
+}
+
+- (id<IRDiscreteLayoutItem>) layoutManager:(IRDiscreteLayoutManager *)manager itemAtIndex:(NSUInteger)index {
+
+  return nil;
+
+}
+
+- (NSUInteger) numberOfLayoutGridsForLayoutManager:(IRDiscreteLayoutManager *)manager {
+
+  return 0;
+
+}
+
+- (id<IRDiscreteLayoutItem>) layoutManager:(IRDiscreteLayoutManager *)manager layoutGridAtIndex:(NSUInteger)index {
+
+  return nil;
+
 }
 
 - (void) testFoo {

@@ -13,6 +13,7 @@
 		FF2BFEEC140AC72300604E8D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF2BFEEA140AC72300604E8D /* InfoPlist.strings */; };
 		FF2BFEEE140AC72300604E8D /* IRDiscreteLayoutTests.h in Resources */ = {isa = PBXBuildFile; fileRef = FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */; };
 		FF2BFEF0140AC72300604E8D /* IRDiscreteLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */; };
+		FF2BFF2C140AC9FC00604E8D /* libIRDiscreteLayoutManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */; };
 		FF55E19A1407CE8400D8F3C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
 		FF55E1A01407CE8400D8F3C7 /* IRDiscreteLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */; };
 		FF8726F91408BC08002FE6FC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
@@ -27,6 +28,16 @@
 		FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */; };
 		FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FF2BFF2A140AC9E900604E8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF55E18D1407CE8400D8F3C7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF55E1951407CE8400D8F3C7;
+			remoteInfo = IRDiscreteLayoutManager;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		FF2BFEE0140AC72300604E8D /* IRDiscreteLayoutTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IRDiscreteLayoutTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF2BFF2C140AC9FC00604E8D /* libIRDiscreteLayoutManager.a in Frameworks */,
 				FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */,
 				FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */,
 				FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */,
@@ -185,11 +197,11 @@
 				FF2BFEDC140AC72300604E8D /* Frameworks */,
 				FF2BFEDD140AC72300604E8D /* Resources */,
 				FF2BFEDE140AC72300604E8D /* ShellScript */,
-				FF2BFF29140AC84800604E8D /* Embed Commit SHA */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				FF2BFF2B140AC9E900604E8D /* PBXTargetDependency */,
 			);
 			name = IRDiscreteLayoutTests;
 			productName = IRDiscreteLayoutTests;
@@ -203,7 +215,6 @@
 				FF55E1921407CE8400D8F3C7 /* Sources */,
 				FF55E1931407CE8400D8F3C7 /* Frameworks */,
 				FF55E1941407CE8400D8F3C7 /* Headers */,
-				FF2BFF25140AC7F800604E8D /* Embed Commit SHA */,
 			);
 			buildRules = (
 			);
@@ -220,6 +231,7 @@
 		FF55E18D1407CE8400D8F3C7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0410;
 				ORGANIZATIONNAME = "Iridia Productions";
 			};
 			buildConfigurationList = FF55E1901407CE8400D8F3C7 /* Build configuration list for PBXProject "IRDiscreteLayoutManager" */;
@@ -266,34 +278,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		FF2BFF25140AC7F800604E8D /* Embed Commit SHA */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Commit SHA";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/Users/evadne/Works/Code/iridia-IRDiscreteLayoutManager/IRDiscreteLayoutShared/IRCommitSHA.sh";
-		};
-		FF2BFF29140AC84800604E8D /* Embed Commit SHA */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Commit SHA";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/Users/evadne/Works/Code/iridia-IRDiscreteLayoutManager/IRDiscreteLayoutShared/IRCommitSHA.sh";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -318,6 +302,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FF2BFF2B140AC9E900604E8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF55E1951407CE8400D8F3C7 /* IRDiscreteLayoutManager */;
+			targetProxy = FF2BFF2A140AC9E900604E8D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		FF2BFEEA140AC72300604E8D /* InfoPlist.strings */ = {
@@ -381,6 +373,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos4.3;
+				VALID_ARCHS = "armv6 armv7 i386";
 			};
 			name = Debug;
 		};
@@ -398,6 +391,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos4.3;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv6 armv7 i386";
 			};
 			name = Release;
 		};

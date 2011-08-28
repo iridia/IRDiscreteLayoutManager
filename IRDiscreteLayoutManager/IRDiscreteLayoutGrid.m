@@ -114,7 +114,7 @@
 
 
 
-extern IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, int autoresizingMask) {
+IRDiscreteLayoutItemLayoutBlock IRDiscreteLayoutGridLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, int autoresizingMask) {
 
 	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
 	

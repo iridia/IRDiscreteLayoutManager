@@ -7,6 +7,7 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import "IRDiscreteLayoutManager.h"
 
 @interface IRDiscreteLayoutTests : SenTestCase
 
