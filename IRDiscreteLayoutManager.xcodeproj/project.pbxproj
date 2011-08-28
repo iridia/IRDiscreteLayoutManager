@@ -10,7 +10,6 @@
 		FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */; };
 		FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
 		FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
-		FF2BFEE6140AC72300604E8D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF2BFEE5140AC72300604E8D /* CoreGraphics.framework */; };
 		FF2BFEEC140AC72300604E8D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF2BFEEA140AC72300604E8D /* InfoPlist.strings */; };
 		FF2BFEEE140AC72300604E8D /* IRDiscreteLayoutTests.h in Resources */ = {isa = PBXBuildFile; fileRef = FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */; };
 		FF2BFEF0140AC72300604E8D /* IRDiscreteLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */; };
@@ -32,7 +31,6 @@
 /* Begin PBXFileReference section */
 		FF2BFEE0140AC72300604E8D /* IRDiscreteLayoutTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IRDiscreteLayoutTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		FF2BFEE5140AC72300604E8D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		FF2BFEE9140AC72300604E8D /* IRDiscreteLayoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IRDiscreteLayoutTests-Info.plist"; sourceTree = "<group>"; };
 		FF2BFEEB140AC72300604E8D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IRDiscreteLayoutTests.h; sourceTree = "<group>"; };
@@ -65,7 +63,6 @@
 				FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */,
 				FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */,
 				FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */,
-				FF2BFEE6140AC72300604E8D /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,8 +123,8 @@
 				FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */,
 				FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */,
 				FF55E19C1407CE8400D8F3C7 /* Supporting Files */,
-				FF2BFF28140AC82600604E8D /* Shared */,
 				FF2BFEE7140AC72300604E8D /* Tests */,
+				FF2BFF28140AC82600604E8D /* Shared */,
 				FF55E1981407CE8400D8F3C7 /* Frameworks */,
 				FF55E1971407CE8400D8F3C7 /* Products */,
 			);
@@ -149,7 +146,6 @@
 				FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */,
 				FF8726F81408BC08002FE6FC /* UIKit.framework */,
 				FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */,
-				FF2BFEE5140AC72300604E8D /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
