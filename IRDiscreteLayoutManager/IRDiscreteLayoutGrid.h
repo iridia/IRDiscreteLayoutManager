@@ -24,7 +24,7 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 
 @protocol IRDiscreteLayoutItem;
 
-@interface IRDiscreteLayoutGrid : NSObject
+@interface IRDiscreteLayoutGrid : NSObject <NSCopying>
 
 @property (nonatomic, readwrite, assign) CGSize contentSize;
 @property (nonatomic, readonly, retain) IRDiscreteLayoutGrid *prototype;

@@ -39,6 +39,21 @@
 
 }
 
+- (id) init {
+
+	self = [super init];
+	if (!self)
+		return nil;
+		
+	self.layoutAreaNames = [NSArray array];
+	self.layoutAreaNamesToLayoutBlocks = [NSMutableDictionary dictionary];
+	self.layoutAreaNamesToLayoutItems = [NSMutableDictionary dictionary];
+	self.layoutAreaNamesToValidatorBlocks = [NSMutableDictionary dictionary];
+	
+	return self;
+
+}
+
 - (void) dealloc {
 
 	[prototype release];
@@ -48,6 +63,17 @@
 	[layoutAreaNamesToLayoutItems release];
 	
 	[super dealloc];
+
+}
+
+- (id) copyWithZone:(NSZone *)zone {
+
+	IRDiscreteLayoutGrid *copiedGrid = [[IRDiscreteLayoutGrid allocWithZone:zone] init];
+	copiedGrid.layoutAreaNames = self.layoutAreaNames;
+	copiedGrid.layoutAreaNamesToLayoutBlocks = self.layoutAreaNamesToLayoutBlocks;
+	copiedGrid.layoutAreaNamesToLayoutItems = self.layoutAreaNamesToLayoutItems;
+	copiedGrid.layoutAreaNamesToValidatorBlocks = self.layoutAreaNamesToValidatorBlocks;
+	return copiedGrid;
 
 }
 
