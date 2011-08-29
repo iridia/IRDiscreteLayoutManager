@@ -24,7 +24,7 @@
 
 @interface IRDiscreteLayoutItem  : NSObject <IRDiscreteLayoutItem>
 
-@property (nonatomic, readonly, retain) NSString *title;
+@property (nonatomic, readwrite, retain) NSString *title;
 @property (nonatomic, readonly, retain) NSArray *representedMediaItems;
 
 - (BOOL) addMediaItem:(id)anItem withType:(CFStringRef)typeUTI;
