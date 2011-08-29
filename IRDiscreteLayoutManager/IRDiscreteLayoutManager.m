@@ -49,7 +49,7 @@
 	};
 		
 	void (^stashGridAndItems)() = ^ {
-		
+	
 		[currentItems enumerateObjectsUsingBlock: ^ (id<IRDiscreteLayoutItem> anItem, NSUInteger idx, BOOL *stop) {
 			[currentGrid setLayoutItem:anItem forAreaNamed:[currentGrid.layoutAreaNames objectAtIndex:idx]];
 		}];
@@ -58,7 +58,7 @@
 
 		[grids addObject:currentGrid];
 		currentGrid = nil;
-		
+				
 	};
 	
 	for (NSUInteger index = 0; ((index < numberOfItems) && !stop); index ++) {
@@ -77,7 +77,8 @@
 	
 	};
 	
-	stashGridAndItems();
+	if (currentItems)
+		stashGridAndItems();
 	
 	return [IRDiscreteLayoutResult resultWithGrids:grids];
 
