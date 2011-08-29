@@ -43,4 +43,15 @@
 
 }
 
+- (NSString *) description {
+
+	return [[NSDictionary dictionaryWithObjectsAndKeys:
+	
+		[super description], @"Identity",
+		self.grids, @"Grids",
+	
+	nil] description];
+
+}
+
 @end

@@ -145,6 +145,12 @@
 
 }
 
+- (NSString *) description {
+
+	return [NSString stringWithFormat:@"%@ { Prototype: %@ }", [super description], self.prototype];
+
+}
+
 @end
 
 
