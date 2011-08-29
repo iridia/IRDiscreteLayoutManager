@@ -12,11 +12,12 @@ NSString * const kIRDiscreteLayoutGridTransformingMap = @"kIRDiscreteLayoutGridT
 NSString * const kIRDiscreteLayoutGridTransformingGrid = @"kIRDiscreteLayoutGridTransformingGrid";
 NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLayoutGridTransformingAreaName";
 
+
 @interface IRDiscreteLayoutGrid (TransformingPrivate)
 
 + (NSMutableDictionary *) transformingMapRegistry;
 + (NSMutableDictionary *) transformingMapForGridPrototype:(IRDiscreteLayoutGrid *)gridPrototype;
-+ (CFMutableDictionaryRef) transformingMapForGridPrototype:(IRDiscreteLayoutGrid *)gridPrototype areaName:(NSString *)areaName;
++ (NSMutableDictionary *) transformingMapForGridPrototype:(IRDiscreteLayoutGrid *)gridPrototype areaName:(NSString *)areaName;
 
 //	aGridPrototype: {
 //		"anAreaName" : {	anotherGrid: anotherAreaName, yetAnotherGrid, yetAnotherAreaName, … }
@@ -24,12 +25,62 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 
 @end
 
+
+@implementation IRDiscreteLayoutGrid (TransformingPrivate)
+
++ (NSMutableDictionary *) transformingMapRegistry {
+
+	static dispatch_once_t onceToken = 0;
+	static NSMutableDictionary *registry = nil;
+	dispatch_once(&onceToken, ^{
+	
+		CFMutableDictionaryRef cfRegistry = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+		registry = [(NSMutableDictionary *)cfRegistry retain];
+		CFRelease(cfRegistry);
+			
+	});
+	
+	return registry;
+
+}
+
++ (NSMutableDictionary *) transformingMapForGridPrototype:(IRDiscreteLayoutGrid *)gridPrototype {
+
+	NSMutableDictionary *map = [[self transformingMapRegistry] objectForKey:gridPrototype];
+	if (!map) {
+		map = [NSMutableDictionary dictionary];
+		CFDictionarySetValue((CFMutableDictionaryRef)[self transformingMapRegistry], gridPrototype, map);
+	}
+		
+	return map;
+
+}
+
++ (NSMutableDictionary *) transformingMapForGridPrototype:(IRDiscreteLayoutGrid *)gridPrototype areaName:(NSString *)areaName {
+
+	NSMutableDictionary *parentMap = [self transformingMapForGridPrototype:gridPrototype];
+	NSMutableDictionary *childMap = [parentMap objectForKey:areaName];
+	
+	if (!childMap) {
+		CFMutableDictionaryRef cfChildMap = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+		CFDictionarySetValue((CFMutableDictionaryRef)parentMap, areaName, cfChildMap);
+		childMap = (NSMutableDictionary *)cfChildMap;
+		CFRelease(cfChildMap);
+	}
+	
+	return childMap;
+
+}
+
+@end
+
+
 @implementation IRDiscreteLayoutGrid (Transforming)
 
 + (void) markAreaNamed:(NSString *)aName inGridPrototype:(IRDiscreteLayoutGrid *)aGrid asEquivalentToAreaNamed:(NSString *)mappedName inGridPrototype:(IRDiscreteLayoutGrid *)mappedGrid {
 
-	CFDictionarySetValue([self transformingMapForGridPrototype:aGrid areaName:aName], mappedGrid, mappedName);
-	CFDictionarySetValue([self transformingMapForGridPrototype:mappedGrid areaName:mappedName], aGrid, aName);
+	CFDictionarySetValue((CFMutableDictionaryRef)[self transformingMapForGridPrototype:aGrid areaName:aName], mappedGrid, mappedName);
+	CFDictionarySetValue((CFMutableDictionaryRef)[self transformingMapForGridPrototype:mappedGrid areaName:mappedName], aGrid, aName);
 
 }
 
@@ -42,7 +93,7 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 	
 	[self enumerateLayoutAreaNamesWithBlock: ^ (NSString *anAreaName) {
 
-		[returnedGrid setLayoutItem:[self layoutItemForAreaNamed:anAreaName] forAreaNamed:CFDictionaryGetValue([[self class] transformingMapForGridPrototype:self.prototype areaName:anAreaName], newGrid)];
+		[returnedGrid setLayoutItem:[self layoutItemForAreaNamed:anAreaName] forAreaNamed:CFDictionaryGetValue((CFMutableDictionaryRef)[[self class] transformingMapForGridPrototype:self.prototype areaName:anAreaName], newGrid)];
 
 	}];
 		
