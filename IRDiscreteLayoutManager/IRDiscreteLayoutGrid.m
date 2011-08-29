@@ -145,9 +145,16 @@
 
 }
 
-- (NSString *) description {
+- (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level {
 
-	return [NSString stringWithFormat:@"%@ { Prototype: %@ }", [super description], self.prototype];
+	return [[NSDictionary dictionaryWithObjectsAndKeys:
+	
+		[super description], @"Identity",
+		self.prototype, @"Prototype",
+		self.layoutAreaNames, @"Areas",
+		self.layoutAreaNamesToLayoutItems, @"Items",
+		
+	nil] descriptionWithLocale:locale indent:level];
 
 }
 

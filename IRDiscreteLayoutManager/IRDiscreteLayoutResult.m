@@ -7,6 +7,7 @@
 //
 
 #import "IRDiscreteLayoutResult.h"
+#import "IRDiscreteLayoutGrid.h"
 
 @implementation IRDiscreteLayoutResult
 
@@ -44,13 +45,26 @@
 }
 
 - (NSString *) description {
-
-	return [[NSDictionary dictionaryWithObjectsAndKeys:
 	
-		[super description], @"Identity",
-		self.grids, @"Grids",
+	NSMutableString *returnedString = [NSMutableString string];
 	
-	nil] description];
+	[returnedString appendFormat:@"%@\n(\n", [super description]];
+	
+	NSUInteger numberOfGrids = [self.grids count];
+	[self.grids enumerateObjectsUsingBlock: ^ (IRDiscreteLayoutGrid *aGrid, NSUInteger idx, BOOL *stop) {
+		
+		[returnedString appendString:[aGrid descriptionWithLocale:nil indent:1]];
+		
+		if (idx != (numberOfGrids - 1))
+			[returnedString appendString:@","];
+		
+		[returnedString appendString:@"\n"];
+	
+	}];
+	
+	[returnedString appendFormat:@")"];
+	
+	return returnedString;
 
 }
 

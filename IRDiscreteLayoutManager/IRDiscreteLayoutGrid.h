@@ -44,6 +44,8 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 - (void) enumerateLayoutAreaNamesWithBlock:(void(^)(NSString *anAreaName))aBlock;
 - (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock))aBlock;
 
+- (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level;
+
 @end
 
 //	Helpers returning layout blocks that latch on a certain content size, or a certain proportion in an unit rect.
