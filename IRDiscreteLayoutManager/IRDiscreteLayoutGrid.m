@@ -69,10 +69,10 @@
 - (id) copyWithZone:(NSZone *)zone {
 
 	IRDiscreteLayoutGrid *copiedGrid = [[IRDiscreteLayoutGrid allocWithZone:zone] init];
-	copiedGrid.layoutAreaNames = self.layoutAreaNames;
-	copiedGrid.layoutAreaNamesToLayoutBlocks = self.layoutAreaNamesToLayoutBlocks;
-	copiedGrid.layoutAreaNamesToLayoutItems = self.layoutAreaNamesToLayoutItems;
-	copiedGrid.layoutAreaNamesToValidatorBlocks = self.layoutAreaNamesToValidatorBlocks;
+	copiedGrid.layoutAreaNames = [[self.layoutAreaNames copy] autorelease];
+	copiedGrid.layoutAreaNamesToLayoutBlocks = [[self.layoutAreaNamesToLayoutBlocks mutableCopy] autorelease];
+	copiedGrid.layoutAreaNamesToLayoutItems = [[self.layoutAreaNamesToLayoutItems mutableCopy] autorelease];
+	copiedGrid.layoutAreaNamesToValidatorBlocks = [[self.layoutAreaNamesToValidatorBlocks mutableCopy] autorelease];
 	return copiedGrid;
 
 }
@@ -172,7 +172,7 @@ CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize
 	static UIView *referenceBoundingView = nil;
 	static UIView *referenceInnerView = nil;
 	static dispatch_once_t onceToken = 0;
-	dispatch_once(&onceToken, ^{
+	dispatch_once(&onceToken, ^ {
 		referenceBoundingView = [[UIView alloc] initWithFrame:CGRectZero];
 		referenceInnerView = [[UIView alloc] initWithFrame:CGRectZero];
 		[referenceBoundingView addSubview:referenceInnerView];
