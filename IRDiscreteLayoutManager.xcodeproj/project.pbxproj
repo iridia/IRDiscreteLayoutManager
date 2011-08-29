@@ -16,6 +16,9 @@
 		FF2BFF2C140AC9FC00604E8D /* libIRDiscreteLayoutManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */; };
 		FF55E19A1407CE8400D8F3C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
 		FF55E1A01407CE8400D8F3C7 /* IRDiscreteLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */; };
+		FF5C84EC140B802A002E0415 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84EB140B802A002E0415 /* MobileCoreServices.framework */; };
+		FF5C84EF140B803E002E0415 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84EE140B803E002E0415 /* QuartzCore.framework */; };
+		FF5C84F1140B8044002E0415 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84F0140B8044002E0415 /* CoreGraphics.framework */; };
 		FF8726F91408BC08002FE6FC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
 		FF8726FC1408BC0E002FE6FC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */; };
 		FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -54,6 +57,9 @@
 		FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutManager.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutManager.h; sourceTree = "<group>"; };
 		FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutManager.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutManager.m; sourceTree = "<group>"; };
 		FF55E1A61407CED100D8F3C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		FF5C84EB140B802A002E0415 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		FF5C84EE140B803E002E0415 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FF5C84F0140B8044002E0415 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		FF8726F81408BC08002FE6FC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		FF8726FE1408BCA1002FE6FC /* IRDiscreteLayoutItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutItem.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutItem.m; sourceTree = "<group>"; };
@@ -71,10 +77,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF5C84F1140B8044002E0415 /* CoreGraphics.framework in Frameworks */,
+				FF5C84EF140B803E002E0415 /* QuartzCore.framework in Frameworks */,
 				FF2BFF2C140AC9FC00604E8D /* libIRDiscreteLayoutManager.a in Frameworks */,
 				FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */,
 				FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */,
 				FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */,
+				FF5C84EC140B802A002E0415 /* MobileCoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +167,9 @@
 				FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */,
 				FF8726F81408BC08002FE6FC /* UIKit.framework */,
 				FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */,
+				FF5C84F0140B8044002E0415 /* CoreGraphics.framework */,
+				FF5C84EE140B803E002E0415 /* QuartzCore.framework */,
+				FF5C84EB140B802A002E0415 /* MobileCoreServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -372,6 +384,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				SDKROOT = iphoneos4.3;
 				VALID_ARCHS = "armv6 armv7 i386";
 			};
@@ -389,6 +405,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				SDKROOT = iphoneos4.3;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv6 armv7 i386";
