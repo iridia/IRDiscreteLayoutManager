@@ -15,6 +15,8 @@
 @property (nonatomic, readwrite, retain) NSArray *layoutGrids;
 @property (nonatomic, readwrite, retain) NSArray *layoutItems;
 
+- (id<IRDiscreteLayoutItem>) randomLayoutItem;
+
 @end
 
 
@@ -56,16 +58,13 @@
 		portraitGrid,
 	nil];
 	
+	NSUInteger numberOfItems = 100;
+	NSMutableArray *enqueuedItems = [NSMutableArray arrayWithCapacity:numberOfItems];
 	
-	self.layoutItems = [NSArray arrayWithObjects:
+	for (int i = 0; i < numberOfItems; i++)
+		[enqueuedItems addObject:[self randomLayoutItem]];
 	
-		((^ {
-			IRDiscreteLayoutItem *item = [[[IRDiscreteLayoutItem alloc] init] autorelease];
-			return item;
-		
-		})()),
-	
-	nil];
+	self.layoutItems = enqueuedItems;
 
 }
 
@@ -100,6 +99,15 @@
 - (id<IRDiscreteLayoutItem>) layoutManager:(IRDiscreteLayoutManager *)manager layoutGridAtIndex:(NSUInteger)index {
 
   return (id<IRDiscreteLayoutItem>)[self.layoutGrids objectAtIndex:index];
+
+}
+
+- (id<IRDiscreteLayoutItem>) randomLayoutItem {
+
+	IRDiscreteLayoutItem *item = [[[IRDiscreteLayoutItem alloc] init] autorelease];
+	item.title = [NSString stringWithFormat:@"Randomized item %i", rand()];
+	
+	return item;
 
 }
 
