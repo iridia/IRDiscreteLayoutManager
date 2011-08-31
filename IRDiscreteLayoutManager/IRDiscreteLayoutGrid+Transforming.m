@@ -34,7 +34,7 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 	static NSMutableDictionary *registry = nil;
 	dispatch_once(&onceToken, ^{
 	
-		CFMutableDictionaryRef cfRegistry = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+		CFMutableDictionaryRef cfRegistry = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryValueCallBacks, &kCFTypeDictionaryKeyCallBacks);
 		registry = [(NSMutableDictionary *)cfRegistry retain];
 		CFRelease(cfRegistry);
 			
@@ -48,6 +48,7 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 
 	NSMutableDictionary *map = [[self transformingMapRegistry] objectForKey:gridPrototype];
 	if (!map) {
+		NSLog(@"making new map.");
 		map = [NSMutableDictionary dictionary];
 		CFDictionarySetValue((CFMutableDictionaryRef)[self transformingMapRegistry], gridPrototype, map);
 	}
@@ -81,6 +82,54 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 
 	CFDictionarySetValue((CFMutableDictionaryRef)[self transformingMapForGridPrototype:aGrid areaName:aName], mappedGrid, mappedName);
 	CFDictionarySetValue((CFMutableDictionaryRef)[self transformingMapForGridPrototype:mappedGrid areaName:mappedName], aGrid, aName);
+
+}
+
+- (NSSet *) allTransformablePrototypeDestinations {
+
+	if (self.prototype)
+		return [self.prototype allTransformablePrototypeDestinations];
+		
+	NSMutableDictionary *ownTransformingMap = [[self class] transformingMapForGridPrototype:self];
+	
+	if ([[ownTransformingMap allKeys] count] != [self.layoutAreaNames count])
+		return nil;
+		
+	/*
+	
+		ownTransformingMap = {
+		
+			areaname : { grid : areaName, grid : areaName },
+			…
+		
+		};
+	
+	*/
+	
+	//	Find all the grids that present in all the mapped area mappings
+	
+	NSMutableSet *probableGrids = [NSMutableSet set];
+	
+	[ownTransformingMap enumerateKeysAndObjectsUsingBlock: ^ (NSString *anAreaName, NSDictionary *mappedGridsToMappedAreaNames, BOOL *stop) {
+		[probableGrids addObjectsFromArray:[mappedGridsToMappedAreaNames allKeys]];
+	}];
+	
+	return [probableGrids objectsPassingTest: ^ (IRDiscreteLayoutGrid *aProbableGrid, BOOL *stop) {
+		
+		__block BOOL gridFullfillsLayoutTransformPreconditions = NO;
+	
+		[self.layoutAreaNames enumerateObjectsUsingBlock: ^ (NSString *aLayoutAreaName, NSUInteger idx, BOOL *stop) {
+		
+			if (![[[ownTransformingMap objectForKey:aLayoutAreaName] allKeys] containsObject:aProbableGrid])
+				return;
+				
+			gridFullfillsLayoutTransformPreconditions = YES;
+			
+		}];
+		
+		return gridFullfillsLayoutTransformPreconditions;
+	
+	}];
 
 }
 
