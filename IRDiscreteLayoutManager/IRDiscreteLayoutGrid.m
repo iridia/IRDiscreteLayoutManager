@@ -200,9 +200,7 @@ IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConsta
 
 	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
 	
-		NSLog(@"self %@, self.contentSize %@", self, NSStringFromCGSize(self.contentSize));
-	
-	  if (CGSizeEqualToSize(defaultBounds, self.contentSize))
+		if (CGSizeEqualToSize(defaultBounds, self.contentSize))
 			return size;
 		else
 			return IRAutoresizedRectMake(size, defaultBounds, self.contentSize, autoresizingMask);
