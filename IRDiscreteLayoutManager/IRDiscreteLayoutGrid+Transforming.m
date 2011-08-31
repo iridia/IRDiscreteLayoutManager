@@ -34,7 +34,7 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 	static NSMutableDictionary *registry = nil;
 	dispatch_once(&onceToken, ^{
 	
-		CFMutableDictionaryRef cfRegistry = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryValueCallBacks, &kCFTypeDictionaryKeyCallBacks);
+		CFMutableDictionaryRef cfRegistry = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		registry = [(NSMutableDictionary *)cfRegistry retain];
 		CFRelease(cfRegistry);
 			
