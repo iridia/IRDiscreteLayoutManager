@@ -21,7 +21,7 @@
 		FF5C84F1140B8044002E0415 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84F0140B8044002E0415 /* CoreGraphics.framework */; };
 		FF8726F91408BC08002FE6FC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
 		FF8726FC1408BC0E002FE6FC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */; };
-		FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */; settings = {ATTRIBUTES = (); }; };
 		FF8726FF1408BCA1002FE6FC /* IRDiscreteLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8726FE1408BCA1002FE6FC /* IRDiscreteLayoutItem.m */; };
 		FF8727021408C47E002FE6FC /* IRDiscreteLayoutGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = FF8727001408C47E002FE6FC /* IRDiscreteLayoutGrid.h */; };
 		FF8727031408C47E002FE6FC /* IRDiscreteLayoutGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727011408C47E002FE6FC /* IRDiscreteLayoutGrid.m */; };
@@ -29,7 +29,7 @@
 		FF8727071408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727051408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m */; };
 		FF87270A1408E08A002FE6FC /* IRDiscreteLayoutResult.h in Headers */ = {isa = PBXBuildFile; fileRef = FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */; };
 		FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */; };
-		FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,11 +190,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */,
-				FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */,
 				FF8727021408C47E002FE6FC /* IRDiscreteLayoutGrid.h in Headers */,
 				FF8727061408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h in Headers */,
 				FF87270A1408E08A002FE6FC /* IRDiscreteLayoutResult.h in Headers */,
+				FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */,
+				FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
