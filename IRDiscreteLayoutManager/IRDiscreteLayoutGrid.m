@@ -15,13 +15,14 @@
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToValidatorBlocks;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToLayoutBlocks;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToLayoutItems;
+@property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToDisplayBlocks;
 
 @end
 
 @implementation IRDiscreteLayoutGrid
 @synthesize contentSize, prototype;
 @synthesize layoutAreaNames;
-@synthesize layoutAreaNamesToLayoutBlocks, layoutAreaNamesToValidatorBlocks, layoutAreaNamesToLayoutItems;
+@synthesize layoutAreaNamesToLayoutBlocks, layoutAreaNamesToValidatorBlocks, layoutAreaNamesToLayoutItems, layoutAreaNamesToDisplayBlocks;
 
 + (IRDiscreteLayoutGrid *) prototype {
 
@@ -49,6 +50,7 @@
 	self.layoutAreaNamesToLayoutBlocks = [NSMutableDictionary dictionary];
 	self.layoutAreaNamesToLayoutItems = [NSMutableDictionary dictionary];
 	self.layoutAreaNamesToValidatorBlocks = [NSMutableDictionary dictionary];
+	self.layoutAreaNamesToDisplayBlocks = [NSMutableDictionary dictionary];
 	
 	return self;
 
@@ -61,6 +63,7 @@
 	[layoutAreaNamesToLayoutBlocks release];
 	[layoutAreaNamesToValidatorBlocks release];
 	[layoutAreaNamesToLayoutItems release];
+	[layoutAreaNamesToDisplayBlocks release];
 	
 	[super dealloc];
 
@@ -69,15 +72,17 @@
 - (id) copyWithZone:(NSZone *)zone {
 
 	IRDiscreteLayoutGrid *copiedGrid = [[IRDiscreteLayoutGrid allocWithZone:zone] init];
+	copiedGrid.contentSize = self.contentSize;
 	copiedGrid.layoutAreaNames = [[self.layoutAreaNames copy] autorelease];
 	copiedGrid.layoutAreaNamesToLayoutBlocks = [[self.layoutAreaNamesToLayoutBlocks mutableCopy] autorelease];
 	copiedGrid.layoutAreaNamesToLayoutItems = [[self.layoutAreaNamesToLayoutItems mutableCopy] autorelease];
 	copiedGrid.layoutAreaNamesToValidatorBlocks = [[self.layoutAreaNamesToValidatorBlocks mutableCopy] autorelease];
+	copiedGrid.layoutAreaNamesToDisplayBlocks = [[self.layoutAreaNamesToDisplayBlocks mutableCopy] autorelease];
 	return copiedGrid;
 
 }
 
-- (void) registerLayoutAreaNamed:(NSString *)aName validatorBlock:(BOOL(^)(IRDiscreteLayoutGrid *self, id anItem))aValidatorBlock layoutBlock:(CGRect(^)(IRDiscreteLayoutGrid *self, id anItem))aLayoutBlock {
+- (void) registerLayoutAreaNamed:(NSString *)aName validatorBlock:(BOOL(^)(IRDiscreteLayoutGrid *self, id anItem))aValidatorBlock layoutBlock:(CGRect(^)(IRDiscreteLayoutGrid *self, id anItem))aLayoutBlock displayBlock:(id(^)(IRDiscreteLayoutGrid *self, id anItem))aDisplayBlock {
 
 	NSParameterAssert(!self.prototype);
 	NSParameterAssert(aLayoutBlock);
@@ -89,6 +94,9 @@
 	
 	if (aLayoutBlock)
 		[self.layoutAreaNamesToLayoutBlocks setObject:aLayoutBlock forKey:aName];
+		
+	if (aDisplayBlock)
+		[self.layoutAreaNamesToDisplayBlocks setObject:aDisplayBlock forKey:aName];
 
 }
 
@@ -127,7 +135,7 @@
 
 }
 
-- (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock))aBlock {
+- (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock))aBlock {
 	
 	if (!aBlock)
 		return;
@@ -137,8 +145,9 @@
 		aBlock(
 			anAreaName,
 			[self.layoutAreaNamesToLayoutItems objectForKey:anAreaName],
+			[self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName],
 			[self.layoutAreaNamesToLayoutBlocks objectForKey:anAreaName],
-			[self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName]
+			[self.layoutAreaNamesToDisplayBlocks objectForKey:anAreaName]
 		);
 		
 	}];
@@ -191,6 +200,8 @@ IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConsta
 
 	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
 	
+		NSLog(@"self %@, self.contentSize %@", self, NSStringFromCGSize(self.contentSize));
+	
 	  if (CGSizeEqualToSize(defaultBounds, self.contentSize))
 			return size;
 		else
@@ -202,10 +213,22 @@ IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConsta
 
 IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY) {
 
-	return IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake(
-		(CGRect){ unitsOffsetX, unitsOffsetY, unitsSpanX, unitsSpanY },
-		(CGSize){ totalUnitsX, totalUnitsY }, 
-		UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight
-	);
+	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
+		
+		CGFloat xFactor = self.contentSize.width / totalUnitsX;
+		CGFloat yFactor = self.contentSize.height / totalUnitsY;
+		
+		return CGRectIntegral((CGRect){
+			(CGPoint){
+				unitsOffsetX * xFactor,
+				unitsOffsetY * yFactor
+			},
+			(CGSize){
+				unitsSpanX * xFactor,
+				unitsSpanY * yFactor
+			}
+		});
+	
+	} copy] autorelease];
 
 };
