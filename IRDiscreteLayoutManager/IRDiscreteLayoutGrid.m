@@ -109,6 +109,7 @@
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName {
 
 	NSParameterAssert(self.prototype);
+	NSParameterAssert(anAreaName);
 
 	IRDiscreteLayoutGridAreaValidatorBlock validatorBlock = [self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName];
 	if (validatorBlock)

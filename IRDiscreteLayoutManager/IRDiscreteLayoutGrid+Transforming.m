@@ -48,7 +48,6 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 
 	NSMutableDictionary *map = [[self transformingMapRegistry] objectForKey:gridPrototype];
 	if (!map) {
-		NSLog(@"making new map.");
 		map = [NSMutableDictionary dictionary];
 		CFDictionarySetValue((CFMutableDictionaryRef)[self transformingMapRegistry], gridPrototype, map);
 	}
@@ -59,6 +58,8 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 
 + (NSMutableDictionary *) transformingMapForGridPrototype:(IRDiscreteLayoutGrid *)gridPrototype areaName:(NSString *)areaName {
 
+	NSParameterAssert(areaName);
+	
 	NSMutableDictionary *parentMap = [self transformingMapForGridPrototype:gridPrototype];
 	NSMutableDictionary *childMap = [parentMap objectForKey:areaName];
 	
@@ -135,8 +136,8 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 
 - (IRDiscreteLayoutGrid *) transformedGridWithPrototype:(IRDiscreteLayoutGrid *)newGrid {
 
-	//
 	NSParameterAssert(self.prototype);
+	NSParameterAssert(!newGrid.prototype);
 	
 	IRDiscreteLayoutGrid *returnedGrid = [newGrid instantiatedGrid];
 	
