@@ -139,6 +139,9 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 	NSParameterAssert(self.prototype);
 	NSParameterAssert(!newGrid.prototype);
 	
+	if (self.prototype == newGrid)
+		return self;
+	
 	IRDiscreteLayoutGrid *returnedGrid = [newGrid instantiatedGrid];
 	
 	[self enumerateLayoutAreaNamesWithBlock: ^ (NSString *anAreaName) {
