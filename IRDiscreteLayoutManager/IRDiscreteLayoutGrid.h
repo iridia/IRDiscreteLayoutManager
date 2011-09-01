@@ -55,4 +55,4 @@ extern CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds,
 
 extern IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask);
 
-extern IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (NSUInteger totalUnitsX, NSUInteger totalUnitsY, NSUInteger unitsOffsetX, NSUInteger unitsOffsetY, NSUInteger unitsSpanX, NSUInteger unitsSpanY);
+extern IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (CGFloat totalUnitsX, CGFloat totalUnitsY, CGFloat unitsOffsetX, CGFloat unitsOffsetY, CGFloat unitsSpanX, CGFloat unitsSpanY);
