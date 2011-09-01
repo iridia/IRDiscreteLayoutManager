@@ -116,7 +116,10 @@
 		if (!validatorBlock(self, aLayoutItem))
 			[NSException raise:NSInternalInconsistencyException format:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName];
 	
-	[self.layoutAreaNamesToLayoutItems setObject:aLayoutItem forKey:anAreaName];
+	if (aLayoutItem)
+		[self.layoutAreaNamesToLayoutItems setObject:aLayoutItem forKey:anAreaName];
+	else
+		[self.layoutAreaNamesToLayoutItems removeObjectForKey:anAreaName];
 
 }
 
