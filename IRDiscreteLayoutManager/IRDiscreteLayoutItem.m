@@ -25,10 +25,10 @@
 	self = [super init];
 	if (!self)
 		return nil;
-	
-	self.itemsToTypes = (NSDictionary *)CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
-	if (self.itemsToTypes)
-		CFRelease((CFMutableDictionaryRef)self.itemsToTypes);
+		
+	CFMutableDictionaryRef cfItemsToTypes = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+	self.itemsToTypes = (NSDictionary *)cfItemsToTypes;
+	CFRelease(cfItemsToTypes);
 	
 	return self;
 

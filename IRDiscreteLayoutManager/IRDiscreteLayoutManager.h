@@ -7,10 +7,11 @@
 //
 
 #import "IRDiscreteLayoutItem.h"
+#import "IRDiscreteLayoutGrid.h"
+#import "IRDiscreteLayoutGrid+Transforming.h"
+#import "IRDiscreteLayoutResult.h"
 
-@class IRDiscreteLayoutGrid;
 @class IRDiscreteLayoutManager;
-@class IRDiscreteLayoutResult;
 
 
 @protocol IRDiscreteLayoutManagerDataSource, IRDiscreteLayoutManagerDelegate;
@@ -19,6 +20,8 @@
 @property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDataSource> dataSource;
 @property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDelegate> delegate;
 @property (nonatomic, readwrite, retain) IRDiscreteLayoutResult *result;
+
+- (IRDiscreteLayoutResult *) calculatedResult;
 
 @end
 
@@ -35,6 +38,16 @@
 
 
 @protocol IRDiscreteLayoutManagerDelegate <NSObject>
+
+- (NSUInteger) numberOfLayoutGridsForLayoutManager:(IRDiscreteLayoutManager *)manager;
+- (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager layoutGridAtIndex:(NSUInteger)index;
+
+@optional
+
+//	For overriding the upcoming layout grid.
+//	Not implemented: manager uses its own determination
+//	Returns nil: manager stops layout immediately
+//	Returns anything: manager uses returned grid
 
 - (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager nextGridForContentsUsingGrid:(IRDiscreteLayoutGrid *)proposedGrid;
 

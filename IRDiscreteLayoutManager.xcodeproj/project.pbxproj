@@ -7,29 +7,86 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */; };
+		FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
+		FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
+		FF2BFEEC140AC72300604E8D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF2BFEEA140AC72300604E8D /* InfoPlist.strings */; };
+		FF2BFEEE140AC72300604E8D /* IRDiscreteLayoutTests.h in Resources */ = {isa = PBXBuildFile; fileRef = FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */; };
+		FF2BFEF0140AC72300604E8D /* IRDiscreteLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */; };
+		FF2BFF2C140AC9FC00604E8D /* libIRDiscreteLayoutManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */; };
 		FF55E19A1407CE8400D8F3C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
 		FF55E1A01407CE8400D8F3C7 /* IRDiscreteLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */; };
+		FF5C84EC140B802A002E0415 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84EB140B802A002E0415 /* MobileCoreServices.framework */; };
+		FF5C84EF140B803E002E0415 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84EE140B803E002E0415 /* QuartzCore.framework */; };
+		FF5C84F1140B8044002E0415 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84F0140B8044002E0415 /* CoreGraphics.framework */; };
 		FF8726F91408BC08002FE6FC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
 		FF8726FC1408BC0E002FE6FC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */; };
-		FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */; settings = {ATTRIBUTES = (); }; };
 		FF8726FF1408BCA1002FE6FC /* IRDiscreteLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8726FE1408BCA1002FE6FC /* IRDiscreteLayoutItem.m */; };
-		FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FF8727021408C47E002FE6FC /* IRDiscreteLayoutGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = FF8727001408C47E002FE6FC /* IRDiscreteLayoutGrid.h */; };
+		FF8727031408C47E002FE6FC /* IRDiscreteLayoutGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727011408C47E002FE6FC /* IRDiscreteLayoutGrid.m */; };
+		FF8727061408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h in Headers */ = {isa = PBXBuildFile; fileRef = FF8727041408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h */; };
+		FF8727071408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727051408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m */; };
+		FF87270A1408E08A002FE6FC /* IRDiscreteLayoutResult.h in Headers */ = {isa = PBXBuildFile; fileRef = FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */; };
+		FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */; };
+		FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		FF2BFF2A140AC9E900604E8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF55E18D1407CE8400D8F3C7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF55E1951407CE8400D8F3C7;
+			remoteInfo = IRDiscreteLayoutManager;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		FF2BFEE0140AC72300604E8D /* IRDiscreteLayoutTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IRDiscreteLayoutTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		FF2BFEE9140AC72300604E8D /* IRDiscreteLayoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IRDiscreteLayoutTests-Info.plist"; sourceTree = "<group>"; };
+		FF2BFEEB140AC72300604E8D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IRDiscreteLayoutTests.h; sourceTree = "<group>"; };
+		FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IRDiscreteLayoutTests.m; sourceTree = "<group>"; };
+		FF2BFEF1140AC72300604E8D /* IRDiscreteLayoutTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IRDiscreteLayoutTests-Prefix.pch"; sourceTree = "<group>"; };
+		FF2BFF27140AC82100604E8D /* IRCommitSHA.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = IRCommitSHA.sh; path = IRDiscreteLayoutShared/IRCommitSHA.sh; sourceTree = "<group>"; };
 		FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIRDiscreteLayoutManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF55E1991407CE8400D8F3C7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FF55E19D1407CE8400D8F3C7 /* IRDiscreteLayoutManager-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IRDiscreteLayoutManager-Prefix.pch"; sourceTree = "<group>"; };
 		FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutManager.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutManager.h; sourceTree = "<group>"; };
 		FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutManager.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutManager.m; sourceTree = "<group>"; };
 		FF55E1A61407CED100D8F3C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		FF5C84EB140B802A002E0415 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		FF5C84EE140B803E002E0415 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FF5C84F0140B8044002E0415 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		FF8726F81408BC08002FE6FC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		FF8726FE1408BCA1002FE6FC /* IRDiscreteLayoutItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutItem.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutItem.m; sourceTree = "<group>"; };
+		FF8727001408C47E002FE6FC /* IRDiscreteLayoutGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutGrid.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutGrid.h; sourceTree = "<group>"; };
+		FF8727011408C47E002FE6FC /* IRDiscreteLayoutGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutGrid.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutGrid.m; sourceTree = "<group>"; };
+		FF8727041408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IRDiscreteLayoutGrid+Transforming.h"; path = "IRDiscreteLayoutManager/IRDiscreteLayoutGrid+Transforming.h"; sourceTree = "<group>"; };
+		FF8727051408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IRDiscreteLayoutGrid+Transforming.m"; path = "IRDiscreteLayoutManager/IRDiscreteLayoutGrid+Transforming.m"; sourceTree = "<group>"; };
+		FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutResult.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutResult.h; sourceTree = "<group>"; };
+		FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutResult.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutResult.m; sourceTree = "<group>"; };
 		FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutItem.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutItem.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		FF2BFEDC140AC72300604E8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF5C84F1140B8044002E0415 /* CoreGraphics.framework in Frameworks */,
+				FF5C84EF140B803E002E0415 /* QuartzCore.framework in Frameworks */,
+				FF2BFF2C140AC9FC00604E8D /* libIRDiscreteLayoutManager.a in Frameworks */,
+				FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */,
+				FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */,
+				FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */,
+				FF5C84EC140B802A002E0415 /* MobileCoreServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FF55E1931407CE8400D8F3C7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -43,15 +100,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF2BFEE7140AC72300604E8D /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */,
+				FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */,
+				FF2BFEE8140AC72300604E8D /* Supporting Files */,
+			);
+			name = Tests;
+			path = IRDiscreteLayoutTests;
+			sourceTree = "<group>";
+		};
+		FF2BFEE8140AC72300604E8D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FF2BFEE9140AC72300604E8D /* IRDiscreteLayoutTests-Info.plist */,
+				FF2BFEEA140AC72300604E8D /* InfoPlist.strings */,
+				FF2BFEF1140AC72300604E8D /* IRDiscreteLayoutTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FF2BFF28140AC82600604E8D /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FF2BFF27140AC82100604E8D /* IRCommitSHA.sh */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
 		FF55E18B1407CE8400D8F3C7 = {
 			isa = PBXGroup;
 			children = (
 				FF55E1A61407CED100D8F3C7 /* README.md */,
 				FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */,
 				FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */,
+				FF8727001408C47E002FE6FC /* IRDiscreteLayoutGrid.h */,
+				FF8727011408C47E002FE6FC /* IRDiscreteLayoutGrid.m */,
+				FF8727041408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h */,
+				FF8727051408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m */,
 				FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */,
 				FF8726FE1408BCA1002FE6FC /* IRDiscreteLayoutItem.m */,
+				FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */,
+				FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */,
 				FF55E19C1407CE8400D8F3C7 /* Supporting Files */,
+				FF2BFEE7140AC72300604E8D /* Tests */,
+				FF2BFF28140AC82600604E8D /* Shared */,
 				FF55E1981407CE8400D8F3C7 /* Frameworks */,
 				FF55E1971407CE8400D8F3C7 /* Products */,
 			);
@@ -61,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */,
+				FF2BFEE0140AC72300604E8D /* IRDiscreteLayoutTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -71,6 +166,10 @@
 				FF55E1991407CE8400D8F3C7 /* Foundation.framework */,
 				FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */,
 				FF8726F81408BC08002FE6FC /* UIKit.framework */,
+				FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */,
+				FF5C84F0140B8044002E0415 /* CoreGraphics.framework */,
+				FF5C84EE140B803E002E0415 /* QuartzCore.framework */,
+				FF5C84EB140B802A002E0415 /* MobileCoreServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -91,6 +190,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF8727021408C47E002FE6FC /* IRDiscreteLayoutGrid.h in Headers */,
+				FF8727061408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h in Headers */,
+				FF87270A1408E08A002FE6FC /* IRDiscreteLayoutResult.h in Headers */,
 				FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */,
 				FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */,
 			);
@@ -99,6 +201,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		FF2BFEDF140AC72300604E8D /* IRDiscreteLayoutTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF2BFEF4140AC72300604E8D /* Build configuration list for PBXNativeTarget "IRDiscreteLayoutTests" */;
+			buildPhases = (
+				FF2BFEDB140AC72300604E8D /* Sources */,
+				FF2BFEDC140AC72300604E8D /* Frameworks */,
+				FF2BFEDD140AC72300604E8D /* Resources */,
+				FF2BFEDE140AC72300604E8D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF2BFF2B140AC9E900604E8D /* PBXTargetDependency */,
+			);
+			name = IRDiscreteLayoutTests;
+			productName = IRDiscreteLayoutTests;
+			productReference = FF2BFEE0140AC72300604E8D /* IRDiscreteLayoutTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		FF55E1951407CE8400D8F3C7 /* IRDiscreteLayoutManager */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FF55E1A31407CE8400D8F3C7 /* Build configuration list for PBXNativeTarget "IRDiscreteLayoutManager" */;
@@ -122,6 +243,7 @@
 		FF55E18D1407CE8400D8F3C7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0410;
 				ORGANIZATIONNAME = "Iridia Productions";
 			};
 			buildConfigurationList = FF55E1901407CE8400D8F3C7 /* Build configuration list for PBXProject "IRDiscreteLayoutManager" */;
@@ -137,23 +259,112 @@
 			projectRoot = "";
 			targets = (
 				FF55E1951407CE8400D8F3C7 /* IRDiscreteLayoutManager */,
+				FF2BFEDF140AC72300604E8D /* IRDiscreteLayoutTests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		FF2BFEDD140AC72300604E8D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF2BFEEC140AC72300604E8D /* InfoPlist.strings in Resources */,
+				FF2BFEEE140AC72300604E8D /* IRDiscreteLayoutTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FF2BFEDE140AC72300604E8D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		FF2BFEDB140AC72300604E8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF2BFEF0140AC72300604E8D /* IRDiscreteLayoutTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FF55E1921407CE8400D8F3C7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				FF55E1A01407CE8400D8F3C7 /* IRDiscreteLayoutManager.m in Sources */,
 				FF8726FF1408BCA1002FE6FC /* IRDiscreteLayoutItem.m in Sources */,
+				FF8727031408C47E002FE6FC /* IRDiscreteLayoutGrid.m in Sources */,
+				FF8727071408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m in Sources */,
+				FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		FF2BFF2B140AC9E900604E8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF55E1951407CE8400D8F3C7 /* IRDiscreteLayoutManager */;
+			targetProxy = FF2BFF2A140AC9E900604E8D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FF2BFEEA140AC72300604E8D /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FF2BFEEB140AC72300604E8D /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		FF2BFEF2140AC72300604E8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "IRDiscreteLayoutTests/IRDiscreteLayoutTests-Prefix.pch";
+				INFOPLIST_FILE = "IRDiscreteLayoutTests/IRDiscreteLayoutTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		FF2BFEF3140AC72300604E8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "IRDiscreteLayoutTests/IRDiscreteLayoutTests-Prefix.pch";
+				INFOPLIST_FILE = "IRDiscreteLayoutTests/IRDiscreteLayoutTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
 		FF55E1A11407CE8400D8F3C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -173,7 +384,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				SDKROOT = iphoneos4.3;
+				VALID_ARCHS = "armv6 armv7 i386";
 			};
 			name = Debug;
 		};
@@ -189,8 +405,13 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				SDKROOT = iphoneos4.3;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv6 armv7 i386";
 			};
 			name = Release;
 		};
@@ -221,6 +442,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		FF2BFEF4140AC72300604E8D /* Build configuration list for PBXNativeTarget "IRDiscreteLayoutTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF2BFEF2140AC72300604E8D /* Debug */,
+				FF2BFEF3140AC72300604E8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FF55E1901407CE8400D8F3C7 /* Build configuration list for PBXProject "IRDiscreteLayoutManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
