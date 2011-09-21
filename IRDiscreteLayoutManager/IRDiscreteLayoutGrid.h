@@ -24,7 +24,20 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 
 @protocol IRDiscreteLayoutItem;
 
-@interface IRDiscreteLayoutGrid : NSObject <NSCopying>
+@protocol IRDiscreteLayoutGridEngineUsing <NSObject>
+
+//	The protocol is here to allow custom grids that have variable layout content areas in the grid, which are determined dynamically
+//	The method is invoked on any prototype, and then the prototype will instantiate something, then fill that thing up using available items
+//	within the grid.  The layout manager will then look at the returned instance, and make sure the used items are not sent to another grid.
+
+//	The layout manager will not enumerate the content areas and manually set everything.
+
+- (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items;
+
+@end
+
+
+@interface IRDiscreteLayoutGrid : NSObject <NSCopying, IRDiscreteLayoutGridEngineUsing>
 
 @property (nonatomic, readwrite, assign) CGSize contentSize;
 @property (nonatomic, readonly, retain) IRDiscreteLayoutGrid *prototype;

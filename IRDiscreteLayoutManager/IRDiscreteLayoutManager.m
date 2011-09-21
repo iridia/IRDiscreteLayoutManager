@@ -24,7 +24,7 @@
 	NSParameterAssert(self.dataSource);
 	NSParameterAssert(self.delegate);
 	
-	NSMutableArray *grids = [NSMutableArray array];
+	NSMutableArray *returnedGrids = [NSMutableArray array];
 	NSUInteger numberOfItems = [self.dataSource numberOfItemsForLayoutManager:self];
 	
 	__block IRDiscreteLayoutGrid *currentGrid = nil;
@@ -41,46 +41,47 @@
 	IRDiscreteLayoutGrid * (^nextGridPrototype)() = ^ {
 	
 		IRDiscreteLayoutGrid *tentativeGrid = randomGrid();
-		if (![self.delegate respondsToSelector:@selector(layoutManager:nextGridForContentsUsingGrid:)])
-			return tentativeGrid;
 		
-		return [self.delegate layoutManager:self nextGridForContentsUsingGrid:tentativeGrid];
-			
-	};
+		if ([self.delegate respondsToSelector:@selector(layoutManager:nextGridForContentsUsingGrid:)])
+			return [self.delegate layoutManager:self nextGridForContentsUsingGrid:tentativeGrid];
 		
-	void (^stashGridAndItems)() = ^ {
-	
-		[currentItems enumerateObjectsUsingBlock: ^ (id<IRDiscreteLayoutItem> anItem, NSUInteger idx, BOOL *stop) {
-			[currentGrid setLayoutItem:anItem forAreaNamed:[currentGrid.layoutAreaNames objectAtIndex:idx]];
-		}];
+		return tentativeGrid;
 		
-		currentItems = nil;
-
-		[grids addObject:currentGrid];
-		currentGrid = nil;
-				
 	};
 	
+	currentItems = [NSMutableArray arrayWithCapacity:numberOfItems];
 	for (NSUInteger index = 0; ((index < numberOfItems) && !stop); index ++) {
-	
-		if (!currentGrid)
-			currentGrid = [nextGridPrototype() instantiatedGrid];
-		
-		if (!currentItems)
-			currentItems = [NSMutableArray arrayWithCapacity:[currentGrid numberOfLayoutAreas]];
 		
 		id<IRDiscreteLayoutItem> item = [self.dataSource layoutManager:self itemAtIndex:index];
-		[currentItems addObject:item];
+		[currentItems insertObject:item atIndex:index];
 		
-		if ([currentGrid numberOfLayoutAreas] == [currentItems count])
-			stashGridAndItems();
+	}
 	
-	};
+	while (!stop) {
+		
+		if (!currentGrid)
+			currentGrid = [nextGridPrototype() instantiatedGridWithAvailableItems:currentItems];
+			
+		if (!currentGrid) {
+			stop = YES;
+			continue;
+		}
+		
+		[currentGrid enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+			[currentItems removeObject:item];
+		}];
+		
+		[returnedGrids addObject:currentGrid];
+		currentGrid = nil;
+		
+		if (![currentItems count]) {
+			stop = YES;
+			continue;
+		}
+		
+	}
 	
-	if (currentItems)
-		stashGridAndItems();
-	
-	return [IRDiscreteLayoutResult resultWithGrids:grids];
+	return [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
 
 }
 

@@ -171,6 +171,29 @@
 
 }
 
+- (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items {
+
+	//	This base implementation simply fills the grid up with some available items at the beginning of the array
+	//	Subclasses can probably swizzle the prototype, and return a new instantiated grid
+	
+	NSUInteger numberOfItems = [items count];
+		
+	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
+	__block NSUInteger index = 0;
+	
+	[instance enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+	
+		if (index < numberOfItems)
+			[instance setLayoutItem:[items objectAtIndex:index] forAreaNamed:name];
+		
+		index++;
+	
+	}];
+	
+	return instance;
+
+}
+
 @end
 
 
