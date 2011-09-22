@@ -31,7 +31,12 @@
 	__block NSMutableArray *currentItems = nil;
 	__block BOOL stop = NO;
 
+	NSUInteger numberOfGrids = [self.delegate numberOfLayoutGridsForLayoutManager:self];
+	
 	IRDiscreteLayoutGrid * (^randomGrid)() = ^ {
+	
+		if (!numberOfGrids)
+			return (IRDiscreteLayoutGrid *)nil;
 		
 		NSUInteger randomIndex = (arc4random() % [self.delegate numberOfLayoutGridsForLayoutManager:self]);
 		return [self.delegate layoutManager:self layoutGridAtIndex:randomIndex];
