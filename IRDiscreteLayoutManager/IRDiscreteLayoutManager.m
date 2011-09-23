@@ -72,17 +72,19 @@
 			continue;
 		}
 		
+		NSUInteger oldCurrentItemsCount = [currentItems count];
+		
 		[currentGrid enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 			[currentItems removeObject:item];
 		}];
 		
-		[returnedGrids addObject:currentGrid];
-		currentGrid = nil;
-		
-		if (![currentItems count]) {
+		if (![currentItems count] || (oldCurrentItemsCount == [currentItems count])) {
 			stop = YES;
 			continue;
 		}
+		
+		[returnedGrids addObject:currentGrid];
+		currentGrid = nil;
 		
 	}
 	
