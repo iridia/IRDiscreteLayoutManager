@@ -10,7 +10,7 @@
 
 - (NSString *) title;
 - (NSArray *) representedMediaItems;
-- (NSString *) typeForRepresentedMediaItem:(id)anItem;
+- (CFStringRef) typeForRepresentedMediaItem:(id)anItem;
 
 - (NSString *) representedText;
 - (NSURL *) representedImageURI;
@@ -36,6 +36,6 @@
 #ifndef __IRDiscreteLayoutItemHelpers__
 #define __IRDiscreteLayoutItemHelpers__
 
-extern id IRDiscreteLayoutItemContentMediaForUTIType (id<IRDiscreteLayoutItem>self, NSString *aType);
+extern id IRDiscreteLayoutItemContentMediaForUTIType (id<IRDiscreteLayoutItem>self, CFStringRef aType);
 
 #endif

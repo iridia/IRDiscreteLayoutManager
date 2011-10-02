@@ -66,47 +66,47 @@
 
 }
 
-- (NSString *) typeForRepresentedMediaItem:(id)anItem {
+- (CFStringRef) typeForRepresentedMediaItem:(id)anItem {
 
 	NSString *potentialType = [itemsToTypes objectForKey:anItem];
 	
 	if (potentialType)
-		return potentialType;
+		return (CFStringRef)potentialType;
 
 	if ([anItem isKindOfClass:[NSURL class]])
-		return (NSString *)kUTTypeURL;
+		return kUTTypeURL;
 	
-	return (NSString *)kUTTypeItem;
+	return kUTTypeItem;
 
 }
 
 - (NSString *) representedText {
 
-		return IRDiscreteLayoutItemContentMediaForUTIType(self, (NSString *)kUTTypeText);
+		return IRDiscreteLayoutItemContentMediaForUTIType(self, kUTTypeText);
 
 }
 
 - (NSURL *) representedImageURI {
 
-	return IRDiscreteLayoutItemContentMediaForUTIType(self, (NSString *)kUTTypeText);	
+	return IRDiscreteLayoutItemContentMediaForUTIType(self, kUTTypeImage);	
 
 }
 
 - (NSURL *) representedVideoURI {
 
-	return IRDiscreteLayoutItemContentMediaForUTIType(self, (NSString *)kUTTypeText);
+	return IRDiscreteLayoutItemContentMediaForUTIType(self, kUTTypeVideo);
 
 }
 
 @end
 
 
-id IRDiscreteLayoutItemContentMediaForUTIType (id<IRDiscreteLayoutItem>self, NSString *aType) {
+id IRDiscreteLayoutItemContentMediaForUTIType (id<IRDiscreteLayoutItem>self, CFStringRef aType) {
 
 	NSArray *itemsWithConformingTypes = [[self representedMediaItems] objectsAtIndexes:[[self representedMediaItems] indexesOfObjectsPassingTest:^BOOL(id aMediaItem, NSUInteger idx, BOOL *stop) {
 	
-		NSString *mediaUTI = [self typeForRepresentedMediaItem:aMediaItem];
-		return UTTypeConformsTo((CFStringRef)mediaUTI, (CFStringRef)aType);
+		CFStringRef mediaUTI = (CFStringRef)[self typeForRepresentedMediaItem:aMediaItem];
+		return UTTypeConformsTo(mediaUTI, aType);
 		
 	}]];
 

@@ -31,7 +31,12 @@
 	__block NSMutableArray *currentItems = nil;
 	__block BOOL stop = NO;
 
+	NSUInteger numberOfGrids = [self.delegate numberOfLayoutGridsForLayoutManager:self];
+	
 	IRDiscreteLayoutGrid * (^randomGrid)() = ^ {
+	
+		if (!numberOfGrids)
+			return (IRDiscreteLayoutGrid *)nil;
 		
 		NSUInteger randomIndex = (arc4random() % [self.delegate numberOfLayoutGridsForLayoutManager:self]);
 		return [self.delegate layoutManager:self layoutGridAtIndex:randomIndex];
@@ -67,17 +72,19 @@
 			continue;
 		}
 		
+		NSUInteger oldCurrentItemsCount = [currentItems count];
+		
 		[currentGrid enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 			[currentItems removeObject:item];
 		}];
 		
-		[returnedGrids addObject:currentGrid];
-		currentGrid = nil;
-		
-		if (![currentItems count]) {
+		if (![currentItems count] || (oldCurrentItemsCount == [currentItems count])) {
 			stop = YES;
 			continue;
 		}
+		
+		[returnedGrids addObject:currentGrid];
+		currentGrid = nil;
 		
 	}
 	
