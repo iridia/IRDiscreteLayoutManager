@@ -8,13 +8,25 @@
 
 #import "IRDiscreteLayoutManager.h"
 
+@interface IRDiscreteLayoutManager ()
+
+@property (nonatomic, readwrite, retain) NSArray *currentlyConsumedItems;
+@property (nonatomic, readwrite, retain) NSMutableDictionary *sessionDictionary;
+
+@end
+
+
 @implementation IRDiscreteLayoutManager
 
 @synthesize dataSource, delegate, result;
+@synthesize currentlyConsumedItems, sessionDictionary;
 
 - (void) dealloc {
 
 	[result release];
+	[currentlyConsumedItems release];
+	[sessionDictionary release];
+	
 	[super dealloc];
 
 }
@@ -23,6 +35,9 @@
 
 	NSParameterAssert(self.dataSource);
 	NSParameterAssert(self.delegate);
+	
+	self.currentlyConsumedItems = [NSArray array];
+	self.sessionDictionary = [NSMutableDictionary dictionary];
 	
 	NSMutableArray *returnedGrids = [NSMutableArray array];
 	NSUInteger numberOfItems = [self.dataSource numberOfItemsForLayoutManager:self];
@@ -75,6 +90,7 @@
 		NSUInteger oldCurrentItemsCount = [currentItems count];
 		
 		[currentGrid enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+			[[self mutableArrayValueForKey:@"currentlyConsumedItems"] addObject:item];
 			[currentItems removeObject:item];
 		}];
 		

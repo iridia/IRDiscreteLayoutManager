@@ -14,21 +14,6 @@
 @class IRDiscreteLayoutManager;
 
 
-@protocol IRDiscreteLayoutManagerDataSource, IRDiscreteLayoutManagerDelegate;
-@interface IRDiscreteLayoutManager : NSObject
-
-@property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDataSource> dataSource;
-@property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDelegate> delegate;
-@property (nonatomic, readwrite, retain) IRDiscreteLayoutResult *result;
-
-- (IRDiscreteLayoutResult *) calculatedResult;
-
-@end
-
-
-
-
-
 @protocol IRDiscreteLayoutManagerDataSource <NSObject>
 
 - (NSUInteger) numberOfItemsForLayoutManager:(IRDiscreteLayoutManager *)manager;
@@ -54,16 +39,28 @@
 @end
 
 
-//	Provides extra information for the layout manager’s current operation
+@protocol IRDiscreteLayoutProgressIntrospection <NSObject>
+
+//	Introspection provides extra information for the layout manager’s current operation
 //	so the delegate can make an informed decision about returning a better proposed grid
 
-@protocol IRDiscreteLayoutManagerIntrospection <NSObject>
+//	As a matter of face, the session dictionary might be nil’d after each layout calculation
+//	And they should NOT be referenced out of the context of a single layout
+
+//	Don’t assume that anything will persist across layout sessions!
 
 - (NSArray *) currentlyConsumedItems;
+- (NSMutableDictionary *) sessionDictionary;
 
 @end
 
-@interface IRDiscreteLayoutManager (IRDiscreteLayoutManagerIntrospection) <IRDiscreteLayoutManagerIntrospection>
-	
-@end
 
+@interface IRDiscreteLayoutManager : NSObject <IRDiscreteLayoutProgressIntrospection>
+
+@property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDataSource> dataSource;
+@property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDelegate> delegate;
+@property (nonatomic, readwrite, retain) IRDiscreteLayoutResult *result;
+
+- (IRDiscreteLayoutResult *) calculatedResult;
+
+@end
