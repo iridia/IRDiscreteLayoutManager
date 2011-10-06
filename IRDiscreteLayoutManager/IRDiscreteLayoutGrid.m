@@ -194,6 +194,23 @@
 
 }
 
+- (BOOL) isFullyPopulated {
+
+	NSParameterAssert(self.prototype);
+	
+	__block BOOL answer = YES;
+	
+	[self enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+	
+		if (!item)
+			answer = NO;
+			
+	}];
+	
+	return answer;
+
+}
+
 @end
 
 
