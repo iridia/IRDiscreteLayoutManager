@@ -96,7 +96,6 @@
 		
 		if (![currentItems count] || (oldCurrentItemsCount == [currentItems count])) {
 			stop = YES;
-			continue;
 		}
 		
 		[returnedGrids addObject:currentGrid];
