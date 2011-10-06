@@ -89,6 +89,11 @@
 		
 		NSUInteger oldCurrentItemsCount = [currentItems count];
 		
+		if (!oldCurrentItemsCount) {
+			stop = YES;
+			continue;
+		}
+		
 		[currentGrid enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 			[[self mutableArrayValueForKey:@"currentlyConsumedItems"] addObject:item];
 			[currentItems removeObject:item];
