@@ -23,6 +23,7 @@
 @synthesize contentSize, prototype;
 @synthesize layoutAreaNames;
 @synthesize layoutAreaNamesToLayoutBlocks, layoutAreaNamesToValidatorBlocks, layoutAreaNamesToLayoutItems, layoutAreaNamesToDisplayBlocks;
+@synthesize populationInspectorBlock;
 
 + (IRDiscreteLayoutGrid *) prototype {
 
@@ -64,6 +65,8 @@
 	[layoutAreaNamesToValidatorBlocks release];
 	[layoutAreaNamesToLayoutItems release];
 	[layoutAreaNamesToDisplayBlocks release];
+	
+	[populationInspectorBlock release];
 	
 	[super dealloc];
 
@@ -197,6 +200,12 @@
 - (BOOL) isFullyPopulated {
 
 	NSParameterAssert(self.prototype);
+	
+	if (self.populationInspectorBlock)
+		return self.populationInspectorBlock(self);
+	
+	if (self.prototype.populationInspectorBlock)
+		return self.prototype.populationInspectorBlock(self);
 	
 	__block BOOL answer = YES;
 	

@@ -52,7 +52,10 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 - (IRDiscreteLayoutGrid *) instantiatedGrid;
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName;
 - (id) layoutItemForAreaNamed:(NSString *)anAreaName;
+
+//	Invoking -isFullyPopulated actually asks the block if it has got any idea at all first
 - (BOOL) isFullyPopulated;
+@property (nonatomic, readwrite, copy) BOOL (^populationInspectorBlock)(IRDiscreteLayoutGrid *self);
 
 //	Generally, these enumerators always work no matter if the grid is a prototype or not.
 - (void) enumerateLayoutAreaNamesWithBlock:(void(^)(NSString *anAreaName))aBlock;
