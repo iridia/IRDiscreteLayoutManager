@@ -28,6 +28,7 @@
 		
 	CFMutableDictionaryRef cfItemsToTypes = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
 	self.itemsToTypes = (NSDictionary *)cfItemsToTypes;
+	self.representedMediaItems = [NSArray array];
 	CFRelease(cfItemsToTypes);
 	
 	return self;

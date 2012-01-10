@@ -95,8 +95,13 @@
 		}
 		
 		[currentGrid enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+			
+			if (!item)
+				return;
+		
 			[[self mutableArrayValueForKey:@"currentlyConsumedItems"] addObject:item];
 			[currentItems removeObject:item];
+			
 		}];
 		
 		if (![currentItems count] || (oldCurrentItemsCount == [currentItems count])) {
