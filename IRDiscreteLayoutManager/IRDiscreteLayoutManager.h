@@ -24,8 +24,11 @@
 
 @protocol IRDiscreteLayoutManagerDelegate <NSObject>
 
+//	-layoutManager:indexOfLayoutGrid: may also return NSNotFound
+
 - (NSUInteger) numberOfLayoutGridsForLayoutManager:(IRDiscreteLayoutManager *)manager;
 - (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager layoutGridAtIndex:(NSUInteger)index;
+- (NSInteger) layoutManager:(IRDiscreteLayoutManager *)manager indexOfLayoutGrid:(IRDiscreteLayoutGrid *)grid;
 
 @optional
 
