@@ -78,10 +78,39 @@
 	}
 	
 	while (!stop) {
+	
+		NSMutableIndexSet *attemptedPrototypeIndices = [NSMutableIndexSet indexSet];
+		BOOL canEnumerate = YES;
 		
-		if (!currentGrid)
-			currentGrid = [nextGridPrototype() instantiatedGridWithAvailableItems:currentItems];
+		while (canEnumerate) {
+		
+			//	If all the grids have been tried, we have no luck left
 			
+			if ([attemptedPrototypeIndices containsIndexesInRange:(NSRange){ 0, numberOfGrids }]) {
+			
+				canEnumerate = NO;
+				continue;
+			
+			}
+		
+			IRDiscreteLayoutGrid *nextPrototype = nextGridPrototype();
+			
+			NSInteger index = [self.delegate layoutManager:self indexOfLayoutGrid:nextPrototype];
+			NSParameterAssert(index != NSNotFound);
+			
+			if ([attemptedPrototypeIndices containsIndex:(NSUInteger)index])
+				continue;
+				
+			[attemptedPrototypeIndices addIndex:(NSUInteger)index];
+			
+			currentGrid = [nextPrototype instantiatedGridWithAvailableItems:currentItems];
+			if (currentGrid) {
+				canEnumerate = NO;
+				continue;
+			}
+			
+		}
+		
 		if (!currentGrid) {
 			stop = YES;
 			continue;
@@ -112,6 +141,9 @@
 		currentGrid = nil;
 		
 	}
+	
+	//	No item left behind
+	NSAssert1(![currentItems count], @"Layout must consume all items; items left are %@", currentItems);
 	
 	return [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
 
