@@ -184,16 +184,28 @@
 	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
 	__block NSUInteger index = 0;
 	
-	[instance enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-	
-		if (index < numberOfItems)
-			[instance setLayoutItem:[items objectAtIndex:index] forAreaNamed:name];
+	@try {
+
+		[instance enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 		
-		index++;
+			if (index < numberOfItems)
+				[instance setLayoutItem:[items objectAtIndex:index] forAreaNamed:name];
+			
+			index++;
+		
+		}];
+		
+		return instance;
 	
-	}];
+	} @catch (NSException *exception) {
 	
-	return instance;
+		//	If any validator said NO, the grid prototype is skipped
+	
+		NSLog(@"exception during layout: %@", exception);
+			
+	}
+	
+	return nil;
 
 }
 
