@@ -24,6 +24,7 @@
 @synthesize layoutAreaNames;
 @synthesize layoutAreaNamesToLayoutBlocks, layoutAreaNamesToValidatorBlocks, layoutAreaNamesToLayoutItems, layoutAreaNamesToDisplayBlocks;
 @synthesize populationInspectorBlock;
+@synthesize allowsPartialInstancePopulation;
 
 + (IRDiscreteLayoutGrid *) prototype {
 
@@ -47,11 +48,12 @@
 	if (!self)
 		return nil;
 		
-	self.layoutAreaNames = [NSArray array];
-	self.layoutAreaNamesToLayoutBlocks = [NSMutableDictionary dictionary];
-	self.layoutAreaNamesToLayoutItems = [NSMutableDictionary dictionary];
-	self.layoutAreaNamesToValidatorBlocks = [NSMutableDictionary dictionary];
-	self.layoutAreaNamesToDisplayBlocks = [NSMutableDictionary dictionary];
+	layoutAreaNames = [[NSArray array] retain];
+	layoutAreaNamesToLayoutBlocks = [[NSMutableDictionary dictionary] retain];
+	layoutAreaNamesToLayoutItems = [[NSMutableDictionary dictionary] retain];
+	layoutAreaNamesToValidatorBlocks = [[NSMutableDictionary dictionary] retain];
+	layoutAreaNamesToDisplayBlocks = [[NSMutableDictionary dictionary] retain];
+	allowsPartialInstancePopulation = NO;
 	
 	return self;
 
@@ -81,6 +83,7 @@
 	copiedGrid.layoutAreaNamesToLayoutItems = [[self.layoutAreaNamesToLayoutItems mutableCopy] autorelease];
 	copiedGrid.layoutAreaNamesToValidatorBlocks = [[self.layoutAreaNamesToValidatorBlocks mutableCopy] autorelease];
 	copiedGrid.layoutAreaNamesToDisplayBlocks = [[self.layoutAreaNamesToDisplayBlocks mutableCopy] autorelease];
+	copiedGrid.allowsPartialInstancePopulation = self.allowsPartialInstancePopulation;
 	return copiedGrid;
 
 }
@@ -93,13 +96,13 @@
 	[[self mutableArrayValueForKey:@"layoutAreaNames"] addObject:aName];
 	
 	if (aValidatorBlock)
-		[self.layoutAreaNamesToValidatorBlocks setObject:aValidatorBlock forKey:aName];
+		[self.layoutAreaNamesToValidatorBlocks setObject:[[aValidatorBlock copy] autorelease] forKey:aName];
 	
 	if (aLayoutBlock)
-		[self.layoutAreaNamesToLayoutBlocks setObject:aLayoutBlock forKey:aName];
+		[self.layoutAreaNamesToLayoutBlocks setObject:[[aLayoutBlock copy] autorelease] forKey:aName];
 		
 	if (aDisplayBlock)
-		[self.layoutAreaNamesToDisplayBlocks setObject:aDisplayBlock forKey:aName];
+		[self.layoutAreaNamesToDisplayBlocks setObject:[[aDisplayBlock copy] autorelease] forKey:aName];
 
 }
 
@@ -115,9 +118,8 @@
 	NSParameterAssert(anAreaName);
 
 	IRDiscreteLayoutGridAreaValidatorBlock validatorBlock = [self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName];
-	if (validatorBlock)
-		if (!validatorBlock(self, aLayoutItem))
-			[NSException raise:NSInternalInconsistencyException format:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName];
+	if (aLayoutItem && validatorBlock && !validatorBlock(self, aLayoutItem))
+		[NSException raise:NSInternalInconsistencyException format:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName];
 	
 	if (aLayoutItem)
 		[self.layoutAreaNamesToLayoutItems setObject:aLayoutItem forKey:anAreaName];
@@ -180,31 +182,66 @@
 	//	Subclasses can probably swizzle the prototype, and return a new instantiated grid
 	
 	NSUInteger numberOfItems = [items count];
+	NSMutableArray *nonConsumedItems = [[items mutableCopy] autorelease];
 		
 	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
-	__block NSUInteger index = 0;
 	
-	@try {
+	__block BOOL canContinue = (numberOfItems > 0);
+	__block BOOL hasSkippedItem = NO;
+		
+	while (canContinue) {
+	
+		id nextItem = [nonConsumedItems objectAtIndex:0];
+		__block BOOL hasClaimedItem = NO;
 
-		[instance enumerateLayoutAreasWithBlock: ^ (NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+		[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 		
-			if (index < numberOfItems)
-				[instance setLayoutItem:[items objectAtIndex:index] forAreaNamed:name];
+			if (hasClaimedItem)
+				return;
 			
-			index++;
-		
+			if ([instance layoutItemForAreaNamed:name])
+				return;
+			
+			@try {
+			
+				NSCParameterAssert(!hasClaimedItem);
+			
+				[instance setLayoutItem:nextItem forAreaNamed:name];
+				[nonConsumedItems removeObject:nextItem];
+				hasClaimedItem = YES;
+			
+				NSCParameterAssert(hasClaimedItem);
+			
+			} @catch (NSException *exc) {
+			
+				//	TBD: use custom exception name for validator bail
+				NSCParameterAssert(!hasClaimedItem);
+				
+			}
+			
 		}];
 		
-		return instance;
-	
-	} @catch (NSException *exception) {
-	
-		//	If any validator said NO, the grid prototype is skipped
-	
-		NSLog(@"exception during layout: %@", exception);
+		if (!hasClaimedItem) {
+		
+			[nonConsumedItems removeObject:nextItem];
+			hasSkippedItem = YES;
 			
+		}
+		
+		canContinue = !![nonConsumedItems count];
+		
 	}
 	
+	if ([instance isFullyPopulated])
+		return instance;
+	
+	if (!hasSkippedItem)
+		return instance;
+	
+	if (self.allowsPartialInstancePopulation)
+		return instance;
+	
+	NSLog(@"%@ failed to instantiate, disallowing partial population", self);
 	return nil;
 
 }
