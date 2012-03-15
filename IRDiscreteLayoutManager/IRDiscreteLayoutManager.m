@@ -58,8 +58,6 @@
 	
 	while (!stop) {
 	
-		NSLog(@"starting new layout loop for the next page");
-	
 		NSMutableIndexSet *attemptedPrototypeIndices = [NSMutableIndexSet indexSet];
 		BOOL canEnumerate = YES;
 		
@@ -68,9 +66,6 @@
 			//	If all the grids have been tried, we have no luck left
 			
 			if ([attemptedPrototypeIndices containsIndexesInRange:(NSRange){ 0, numberOfGrids }]) {
-			
-				NSLog(@"can not emuerate, attempted indices is full");
-			
 				canEnumerate = NO;
 				continue;
 			
@@ -119,26 +114,20 @@
 			NSUInteger index = NSNotFound;
 			
 			if (gridHasBeenAttempted(nextPrototype, &index)) {
-				NSLog(@"skipping grid at %i because it has been tried", index);
 				continue;
 			}
 			
 			[attemptedPrototypeIndices addIndex:(NSUInteger)index];
 			
-			NSLog(@"layout manager trying prototype %@ at index %i", nextPrototype, index);
 			currentGrid = [nextPrototype instantiatedGridWithAvailableItems:currentItems];
 			if (currentGrid) {
 				canEnumerate = NO;
-				NSLog(@"prototype at index %i was instantiated", index);
 				continue;
 			}
-			
-			NSLog(@"prototype at index %i failed to instantiate", index);
 			
 		}
 		
 		if (!currentGrid) {
-			NSLog(@"failure to instantiate terminates loop early");
 			stop = YES;
 			continue;
 		}
@@ -146,7 +135,6 @@
 		NSUInteger oldCurrentItemsCount = [currentItems count];
 		
 		if (!oldCurrentItemsCount) {
-			NSLog(@"failure to consume more items terminates loop early");
 			stop = YES;
 			continue;
 		}

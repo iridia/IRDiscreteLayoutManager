@@ -241,7 +241,6 @@
 	if (self.allowsPartialInstancePopulation)
 		return instance;
 	
-	NSLog(@"%@ failed to instantiate, disallowing partial population", self);
 	return nil;
 
 }
