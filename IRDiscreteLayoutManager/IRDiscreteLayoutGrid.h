@@ -61,6 +61,12 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 - (void) enumerateLayoutAreaNamesWithBlock:(void(^)(NSString *anAreaName))aBlock;
 - (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock))aBlock;
 
+@property (nonatomic, readwrite, assign) BOOL allowsPartialInstancePopulation;
+//	Whether to allow partial population.
+//	Default is NO.  Affects behavior of -instantiatedGridWithAvailableItems:.
+//	YES: instantiation always succeeds even if some available items are skipped
+//	NO: instantiation returns nil if the grid instance is not fully populated, probably due to validator bailing.
+
 - (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level;
 
 @end

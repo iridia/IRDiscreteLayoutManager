@@ -47,28 +47,7 @@
 	__block BOOL stop = NO;
 
 	NSUInteger numberOfGrids = [self.delegate numberOfLayoutGridsForLayoutManager:self];
-	
-	IRDiscreteLayoutGrid * (^randomGrid)() = ^ {
-	
-		if (!numberOfGrids)
-			return (IRDiscreteLayoutGrid *)nil;
 		
-		NSUInteger randomIndex = (arc4random() % [self.delegate numberOfLayoutGridsForLayoutManager:self]);
-		return [self.delegate layoutManager:self layoutGridAtIndex:randomIndex];
-		
-	};
-	
-	IRDiscreteLayoutGrid * (^nextGridPrototype)() = ^ {
-	
-		IRDiscreteLayoutGrid *tentativeGrid = randomGrid();
-		
-		if ([self.delegate respondsToSelector:@selector(layoutManager:nextGridForContentsUsingGrid:)])
-			return [self.delegate layoutManager:self nextGridForContentsUsingGrid:tentativeGrid];
-		
-		return tentativeGrid;
-		
-	};
-	
 	currentItems = [NSMutableArray arrayWithCapacity:numberOfItems];
 	for (NSUInteger index = 0; ((index < numberOfItems) && !stop); index ++) {
 		
@@ -87,20 +66,57 @@
 			//	If all the grids have been tried, we have no luck left
 			
 			if ([attemptedPrototypeIndices containsIndexesInRange:(NSRange){ 0, numberOfGrids }]) {
-			
 				canEnumerate = NO;
 				continue;
 			
 			}
-		
-			IRDiscreteLayoutGrid *nextPrototype = nextGridPrototype();
 			
-			NSInteger index = [self.delegate layoutManager:self indexOfLayoutGrid:nextPrototype];
-			NSParameterAssert(index != NSNotFound);
+			IRDiscreteLayoutGrid * (^randomGrid)() = ^ {
 			
-			if ([attemptedPrototypeIndices containsIndex:(NSUInteger)index])
-				continue;
+				if (!numberOfGrids)
+					return (IRDiscreteLayoutGrid *)nil;
 				
+				NSUInteger randomIndex = (arc4random() % [self.delegate numberOfLayoutGridsForLayoutManager:self]);
+				return [self.delegate layoutManager:self layoutGridAtIndex:randomIndex];
+				
+			};
+			
+			BOOL (^gridHasBeenAttempted)(IRDiscreteLayoutGrid *, NSUInteger *) = ^ (IRDiscreteLayoutGrid *grid, NSUInteger *outIndex) {
+
+				NSInteger index = [self.delegate layoutManager:self indexOfLayoutGrid:grid];
+				NSParameterAssert(index != NSNotFound);
+				
+				if (outIndex)
+					*outIndex = (NSUInteger)index;
+				
+				return (BOOL)[attemptedPrototypeIndices containsIndex:(NSUInteger)index];
+			
+			};
+		
+			IRDiscreteLayoutGrid * (^nextGridPrototype)() = ^ {
+			
+				IRDiscreteLayoutGrid *tentativeGrid = randomGrid();
+				
+				if ([self.delegate respondsToSelector:@selector(layoutManager:nextGridForContentsUsingGrid:)]) {
+					
+					IRDiscreteLayoutGrid *delegateAnswer = [self.delegate layoutManager:self nextGridForContentsUsingGrid:tentativeGrid];
+					
+					if (!gridHasBeenAttempted(delegateAnswer, NULL))
+						return delegateAnswer;
+					
+				}
+				
+				return tentativeGrid;
+				
+			};
+			
+			IRDiscreteLayoutGrid *nextPrototype = nextGridPrototype();
+			NSUInteger index = NSNotFound;
+			
+			if (gridHasBeenAttempted(nextPrototype, &index)) {
+				continue;
+			}
+			
 			[attemptedPrototypeIndices addIndex:(NSUInteger)index];
 			
 			currentGrid = [nextPrototype instantiatedGridWithAvailableItems:currentItems];
@@ -133,9 +149,12 @@
 			
 		}];
 		
-		if (![currentItems count] || (oldCurrentItemsCount == [currentItems count])) {
+		if (![currentItems count])
 			stop = YES;
-		}
+		
+//		if (![currentItems count] || (oldCurrentItemsCount == [currentItems count])) {
+//			stop = YES;
+//		}
 		
 		[returnedGrids addObject:currentGrid];
 		currentGrid = nil;
