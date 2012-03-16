@@ -182,8 +182,12 @@
 	//	Subclasses can probably swizzle the prototype, and return a new instantiated grid
 	
 	NSUInteger numberOfItems = [items count];
-	NSMutableArray *nonConsumedItems = [[items mutableCopy] autorelease];
-		
+	if (!numberOfItems)
+		return nil;
+	
+	NSMutableArray *nonHandledItems = [[items mutableCopy] autorelease];
+	NSMutableArray *consumedItems = [NSMutableArray array];
+	
 	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
 	
 	__block BOOL canContinue = (numberOfItems > 0);
@@ -191,7 +195,7 @@
 		
 	while (canContinue) {
 	
-		id nextItem = [nonConsumedItems objectAtIndex:0];
+		id nextItem = [nonHandledItems objectAtIndex:0];
 		__block BOOL hasClaimedItem = NO;
 
 		[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
@@ -207,7 +211,8 @@
 				NSCParameterAssert(!hasClaimedItem);
 			
 				[instance setLayoutItem:nextItem forAreaNamed:name];
-				[nonConsumedItems removeObject:nextItem];
+				[nonHandledItems removeObject:nextItem];
+				[consumedItems addObject:nextItem];
 				hasClaimedItem = YES;
 			
 				NSCParameterAssert(hasClaimedItem);
@@ -223,21 +228,28 @@
 		
 		if (!hasClaimedItem) {
 		
-			[nonConsumedItems removeObject:nextItem];
+			[nonHandledItems removeObject:nextItem];
 			hasSkippedItem = YES;
 			
 		}
 		
-		canContinue = !![nonConsumedItems count];
+		canContinue = !![nonHandledItems count];
 		
 	}
+	
+	//	The first item provided must be consumed.
+	
+	if (![consumedItems containsObject:[items objectAtIndex:0]])
+		return nil;
+	
+	if (![consumedItems count])
+		return nil;
 	
 	if ([instance isFullyPopulated])
 		return instance;
 	
+	if (![nonHandledItems count])
 	if (!hasSkippedItem)
-		return instance;
-	
 	if (self.allowsPartialInstancePopulation)
 		return instance;
 	
