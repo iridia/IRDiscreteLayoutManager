@@ -14,56 +14,44 @@
 @class IRDiscreteLayoutManager;
 
 
+enum {
+	IRRandomLayoutStrategy = 1,
+	IRCompareScoreLayoutStrategy,
+	IRDefaultLayoutStrategy = IRRandomLayoutStrategy
+}; typedef NSUInteger IRDiscreteLayoutStrategy;
+
+
 @protocol IRDiscreteLayoutManagerDataSource <NSObject>
 
 - (NSUInteger) numberOfItemsForLayoutManager:(IRDiscreteLayoutManager *)manager;
 - (id<IRDiscreteLayoutItem>) layoutManager:(IRDiscreteLayoutManager *)manager itemAtIndex:(NSUInteger)index;
+- (NSInteger) layoutManager:(IRDiscreteLayoutManager *)manager indexOfLayoutItem:(id<IRDiscreteLayoutItem>)item;
 
 @end
 
 
 @protocol IRDiscreteLayoutManagerDelegate <NSObject>
 
-//	-layoutManager:indexOfLayoutGrid: may also return NSNotFound
-
 - (NSUInteger) numberOfLayoutGridsForLayoutManager:(IRDiscreteLayoutManager *)manager;
 - (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager layoutGridAtIndex:(NSUInteger)index;
 - (NSInteger) layoutManager:(IRDiscreteLayoutManager *)manager indexOfLayoutGrid:(IRDiscreteLayoutGrid *)grid;
 
-@optional
-
-//	For overriding the upcoming layout grid.
-//	Not implemented: manager uses its own determination
-//	Returns nil: manager stops layout immediately
-//	Returns anything: manager uses returned grid
-
-- (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager nextGridForContentsUsingGrid:(IRDiscreteLayoutGrid *)proposedGrid;
-
 @end
 
 
-@protocol IRDiscreteLayoutProgressIntrospection <NSObject>
-
-//	Introspection provides extra information for the layout manager’s current operation
-//	so the delegate can make an informed decision about returning a better proposed grid
-
-//	As a matter of face, the session dictionary might be nil’d after each layout calculation
-//	And they should NOT be referenced out of the context of a single layout
-
-//	Don’t assume that anything will persist across layout sessions!
-
-- (NSArray *) currentlyConsumedItems;
-- (NSMutableDictionary *) sessionDictionary;
-
-@end
-
-
-@interface IRDiscreteLayoutManager : NSObject <IRDiscreteLayoutProgressIntrospection>
+@interface IRDiscreteLayoutManager : NSObject
 
 @property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDataSource> dataSource;
 @property (nonatomic, readwrite, assign) id<IRDiscreteLayoutManagerDelegate> delegate;
-@property (nonatomic, readwrite, retain) IRDiscreteLayoutResult *result;
 
-- (IRDiscreteLayoutResult *) calculatedResult;
+- (IRDiscreteLayoutResult *) calculatedResultWithReference:(IRDiscreteLayoutResult *)lastResult strategy:(IRDiscreteLayoutStrategy)strategy error:(NSError **)outError;
+- (IRDiscreteLayoutResult *) calculatedResult;	//	For lazy people.
 
 @end
+
+
+extern NSError * IRDiscreteLayoutManagerError (NSUInteger code, NSString *description);
+extern NSString * const IRDiscreteLayoutManagerErrorDomain;
+extern NSUInteger IRDiscreteLayoutManagerGenericError;
+extern NSUInteger IRDiscreteLayoutManagerItemExhaustionFailureError;
+extern NSUInteger IRDiscreteLayoutManagerPrototypeSearchFailureError;
