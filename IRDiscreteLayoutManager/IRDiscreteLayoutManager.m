@@ -47,19 +47,67 @@
 	NSMutableIndexSet *leftoverItemIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, numberOfItems }];
 	NSMutableArray *returnedGrids = [NSMutableArray array];
 	
-	switch (strategy) {
+	IRDiscreteLayoutGrid * (^instanceFromPrototype)(IRDiscreteLayoutGrid *, BOOL) = ^ (IRDiscreteLayoutGrid *prototype, BOOL dequeueUsedItems) {
+	
+		//	If dequeueUsedItems is YES, removes item indices from the leftover index set too
+	
+		NSParameterAssert(!prototype.prototype);
 		
-		case IRRandomLayoutStrategy: {
+		NSUInteger const numberOfAreas = [prototype numberOfLayoutAreas];
+		NSAssert1(numberOfAreas, @"Grid %@ must contain at least one layout area available for item association.", prototype);
 		
-			while ([leftoverItemIndices count]) {
+		NSUInteger *itemIndices = malloc(sizeof(NSUInteger) * numberOfAreas);
+		NSUInteger numberOfUsedItems = [leftoverItemIndices getIndexes:itemIndices maxCount:numberOfAreas inIndexRange:NULL];
+		
+		IRDiscreteLayoutGrid *instance = [prototype instantiatedGridWithAvailableItems:((^ {
+		
+			NSMutableArray *	prospectiveItems = [NSMutableArray arrayWithCapacity:numberOfUsedItems];
+			for (unsigned int i = 0; i < numberOfUsedItems; i++)
+				[prospectiveItems addObject:[self.dataSource layoutManager:self itemAtIndex:itemIndices[i]]];
 			
-				NSUInteger const lastLeftoverItemIndicesCount = [leftoverItemIndices count];
+			return prospectiveItems;
+			
+		})())];
+		
+		free(itemIndices);
+		
+		if (instance && dequeueUsedItems) {
+			
+			[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 				
-				//	TBD: now, layout!
+				if (item) {
+					
+					NSUInteger itemIndex = [self.dataSource layoutManager:self indexOfLayoutItem:item];
+					NSParameterAssert(itemIndex != NSNotFound);
+					NSParameterAssert([leftoverItemIndices containsIndex:itemIndex]);
+					
+					[leftoverItemIndices removeIndex:itemIndex];
+					
+				}
+				
+			}];
+	
+		}
+		
+		return instance;
+	
+	};
+	
+	//	Grid prototype tracking should be hoisted out from the default block backing the random layout strategy.
+	//	We can share the tracking code any way.
+		
+	while ([leftoverItemIndices count]) {
+	
+		NSUInteger const lastLeftoverItemIndicesCount = [leftoverItemIndices count];
+				
+		switch (strategy) {
+			
+			case IRRandomLayoutStrategy: {
 				
 				NSMutableIndexSet * availableLayoutGridPrototypeIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, numberOfGrids }];
-				__block IRDiscreteLayoutGrid * (^randomGrid)(NSUInteger *) = [[^ (NSUInteger *outIndex) {
 				
+				__block IRDiscreteLayoutGrid * (^randomGrid)(NSUInteger *) = [[^ (NSUInteger *outIndex) {
+			
 					outIndex = outIndex ? outIndex : &(NSUInteger){ 0 };
 					
 					if (![availableLayoutGridPrototypeIndices count]) {
@@ -82,8 +130,8 @@
 					//	Iterate thru all the valid grids, which is not already used
 				
 					NSUInteger foundGridIndex = NSNotFound;
-					NSLog(@"finding grid");
 					IRDiscreteLayoutGrid * const foundGrid = randomGrid(&foundGridIndex);
+					
 					if (!foundGrid) {
 						*outError = IRDiscreteLayoutManagerError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during random grid election.");
 						return nil;
@@ -91,71 +139,48 @@
 					
 					[availableLayoutGridPrototypeIndices removeIndex:foundGridIndex];
 					
-					NSUInteger const numberOfAreas = [foundGrid numberOfLayoutAreas];
-					NSAssert1(numberOfAreas, @"Grid %@ must contain at least one layout area available for item association.", foundGrid);
 					
-					NSUInteger *itemIndices = malloc(sizeof(NSUInteger) * numberOfAreas);
-					NSUInteger numberOfUsedItems = [leftoverItemIndices getIndexes:itemIndices maxCount:numberOfAreas inIndexRange:NULL];
 					
-					IRDiscreteLayoutGrid *instance = [foundGrid instantiatedGridWithAvailableItems:((^ {
-					
-						NSMutableArray *prospectiveItems = [NSMutableArray arrayWithCapacity:numberOfUsedItems];
-						for (unsigned int i = 0; i < numberOfUsedItems; i++)
-							[prospectiveItems addObject:[self.dataSource layoutManager:self itemAtIndex:itemIndices[i]]];
-						
-						return prospectiveItems;
-						
-					})())];
-					
-					free(itemIndices);
+					IRDiscreteLayoutGrid *instance = instanceFromPrototype(foundGrid, YES);
 					
 					if (instance) {
 					
 						[returnedGrids addObject:instance];
-						
 						hasFoundValidGrid = YES;
-						
-						[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-							
-							if (item) {
-								
-								NSUInteger itemIndex = [self.dataSource layoutManager:self indexOfLayoutItem:item];
-								NSParameterAssert(itemIndex != NSNotFound);
-								
-								[leftoverItemIndices removeIndex:itemIndex];
-								
-							}
-							
-						}];
-
-						//	Post condition: must have exhausted some items
-						//	We might allow empty pages in the future, but not now.  If you want them, deal with them at the calling site.
-						
-						if (lastLeftoverItemIndicesCount == [leftoverItemIndices count]) {
-							*outError = IRDiscreteLayoutManagerError(IRDiscreteLayoutManagerItemExhaustionFailureError, @"Unable to exhaust all layout items during random grid election.");
-							return nil;
-						}
-					
+										
 					}
-
 
 				}
 			
+				break;
+			
 			}
 		
-			break;
-		
+			case IRCompareScoreLayoutStrategy: {
+			
+				//	Instantiate then compare.  Those that could not be instantiated will get left out.
+				
+//				NSMutableSet *instances = [NSMutableSet setWithCapacity:numberOfGrids];
+//				for (NSUInteger i = 0; i < numberOfGrids; i++) {
+//					IRDiscreteLayoutGrid *instance =
+//				}
+				
+				break;
+			
+			}
+			
 		}
 		
-		case IRCompareScoreLayoutStrategy: {
+		//	Post condition: must have exhausted some items
+		//	We might allow empty pages in the future, but not now.  If you want them, deal with them at the calling site.
 		
-			NSParameterAssert(NO);	//	TBD
-			break;
-		
+		if (lastLeftoverItemIndicesCount == [leftoverItemIndices count]) {
+			*outError = IRDiscreteLayoutManagerError(IRDiscreteLayoutManagerItemExhaustionFailureError, @"Unable to exhaust all layout items during random grid election.");
+			return nil;
 		}
-		
-	}
 	
+	}
+		
 	return [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
 
 }
