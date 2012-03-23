@@ -82,8 +82,6 @@
 	
 	})());
 	
-	const char * type = @encode(__typeof__(IRDiscreteLayoutItemChangeType));
-	
 	NSValue * const kInserting = [NSNumber numberWithUnsignedInteger:IRDiscreteLayoutItemChangeInserting];
 	NSValue * const kDeleting = [NSNumber numberWithUnsignedInteger:IRDiscreteLayoutItemChangeDeleting];
 	NSValue * const kRelayout = [NSNumber numberWithUnsignedInteger:IRDiscreteLayoutItemChangeRelayout];

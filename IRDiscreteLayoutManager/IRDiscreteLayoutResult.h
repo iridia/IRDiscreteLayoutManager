@@ -8,11 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol IRDiscreteLayoutItem;
+@class IRDiscreteLayoutGrid;
+
 @interface IRDiscreteLayoutResult : NSObject
 
 + (IRDiscreteLayoutResult *) resultWithGrids:(NSArray *)grids;
 - (IRDiscreteLayoutResult *) initWithGrids:(NSArray *)grids;
 
-@property (nonatomic, readwrite, retain) NSArray *grids;
+- (IRDiscreteLayoutGrid *) gridContainingItem:(id<IRDiscreteLayoutItem>)item;
+
+@property (nonatomic, readonly, retain) NSArray *grids;
 
 @end
