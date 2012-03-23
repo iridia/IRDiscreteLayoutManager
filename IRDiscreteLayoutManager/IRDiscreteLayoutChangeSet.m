@@ -84,10 +84,10 @@
 	
 	const char * type = @encode(__typeof__(IRDiscreteLayoutItemChangeType));
 	
-	NSValue * const kInserting = [NSValue valueWithBytes:IRDiscreteLayoutItemChangeInserting objCType:type];
-	NSValue * const kDeleting = [NSValue valueWithBytes:IRDiscreteLayoutItemChangeDeleting objCType:type];
-	NSValue * const kRelayout = [NSValue valueWithBytes:IRDiscreteLayoutItemChangeRelayout objCType:type];
-	NSValue * const kNone = [NSValue valueWithBytes:IRDiscreteLayoutItemChangeNone objCType:type];
+	NSValue * const kInserting = [NSNumber numberWithUnsignedInteger:IRDiscreteLayoutItemChangeInserting];
+	NSValue * const kDeleting = [NSNumber numberWithUnsignedInteger:IRDiscreteLayoutItemChangeDeleting];
+	NSValue * const kRelayout = [NSNumber numberWithUnsignedInteger:IRDiscreteLayoutItemChangeRelayout];
+	NSValue * const kNone = [NSNumber numberWithUnsignedInteger:IRDiscreteLayoutItemChangeNone];
 	
 	NSSet *allItems = [fromItems setByAddingObjectsFromSet:toItems];
 	NSMutableDictionary *itemsToChanges = [NSMutableDictionary dictionaryWithCapacity:[allItems count]];
