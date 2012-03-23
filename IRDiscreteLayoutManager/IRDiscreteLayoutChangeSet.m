@@ -92,7 +92,9 @@
 	NSSet *allItems = [fromItems setByAddingObjectsFromSet:toItems];
 	NSMutableDictionary *itemsToChanges = [NSMutableDictionary dictionaryWithCapacity:[allItems count]];
 	
-	[allItems enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+	[allItems enumerateObjectsUsingBlock: ^ (id obj, BOOL *stop) {
+	
+		NSValue *objValue = [NSValue valueWithNonretainedObject:obj];
 	
 		BOOL containedBefore = [fromItems containsObject:obj];
 		BOOL containedAfter = [toItems containsObject:obj];
@@ -104,21 +106,21 @@
 			
 			if (fromLayoutBlock && toLayoutBlock && !CGRectEqualToRect(fromLayoutBlock(self.fromGrid, obj), toLayoutBlock(self.toGrid, obj))) {
 				
-				[itemsToChanges setObject:kRelayout forKey:obj];
+				[itemsToChanges setObject:kRelayout forKey:objValue];
 				
 			} else {
 				
-				[itemsToChanges setObject:kNone forKey:obj];
+				[itemsToChanges setObject:kNone forKey:objValue];
 			
 			}
 		
 		} else if (containedBefore && !containedAfter) {
 		
-			[itemsToChanges setObject:kDeleting forKey:obj];
+			[itemsToChanges setObject:kDeleting forKey:objValue];
 		
 		} else if (!containedBefore && containedAfter) {
 
-			[itemsToChanges setObject:kInserting forKey:obj];
+			[itemsToChanges setObject:kInserting forKey:objValue];
 		
 		} else {
 		
@@ -128,27 +130,27 @@
 		
 	}];
 	
-	[itemsToChanges enumerateKeysAndObjectsUsingBlock: ^ (NSValue *key, id obj, BOOL *stop) {
+	[itemsToChanges enumerateKeysAndObjectsUsingBlock: ^ (NSValue *objValue, NSNumber *changeValue, BOOL *stop) {
 	
 		IRDiscreteLayoutItemChangeType change = ((^ {
 			
-			if ([key isEqualToValue:kInserting])
+			if ([changeValue isEqualToValue:kInserting])
 				return IRDiscreteLayoutItemChangeInserting;
 			
-			if ([key isEqualToValue:kDeleting])
+			if ([changeValue isEqualToValue:kDeleting])
 				return IRDiscreteLayoutItemChangeDeleting;
 
-			if ([key isEqualToValue:kRelayout])
+			if ([changeValue isEqualToValue:kRelayout])
 				return IRDiscreteLayoutItemChangeRelayout;
 
-			if ([key isEqualToValue:kNone])
+			if ([changeValue isEqualToValue:kNone])
 				return IRDiscreteLayoutItemChangeNone;
 
 			return IRDiscreteLayoutItemChangeNone;
 			
 		})());
 	
-		block(obj, change);
+		block([objValue nonretainedObjectValue], change);
 		
 	}];
 
