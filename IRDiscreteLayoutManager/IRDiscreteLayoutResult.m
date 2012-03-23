@@ -10,6 +10,14 @@
 #import "IRDiscreteLayoutGrid.h"
 #import "IRDiscreteLayoutGrid+DebugSupport.h"
 
+
+@interface IRDiscreteLayoutResult ()
+
+@property (nonatomic, readwrite, retain) NSArray *grids;
+
+@end
+
+
 @implementation IRDiscreteLayoutResult
 
 @synthesize grids;

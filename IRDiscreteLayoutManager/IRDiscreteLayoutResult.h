@@ -13,6 +13,6 @@
 + (IRDiscreteLayoutResult *) resultWithGrids:(NSArray *)grids;
 - (IRDiscreteLayoutResult *) initWithGrids:(NSArray *)grids;
 
-@property (nonatomic, readwrite, retain) NSArray *grids;
+@property (nonatomic, readonly, retain) NSArray *grids;
 
 @end
