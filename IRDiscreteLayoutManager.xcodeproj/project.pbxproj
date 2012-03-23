@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF0D6DF5151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h in Headers */ = {isa = PBXBuildFile; fileRef = FF0D6DF3151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h */; };
+		FF0D6DF6151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0D6DF4151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m */; };
 		FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */; };
 		FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
 		FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
@@ -43,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF0D6DF3151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutChangeSet.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutChangeSet.h; sourceTree = "<group>"; };
+		FF0D6DF4151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutChangeSet.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutChangeSet.m; sourceTree = "<group>"; };
 		FF2BFEE0140AC72300604E8D /* IRDiscreteLayoutTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IRDiscreteLayoutTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		FF2BFEE9140AC72300604E8D /* IRDiscreteLayoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IRDiscreteLayoutTests-Info.plist"; sourceTree = "<group>"; };
@@ -137,6 +141,8 @@
 				FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */,
 				FF8727001408C47E002FE6FC /* IRDiscreteLayoutGrid.h */,
 				FF8727011408C47E002FE6FC /* IRDiscreteLayoutGrid.m */,
+				FF0D6DF3151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h */,
+				FF0D6DF4151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m */,
 				FF8727041408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h */,
 				FF8727051408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m */,
 				FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */,
@@ -195,6 +201,7 @@
 				FF87270A1408E08A002FE6FC /* IRDiscreteLayoutResult.h in Headers */,
 				FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */,
 				FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */,
+				FF0D6DF5151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +317,7 @@
 				FF8727031408C47E002FE6FC /* IRDiscreteLayoutGrid.m in Sources */,
 				FF8727071408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m in Sources */,
 				FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */,
+				FF0D6DF6151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
