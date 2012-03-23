@@ -8,6 +8,10 @@
 
 #import "IRDiscreteLayoutGrid.h"
 
+
+NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.grid";
+
+
 @interface IRDiscreteLayoutGrid ()
 @property (nonatomic, readwrite, retain) IRDiscreteLayoutGrid *prototype;
 
@@ -18,6 +22,7 @@
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToDisplayBlocks;
 
 @end
+
 
 @implementation IRDiscreteLayoutGrid
 @synthesize contentSize, prototype;
@@ -38,7 +43,76 @@
 
 	IRDiscreteLayoutGrid *returnedGrid = [self copy];
 	returnedGrid.prototype = self;
+	
 	return [returnedGrid autorelease];
+
+}
+
+- (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items {
+
+	NSParameterAssert(!self.prototype);
+
+	//	This base implementation simply fills the grid up with some available items at the beginning of the array
+	//	Subclasses can probably swizzle the prototype, and return a new instantiated grid
+	
+	NSUInteger numberOfItems = [items count];
+	if (!numberOfItems)
+		return nil;
+	
+	NSMutableArray *nonHandledItems = [[items mutableCopy] autorelease];
+	NSMutableArray *consumedItems = [NSMutableArray array];
+	
+	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
+	
+	__block BOOL canContinue = (numberOfItems > 0);
+	__block BOOL hasSkippedItem = NO;
+		
+	while (canContinue) {
+	
+		id nextItem = [nonHandledItems objectAtIndex:0];
+		__block BOOL hasClaimedItem = NO;
+
+		[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+		
+			if (hasClaimedItem || [instance layoutItemForAreaNamed:name])
+				return;
+			
+			if ([instance setLayoutItem:nextItem forAreaNamed:name error:nil]) {
+				[nonHandledItems removeObject:nextItem];
+				[consumedItems addObject:nextItem];
+				hasClaimedItem = YES;				
+			}
+			
+		}];
+		
+		if (!hasClaimedItem) {
+		
+			[nonHandledItems removeObject:nextItem];
+			hasSkippedItem = YES;
+			
+		}
+		
+		canContinue = !![nonHandledItems count];
+		
+	}
+	
+	//	The first item provided must be consumed.
+	
+	if (![consumedItems containsObject:[items objectAtIndex:0]])
+		return nil;
+	
+	if (![consumedItems count])
+		return nil;
+	
+	if ([instance isFullyPopulated])
+		return instance;
+	
+	if (![nonHandledItems count])
+	if (!hasSkippedItem)
+	if (self.allowsPartialInstancePopulation)
+		return instance;
+	
+	return nil;
 
 }
 
@@ -114,23 +188,63 @@
 
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName {
 
+	[self setLayoutItem:aLayoutItem forAreaNamed:anAreaName error:nil];
+
+}
+
+- (BOOL) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName error:(NSError **)outError {
+	
 	NSParameterAssert(self.prototype);
 	NSParameterAssert(anAreaName);
-
+	
 	IRDiscreteLayoutGridAreaValidatorBlock validatorBlock = [self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName];
-	if (aLayoutItem && validatorBlock && !validatorBlock(self, aLayoutItem))
-		[NSException raise:NSInternalInconsistencyException format:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName];
+	if (aLayoutItem && validatorBlock && !validatorBlock(self, aLayoutItem)) {
+		
+		NSString *description = [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName];
+		
+		if (outError) {
+			*outError = [NSError errorWithDomain:IRDiscreteLayoutGridErrorDomain code:0 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+				description, NSLocalizedDescriptionKey,
+			nil]];
+		}
+		
+		return NO;
+		
+	}
 	
 	if (aLayoutItem)
 		[self.layoutAreaNamesToLayoutItems setObject:aLayoutItem forKey:anAreaName];
 	else
 		[self.layoutAreaNamesToLayoutItems removeObjectForKey:anAreaName];
 
+	return YES;
+
 }
 
 - (id) layoutItemForAreaNamed:(NSString *)anAreaName {
 
 	return [self.layoutAreaNamesToLayoutItems objectForKey:anAreaName];
+
+}
+
+- (NSString *) layoutAreaNameForItem:(id)anItem {
+
+	NSParameterAssert(self.prototype);
+	
+	__block NSString *foundName = nil;
+	
+	[self.layoutAreaNamesToLayoutItems enumerateKeysAndObjectsUsingBlock: ^ (NSString *name, id item, BOOL *stop) {
+	
+		if (item == anItem) {
+		
+			foundName = name;
+			*stop = YES;
+		
+		}
+		
+	}];
+	
+	return foundName;
 
 }
 
@@ -163,6 +277,22 @@
 
 }
 
+- (IRDiscreteLayoutGridAreaValidatorBlock) validatorBlockForAreaNamed:(NSString *)name {
+
+	return [self.layoutAreaNamesToValidatorBlocks objectForKey:name];
+
+}
+- (IRDiscreteLayoutGridAreaLayoutBlock) layoutBlockForAreaNamed:(NSString *)name {
+
+	return [self.layoutAreaNamesToLayoutBlocks objectForKey:name];
+
+}
+- (IRDiscreteLayoutGridAreaDisplayBlock) displayBlockForAreaNamed:(NSString *)name {
+
+	return [self.layoutAreaNamesToDisplayBlocks objectForKey:name];
+
+}
+
 - (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level {
 
 	return [[NSDictionary dictionaryWithObjectsAndKeys:
@@ -173,87 +303,6 @@
 		self.layoutAreaNamesToLayoutItems, @"Items",
 		
 	nil] descriptionWithLocale:locale indent:level];
-
-}
-
-- (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items {
-
-	//	This base implementation simply fills the grid up with some available items at the beginning of the array
-	//	Subclasses can probably swizzle the prototype, and return a new instantiated grid
-	
-	NSUInteger numberOfItems = [items count];
-	if (!numberOfItems)
-		return nil;
-	
-	NSMutableArray *nonHandledItems = [[items mutableCopy] autorelease];
-	NSMutableArray *consumedItems = [NSMutableArray array];
-	
-	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
-	
-	__block BOOL canContinue = (numberOfItems > 0);
-	__block BOOL hasSkippedItem = NO;
-		
-	while (canContinue) {
-	
-		id nextItem = [nonHandledItems objectAtIndex:0];
-		__block BOOL hasClaimedItem = NO;
-
-		[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-		
-			if (hasClaimedItem)
-				return;
-			
-			if ([instance layoutItemForAreaNamed:name])
-				return;
-			
-			@try {
-			
-				NSCParameterAssert(!hasClaimedItem);
-			
-				[instance setLayoutItem:nextItem forAreaNamed:name];
-				[nonHandledItems removeObject:nextItem];
-				[consumedItems addObject:nextItem];
-				hasClaimedItem = YES;
-			
-				NSCParameterAssert(hasClaimedItem);
-			
-			} @catch (NSException *exc) {
-			
-				//	TBD: use custom exception name for validator bail
-				NSCParameterAssert(!hasClaimedItem);
-				
-			}
-			
-		}];
-		
-		if (!hasClaimedItem) {
-		
-			[nonHandledItems removeObject:nextItem];
-			hasSkippedItem = YES;
-			
-		}
-		
-		canContinue = !![nonHandledItems count];
-		
-	}
-	
-	//	The first item provided must be consumed.
-	
-	if (![consumedItems containsObject:[items objectAtIndex:0]])
-		return nil;
-	
-	if (![consumedItems count])
-		return nil;
-	
-	if ([instance isFullyPopulated])
-		return instance;
-	
-	if (![nonHandledItems count])
-	if (!hasSkippedItem)
-	if (self.allowsPartialInstancePopulation)
-		return instance;
-	
-	return nil;
 
 }
 
