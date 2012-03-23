@@ -32,6 +32,12 @@
 		FF87270A1408E08A002FE6FC /* IRDiscreteLayoutResult.h in Headers */ = {isa = PBXBuildFile; fileRef = FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */; };
 		FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */; };
 		FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */; settings = {ATTRIBUTES = (); }; };
+		FFF5809D151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF5809B151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h */; };
+		FFF5809E151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF5809C151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.m */; };
+		FFF580A0151C56C200C5C799 /* IRDiscreteLayoutGrid+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF5809F151C56C200C5C799 /* IRDiscreteLayoutGrid+Private.h */; };
+		FFF580A3151C573C00C5C799 /* IRDiscreteLayoutHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF580A1151C573C00C5C799 /* IRDiscreteLayoutHelpers.h */; };
+		FFF580A4151C573C00C5C799 /* IRDiscreteLayoutHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF580A2151C573C00C5C799 /* IRDiscreteLayoutHelpers.m */; };
+		FFF580A6151C57DA00C5C799 /* IRDiscreteLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF580A5151C57DA00C5C799 /* IRDiscreteLayout.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +80,12 @@
 		FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutResult.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutResult.h; sourceTree = "<group>"; };
 		FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutResult.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutResult.m; sourceTree = "<group>"; };
 		FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutItem.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutItem.h; sourceTree = "<group>"; };
+		FFF5809B151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IRDiscreteLayoutGrid+DebugSupport.h"; path = "IRDiscreteLayoutManager/IRDiscreteLayoutGrid+DebugSupport.h"; sourceTree = "<group>"; };
+		FFF5809C151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IRDiscreteLayoutGrid+DebugSupport.m"; path = "IRDiscreteLayoutManager/IRDiscreteLayoutGrid+DebugSupport.m"; sourceTree = "<group>"; };
+		FFF5809F151C56C200C5C799 /* IRDiscreteLayoutGrid+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IRDiscreteLayoutGrid+Private.h"; path = "IRDiscreteLayoutManager/IRDiscreteLayoutGrid+Private.h"; sourceTree = "<group>"; };
+		FFF580A1151C573C00C5C799 /* IRDiscreteLayoutHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutHelpers.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutHelpers.h; sourceTree = "<group>"; };
+		FFF580A2151C573C00C5C799 /* IRDiscreteLayoutHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutHelpers.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutHelpers.m; sourceTree = "<group>"; };
+		FFF580A5151C57DA00C5C799 /* IRDiscreteLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayout.h; path = IRDiscreteLayoutManager/IRDiscreteLayout.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,14 +149,20 @@
 			isa = PBXGroup;
 			children = (
 				FF55E1A61407CED100D8F3C7 /* README.md */,
+				FFF580A5151C57DA00C5C799 /* IRDiscreteLayout.h */,
 				FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */,
 				FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */,
+				FFF580A1151C573C00C5C799 /* IRDiscreteLayoutHelpers.h */,
+				FFF580A2151C573C00C5C799 /* IRDiscreteLayoutHelpers.m */,
 				FF8727001408C47E002FE6FC /* IRDiscreteLayoutGrid.h */,
 				FF8727011408C47E002FE6FC /* IRDiscreteLayoutGrid.m */,
-				FF0D6DF3151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h */,
-				FF0D6DF4151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m */,
+				FFF5809F151C56C200C5C799 /* IRDiscreteLayoutGrid+Private.h */,
+				FFF5809B151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h */,
+				FFF5809C151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.m */,
 				FF8727041408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.h */,
 				FF8727051408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m */,
+				FF0D6DF3151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h */,
+				FF0D6DF4151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m */,
 				FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */,
 				FF8726FE1408BCA1002FE6FC /* IRDiscreteLayoutItem.m */,
 				FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */,
@@ -202,6 +220,10 @@
 				FF8726FD1408BC26002FE6FC /* IRDiscreteLayoutManager.h in Headers */,
 				FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */,
 				FF0D6DF5151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.h in Headers */,
+				FFF5809D151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h in Headers */,
+				FFF580A0151C56C200C5C799 /* IRDiscreteLayoutGrid+Private.h in Headers */,
+				FFF580A3151C573C00C5C799 /* IRDiscreteLayoutHelpers.h in Headers */,
+				FFF580A6151C57DA00C5C799 /* IRDiscreteLayout.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +340,8 @@
 				FF8727071408C4E0002FE6FC /* IRDiscreteLayoutGrid+Transforming.m in Sources */,
 				FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */,
 				FF0D6DF6151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m in Sources */,
+				FFF5809E151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.m in Sources */,
+				FFF580A4151C573C00C5C799 /* IRDiscreteLayoutHelpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

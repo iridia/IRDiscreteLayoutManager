@@ -8,6 +8,7 @@
 
 #import "IRDiscreteLayoutResult.h"
 #import "IRDiscreteLayoutGrid.h"
+#import "IRDiscreteLayoutGrid+DebugSupport.h"
 
 @implementation IRDiscreteLayoutResult
 

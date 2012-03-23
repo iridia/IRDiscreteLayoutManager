@@ -54,36 +54,30 @@
 	
 		NSParameterAssert(!prototype.prototype);
 		
-		NSUInteger const numberOfAreas = [prototype numberOfLayoutAreas];
-		NSAssert1(numberOfAreas, @"Grid %@ must contain at least one layout area available for item association.", prototype);
+		//	We don’t want to give the grid too many items to use, but we still want them to skip some items for convenience.
+		//	Currently, the maximum number of skipped items is hard coded to 20 — we’ll overprovision grid instantiation
 		
-		NSUInteger *itemIndices = malloc(sizeof(NSUInteger) * numberOfAreas);
-		NSUInteger numberOfUsedItems = [leftoverItemIndices getIndexes:itemIndices maxCount:numberOfAreas inIndexRange:NULL];
+		NSAssert1([prototype numberOfLayoutAreas] > 0, @"Grid %@ must contain at least one layout area available for item association.", prototype);
 		
-		IRDiscreteLayoutGrid *instance = [prototype instantiatedGridWithAvailableItems:((^ {
+		NSUInteger const prospectiveItemsCount = [prototype numberOfLayoutAreas] + 20;
+		NSUInteger *itemIndices = malloc(sizeof(NSUInteger) * prospectiveItemsCount);
+		NSUInteger numberOfProvidedItems = [leftoverItemIndices getIndexes:itemIndices maxCount:prospectiveItemsCount inIndexRange:NULL];
 		
-			NSMutableArray *	prospectiveItems = [NSMutableArray arrayWithCapacity:numberOfUsedItems];
-			for (unsigned int i = 0; i < numberOfUsedItems; i++)
+		NSArray *providedLayoutItems = ((^ {
+		
+			NSMutableArray *prospectiveItems = [NSMutableArray arrayWithCapacity:numberOfProvidedItems];
+			for (unsigned int i = 0; i < numberOfProvidedItems; i++)
 				[prospectiveItems addObject:[self.dataSource layoutManager:self itemAtIndex:itemIndices[i]]];
 			
 			return prospectiveItems;
-			
-		})())];
 		
-		if (usedItemIndices) {
+		})());
 		
-			NSMutableIndexSet *outIndices = [NSMutableIndexSet indexSet];
-			
-			for (unsigned int i = 0; i < numberOfUsedItems; i++)
-				[outIndices addIndex:itemIndices[i]];
-			
-			*usedItemIndices = [[outIndices copy] autorelease];
+		IRDiscreteLayoutGrid *instance = [prototype instantiatedGridWithAvailableItems:providedLayoutItems];
 		
-		}
-		
-		free(itemIndices);
-		
-		if (instance && dequeueUsedItems) {
+		if (instance) {
+
+			NSMutableIndexSet *outIndices = usedItemIndices ? [NSMutableIndexSet indexSet] : nil;
 			
 			[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 				
@@ -93,13 +87,30 @@
 					NSParameterAssert(itemIndex != NSNotFound);
 					NSParameterAssert([leftoverItemIndices containsIndex:itemIndex]);
 					
-					[leftoverItemIndices removeIndex:itemIndex];
+					[outIndices addIndex:itemIndex];
+					
+					if (dequeueUsedItems) {
+
+						[leftoverItemIndices removeIndex:itemIndex];
+					
+					}
 					
 				}
 				
 			}];
+			
+			if (usedItemIndices)
+				*usedItemIndices = [[outIndices copy] autorelease];
+			
+			NSLog(@"Instantiated %@ as %@ with provided items %@, real items n/a", prototype, instance, providedLayoutItems);
 	
+		} else {
+		
+			NSLog(@"Unable to instantiate %@ with items %@", prototype, [providedLayoutItems descriptionWithLocale:[NSLocale autoupdatingCurrentLocale] indent:1]);
+		
 		}
+		
+		free(itemIndices);
 		
 		return instance;
 	
@@ -201,10 +212,11 @@
 					IRDiscreteLayoutGrid *prototype = [self.delegate layoutManager:self layoutGridAtIndex:i];
 					NSIndexSet *instanceItemIndices = nil;
 					IRDiscreteLayoutGrid *instance = instanceFromPrototype(prototype, NO, &instanceItemIndices);
-					NSValue *instanceValue = [NSValue valueWithNonretainedObject:instance];
 					
 					if (instance) {
 					
+						NSValue *instanceValue = [NSValue valueWithNonretainedObject:instance];
+						
 						if (instanceItemIndices)
 							[instancesToItemIndices	 setObject:instanceItemIndices forKey:instanceValue];
 					
@@ -289,6 +301,8 @@
 					if (itemIndices) {
 						[leftoverItemIndices removeIndexes:itemIndices];
 					}
+					
+					NSLog(@"Decided on instance %@, spinning loop", foundInstance);
 					
 					[returnedGrids addObject:foundInstance];
 				

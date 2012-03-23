@@ -16,8 +16,6 @@ typedef BOOL (^IRDiscreteLayoutGridAreaValidatorBlock) (IRDiscreteLayoutGrid *se
 typedef CGRect (^IRDiscreteLayoutGridAreaLayoutBlock) (IRDiscreteLayoutGrid *self, id anItem);
 typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, id anItem);
 
-extern NSString * const IRDiscreteLayoutGridErrorDomain;
-
 
 @interface IRDiscreteLayoutGrid : NSObject <NSCopying>
 
@@ -47,8 +45,13 @@ extern NSString * const IRDiscreteLayoutGridErrorDomain;
 - (void) enumerateLayoutAreaNamesWithBlock:(void(^)(NSString *anAreaName))aBlock;
 - (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock))aBlock;
 
+- (void) setValidatorBlock:(IRDiscreteLayoutGridAreaValidatorBlock)block forAreaNamed:(NSString *)name;
 - (IRDiscreteLayoutGridAreaValidatorBlock) validatorBlockForAreaNamed:(NSString *)name;
+
+- (void) setLayoutBlock:(IRDiscreteLayoutGridAreaLayoutBlock)block forAreaNamed:(NSString *)name;
 - (IRDiscreteLayoutGridAreaLayoutBlock) layoutBlockForAreaNamed:(NSString *)name;
+
+- (void) setDisplayBlock:(IRDiscreteLayoutGridAreaDisplayBlock)block forAreaNamed:(NSString *)name;
 - (IRDiscreteLayoutGridAreaDisplayBlock) displayBlockForAreaNamed:(NSString *)name;
 
 @property (nonatomic, readwrite, assign) BOOL allowsPartialInstancePopulation;
@@ -57,11 +60,7 @@ extern NSString * const IRDiscreteLayoutGridErrorDomain;
 //	YES: instantiation always succeeds even if some available items are skipped
 //	NO: instantiation returns nil if the grid instance is not fully populated, probably due to validator bailing.
 
-- (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level;
-
 @end
 
 
-extern CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize newBounds, UIViewAutoresizing autoresizingMask);
-extern IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask);
-extern IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (CGFloat totalUnitsX, CGFloat totalUnitsY, CGFloat unitsOffsetX, CGFloat unitsOffsetY, CGFloat unitsSpanX, CGFloat unitsSpanY);
+extern NSString * const IRDiscreteLayoutGridErrorDomain;

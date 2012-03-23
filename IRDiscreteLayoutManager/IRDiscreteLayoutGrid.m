@@ -7,6 +7,7 @@
 //
 
 #import "IRDiscreteLayoutGrid.h"
+#import "IRDiscreteLayoutGrid+Private.h"
 
 
 NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.grid";
@@ -14,13 +15,11 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 
 @interface IRDiscreteLayoutGrid ()
 @property (nonatomic, readwrite, retain) IRDiscreteLayoutGrid *prototype;
-
 @property (nonatomic, readwrite, retain) NSArray *layoutAreaNames;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToValidatorBlocks;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToLayoutBlocks;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToLayoutItems;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToDisplayBlocks;
-
 @end
 
 
@@ -277,32 +276,39 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 
 }
 
+- (void) setValidatorBlock:(IRDiscreteLayoutGridAreaValidatorBlock)block forAreaNamed:(NSString *)name {
+
+	[self.layoutAreaNamesToValidatorBlocks setObject:block forKey:name];
+
+}
+
 - (IRDiscreteLayoutGridAreaValidatorBlock) validatorBlockForAreaNamed:(NSString *)name {
 
 	return [self.layoutAreaNamesToValidatorBlocks objectForKey:name];
 
 }
+
+- (void) setLayoutBlock:(IRDiscreteLayoutGridAreaLayoutBlock)block forAreaNamed:(NSString *)name {
+
+	[self.layoutAreaNamesToLayoutBlocks setObject:block forKey:name];
+
+}
+
 - (IRDiscreteLayoutGridAreaLayoutBlock) layoutBlockForAreaNamed:(NSString *)name {
 
 	return [self.layoutAreaNamesToLayoutBlocks objectForKey:name];
 
 }
-- (IRDiscreteLayoutGridAreaDisplayBlock) displayBlockForAreaNamed:(NSString *)name {
 
-	return [self.layoutAreaNamesToDisplayBlocks objectForKey:name];
+- (void) setDisplayBlock:(IRDiscreteLayoutGridAreaDisplayBlock)block forAreaNamed:(NSString *)name {
+
+	[self.layoutAreaNamesToDisplayBlocks setObject:block forKey:name];
 
 }
 
-- (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level {
+- (IRDiscreteLayoutGridAreaDisplayBlock) displayBlockForAreaNamed:(NSString *)name {
 
-	return [[NSDictionary dictionaryWithObjectsAndKeys:
-	
-		[super description], @"Identity",
-		self.prototype, @"Prototype",
-		self.layoutAreaNames, @"Areas",
-		self.layoutAreaNamesToLayoutItems, @"Items",
-		
-	nil] descriptionWithLocale:locale indent:level];
+	return [self.layoutAreaNamesToDisplayBlocks objectForKey:name];
 
 }
 
@@ -330,65 +336,3 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 }
 
 @end
-
-
-
-
-
-CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize newBounds, UIViewAutoresizing autoresizingMask) {
-
-	//	Three in the morning, not the best time to reinvent the wheel.
-	//	So I stole all the autoresizing code in UIView.
-	
-	static UIView *referenceBoundingView = nil;
-	static UIView *referenceInnerView = nil;
-	static dispatch_once_t onceToken = 0;
-	dispatch_once(&onceToken, ^ {
-		referenceBoundingView = [[UIView alloc] initWithFrame:CGRectZero];
-		referenceInnerView = [[UIView alloc] initWithFrame:CGRectZero];
-		[referenceBoundingView addSubview:referenceInnerView];
-	});
-	
-	referenceBoundingView.frame = (CGRect){ CGPointZero, originalBounds };
-	referenceInnerView.frame = originalRect;
-	referenceInnerView.autoresizingMask = autoresizingMask;
-	referenceBoundingView.frame = (CGRect){ CGPointZero, newBounds };
-	
-  return referenceInnerView.frame;
-
-}
-
-IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask) {
-
-	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
-	
-		if (CGSizeEqualToSize(defaultBounds, self.contentSize))
-			return size;
-		else
-			return IRAutoresizedRectMake(size, defaultBounds, self.contentSize, autoresizingMask);
-	
-	} copy] autorelease];
-
-}
-
-IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (CGFloat totalUnitsX, CGFloat totalUnitsY, CGFloat unitsOffsetX, CGFloat unitsOffsetY, CGFloat unitsSpanX, CGFloat unitsSpanY) {
-
-	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
-		
-		CGFloat xFactor = self.contentSize.width / totalUnitsX;
-		CGFloat yFactor = self.contentSize.height / totalUnitsY;
-		
-		return CGRectIntegral((CGRect){
-			(CGPoint){
-				unitsOffsetX * xFactor,
-				unitsOffsetY * yFactor
-			},
-			(CGSize){
-				unitsSpanX * xFactor,
-				unitsSpanY * yFactor
-			}
-		});
-	
-	} copy] autorelease];
-
-};
