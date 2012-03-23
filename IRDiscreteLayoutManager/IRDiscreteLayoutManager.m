@@ -102,12 +102,6 @@
 			if (usedItemIndices)
 				*usedItemIndices = [[outIndices copy] autorelease];
 			
-			NSLog(@"Instantiated %@ as %@ with provided items %@, real items n/a", prototype, instance, providedLayoutItems);
-	
-		} else {
-		
-			NSLog(@"Unable to instantiate %@ with items %@", prototype, [providedLayoutItems descriptionWithLocale:[NSLocale autoupdatingCurrentLocale] indent:1]);
-		
 		}
 		
 		free(itemIndices);
@@ -301,8 +295,6 @@
 					if (itemIndices) {
 						[leftoverItemIndices removeIndexes:itemIndices];
 					}
-					
-					NSLog(@"Decided on instance %@, spinning loop", foundInstance);
 					
 					[returnedGrids addObject:foundInstance];
 				
