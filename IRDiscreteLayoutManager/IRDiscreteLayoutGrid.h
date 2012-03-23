@@ -38,6 +38,7 @@ extern NSString * const IRDiscreteLayoutGridErrorDomain;
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName;	//	Will not alert if something gone wrong, use the version with an error pointer and a BOOL return to be safe
 - (BOOL) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName error:(NSError **)outError;
 - (id) layoutItemForAreaNamed:(NSString *)anAreaName;
+- (NSString *) layoutAreaNameForItem:(id)anItem;
 
 - (BOOL) isFullyPopulated;	//uses populationInspectorBlock if exists, otherwise checks if any layout grid is not associated with an item
 @property (nonatomic, readwrite, copy) BOOL (^populationInspectorBlock)(IRDiscreteLayoutGrid *self);
@@ -45,6 +46,10 @@ extern NSString * const IRDiscreteLayoutGridErrorDomain;
 //	Generally, these enumerators always work no matter if the grid is a prototype or not.
 - (void) enumerateLayoutAreaNamesWithBlock:(void(^)(NSString *anAreaName))aBlock;
 - (void) enumerateLayoutAreasWithBlock:(void(^)(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock))aBlock;
+
+- (IRDiscreteLayoutGridAreaValidatorBlock) validatorBlockForAreaNamed:(NSString *)name;
+- (IRDiscreteLayoutGridAreaLayoutBlock) layoutBlockForAreaNamed:(NSString *)name;
+- (IRDiscreteLayoutGridAreaDisplayBlock) displayBlockForAreaNamed:(NSString *)name;
 
 @property (nonatomic, readwrite, assign) BOOL allowsPartialInstancePopulation;
 //	Whether to allow partial population.

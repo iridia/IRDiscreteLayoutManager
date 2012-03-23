@@ -227,6 +227,27 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 
 }
 
+- (NSString *) layoutAreaNameForItem:(id)anItem {
+
+	NSParameterAssert(self.prototype);
+	
+	__block NSString *foundName = nil;
+	
+	[self.layoutAreaNamesToLayoutItems enumerateKeysAndObjectsUsingBlock: ^ (NSString *name, id item, BOOL *stop) {
+	
+		if (item == anItem) {
+		
+			foundName = name;
+			*stop = YES;
+		
+		}
+		
+	}];
+	
+	return foundName;
+
+}
+
 - (void) enumerateLayoutAreaNamesWithBlock:(void(^)(NSString *anAreaName))aBlock {
 
 	if (!aBlock)
@@ -253,6 +274,22 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 		);
 		
 	}];
+
+}
+
+- (IRDiscreteLayoutGridAreaValidatorBlock) validatorBlockForAreaNamed:(NSString *)name {
+
+	return [self.layoutAreaNamesToValidatorBlocks objectForKey:name];
+
+}
+- (IRDiscreteLayoutGridAreaLayoutBlock) layoutBlockForAreaNamed:(NSString *)name {
+
+	return [self.layoutAreaNamesToLayoutBlocks objectForKey:name];
+
+}
+- (IRDiscreteLayoutGridAreaDisplayBlock) displayBlockForAreaNamed:(NSString *)name {
+
+	return [self.layoutAreaNamesToDisplayBlocks objectForKey:name];
 
 }
 
