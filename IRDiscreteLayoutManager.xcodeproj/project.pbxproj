@@ -16,6 +16,8 @@
 		FF2BFEEE140AC72300604E8D /* IRDiscreteLayoutTests.h in Resources */ = {isa = PBXBuildFile; fileRef = FF2BFEED140AC72300604E8D /* IRDiscreteLayoutTests.h */; };
 		FF2BFEF0140AC72300604E8D /* IRDiscreteLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */; };
 		FF2BFF2C140AC9FC00604E8D /* libIRDiscreteLayoutManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */; };
+		FF44DFF1151E110C007EA7F8 /* IRDiscreteLayoutArea.h in Headers */ = {isa = PBXBuildFile; fileRef = FF44DFEF151E110C007EA7F8 /* IRDiscreteLayoutArea.h */; };
+		FF44DFF2151E110C007EA7F8 /* IRDiscreteLayoutArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FF44DFF0151E110C007EA7F8 /* IRDiscreteLayoutArea.m */; };
 		FF55E19A1407CE8400D8F3C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
 		FF55E1A01407CE8400D8F3C7 /* IRDiscreteLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */; };
 		FF5C84EC140B802A002E0415 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF5C84EB140B802A002E0415 /* MobileCoreServices.framework */; };
@@ -61,6 +63,8 @@
 		FF2BFEEF140AC72300604E8D /* IRDiscreteLayoutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IRDiscreteLayoutTests.m; sourceTree = "<group>"; };
 		FF2BFEF1140AC72300604E8D /* IRDiscreteLayoutTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IRDiscreteLayoutTests-Prefix.pch"; sourceTree = "<group>"; };
 		FF2BFF27140AC82100604E8D /* IRCommitSHA.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = IRCommitSHA.sh; path = IRDiscreteLayoutShared/IRCommitSHA.sh; sourceTree = "<group>"; };
+		FF44DFEF151E110C007EA7F8 /* IRDiscreteLayoutArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutArea.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutArea.h; sourceTree = "<group>"; };
+		FF44DFF0151E110C007EA7F8 /* IRDiscreteLayoutArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutArea.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutArea.m; sourceTree = "<group>"; };
 		FF55E1961407CE8400D8F3C7 /* libIRDiscreteLayoutManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIRDiscreteLayoutManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF55E1991407CE8400D8F3C7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FF55E19D1407CE8400D8F3C7 /* IRDiscreteLayoutManager-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IRDiscreteLayoutManager-Prefix.pch"; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 				FF55E19F1407CE8400D8F3C7 /* IRDiscreteLayoutManager.m */,
 				FFF580A1151C573C00C5C799 /* IRDiscreteLayoutHelpers.h */,
 				FFF580A2151C573C00C5C799 /* IRDiscreteLayoutHelpers.m */,
+				FF44DFEF151E110C007EA7F8 /* IRDiscreteLayoutArea.h */,
+				FF44DFF0151E110C007EA7F8 /* IRDiscreteLayoutArea.m */,
 				FF8727001408C47E002FE6FC /* IRDiscreteLayoutGrid.h */,
 				FF8727011408C47E002FE6FC /* IRDiscreteLayoutGrid.m */,
 				FFF5809F151C56C200C5C799 /* IRDiscreteLayoutGrid+Private.h */,
@@ -224,6 +230,7 @@
 				FFF580A0151C56C200C5C799 /* IRDiscreteLayoutGrid+Private.h in Headers */,
 				FFF580A3151C573C00C5C799 /* IRDiscreteLayoutHelpers.h in Headers */,
 				FFF580A6151C57DA00C5C799 /* IRDiscreteLayout.h in Headers */,
+				FF44DFF1151E110C007EA7F8 /* IRDiscreteLayoutArea.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +349,7 @@
 				FF0D6DF6151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m in Sources */,
 				FFF5809E151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.m in Sources */,
 				FFF580A4151C573C00C5C799 /* IRDiscreteLayoutHelpers.m in Sources */,
+				FF44DFF2151E110C007EA7F8 /* IRDiscreteLayoutArea.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

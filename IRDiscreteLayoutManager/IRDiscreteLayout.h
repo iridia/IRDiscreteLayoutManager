@@ -8,6 +8,7 @@
 
 #import "IRDiscreteLayoutManager.h"
 #import "IRDiscreteLayoutHelpers.h"
+#import "IRDiscreteLayoutArea.h"
 #import "IRDiscreteLayoutGrid.h"
 #import "IRDiscreteLayoutGrid+DebugSupport.h"
 #import "IRDiscreteLayoutGrid+Transforming.h"
