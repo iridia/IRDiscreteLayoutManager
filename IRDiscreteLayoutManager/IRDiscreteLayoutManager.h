@@ -48,10 +48,3 @@ enum {
 - (IRDiscreteLayoutResult *) calculatedResult;	//	For lazy people.
 
 @end
-
-
-extern NSError * IRDiscreteLayoutManagerError (NSUInteger code, NSString *description);
-extern NSString * const IRDiscreteLayoutManagerErrorDomain;
-extern NSUInteger IRDiscreteLayoutManagerGenericError;
-extern NSUInteger IRDiscreteLayoutManagerItemExhaustionFailureError;
-extern NSUInteger IRDiscreteLayoutManagerPrototypeSearchFailureError;

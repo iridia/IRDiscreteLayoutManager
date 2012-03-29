@@ -19,8 +19,9 @@
 
 + (void) markAreaNamed:(NSString *)aName inGridPrototype:(IRDiscreteLayoutGrid *)aGrid asEquivalentToAreaNamed:(NSString *)mappedName inGridPrototype:(IRDiscreteLayoutGrid *)mappedGrid;
 
-- (NSSet *) allTransformablePrototypeDestinations;
-
 - (IRDiscreteLayoutGrid *) transformedGridWithPrototype:(IRDiscreteLayoutGrid *)newGrid;
+
+- (NSSet *) allTransformablePrototypeDestinations;
+- (IRDiscreteLayoutGrid *) bestCounteprartPrototypeForAspectRatio:(CGFloat)aspectRatio;
 
 @end

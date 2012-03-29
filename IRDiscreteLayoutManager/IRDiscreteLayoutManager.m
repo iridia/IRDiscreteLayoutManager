@@ -6,6 +6,7 @@
 //  Copyright 2011 Iridia Productions. All rights reserved.
 //
 
+#import "IRDiscreteLayoutError.h"
 #import "IRDiscreteLayoutManager.h"
 #import "IRDiscreteLayoutChangeSet.h"
 
@@ -150,7 +151,7 @@
 					IRDiscreteLayoutGrid * const foundGrid = randomGrid(&foundGridIndex);
 					
 					if (!foundGrid) {
-						*outError = IRDiscreteLayoutManagerError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during random grid election.");
+						*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during random grid election.", nil);
 						return nil;
 					}
 					
@@ -216,6 +217,11 @@
 					
 						__block float_t instanceScore = 0;	//	TBD: Fix Me
 						
+						if ([instance isFullyPopulated]) {
+							NSLog(@"Adding 4 points for full grid population");
+							instanceScore += 4;
+						}
+						
 						//	Several aspects affect the score of the instance.
 						
 						if (lastGridContainingHeadItem) {
@@ -230,6 +236,7 @@
 								
 									case IRDiscreteLayoutItemChangeDeleting:
 									case IRDiscreteLayoutItemChangeInserting: {
+										NSLog(@"Subtracting 1 point for item deletion or insertion");
 										instanceScore -= 1;
 										break;
 									}
@@ -253,8 +260,10 @@
 						[instanceItemIndices enumerateIndexesUsingBlock: ^ (NSUInteger idx, BOOL *stop) {
 						
 							if (lastIndex != NSNotFound)
-							if (idx != (lastIndex + 1))
+							if (idx != (lastIndex + 1)) {
+								NSLog(@"Subtracting 1 point for space left in grid");
 								instanceScore -= 1;
+							}
 							
 						}];
 						
@@ -263,13 +272,17 @@
 						
 						[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 						
-							if (validatorBlock)
+							if (validatorBlock) {
+								NSLog(@"Adding 1 point for successful item validation");
 								instanceScore += 1;
-							
-							if (layoutBlock)
-								instanceScore += 1;
+							} else {
+								NSLog(@"Subtracting 1 point for lack of item validation");
+								instanceScore -= 1;
+							}
 							
 						}];
+						
+						NSLog(@"Instance %@ has score %f", instance, instanceScore);
 						
 						[instancesToScores setObject:[NSNumber numberWithFloat:instanceScore] forKey:instanceValue];
 						
@@ -279,11 +292,14 @@
 				
 				NSArray *sortedScores = [[instancesToScores allValues] sortedArrayUsingSelector:@selector(compare:)];
 				if (![sortedScores count]) {
-					*outError = IRDiscreteLayoutManagerError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during scored grid election.");
+					*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during scored grid election.", nil);
 					return nil;
 				}
 				
-				NSArray *allInstanceValues = [instancesToScores allKeysForObject:[sortedScores objectAtIndex:0]];
+				NSArray *allInstanceValues = [instancesToScores allKeysForObject:[sortedScores lastObject]];
+				
+				NSLog(@"instancesToScores %@", instancesToScores);
+				
 				if ([allInstanceValues count] > 1)
 					NSLog(@"%s: ambiguous scoring among candidate instances %@", __PRETTY_FUNCTION__, allInstanceValues);
 				
@@ -310,7 +326,7 @@
 		//	We might allow empty pages in the future, but not now.  If you want them, deal with them at the calling site.
 		
 		if (lastLeftoverItemIndicesCount == [leftoverItemIndices count]) {
-			*outError = IRDiscreteLayoutManagerError(IRDiscreteLayoutManagerItemExhaustionFailureError, @"Unable to exhaust all layout items during random grid election.");
+			*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerItemExhaustionFailureError, @"Unable to exhaust all layout items during random grid election.", nil);
 			return nil;
 		}
 	
@@ -321,19 +337,3 @@
 }
 
 @end
-
-
-NSError * IRDiscreteLayoutManagerError (NSUInteger code, NSString *description) {
-
-	return [NSError errorWithDomain:IRDiscreteLayoutGridErrorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-	
-		description, NSLocalizedDescriptionKey,
-	
-	nil]];
-
-}
-
-NSString * const IRDiscreteLayoutManagerErrorDomain = @"com.iridia.discreteLayout.layoutManager";
-NSUInteger IRDiscreteLayoutManagerGenericError = 0;;
-NSUInteger IRDiscreteLayoutManagerItemExhaustionFailureError = 1;
-NSUInteger IRDiscreteLayoutManagerPrototypeSearchFailureError = 2;

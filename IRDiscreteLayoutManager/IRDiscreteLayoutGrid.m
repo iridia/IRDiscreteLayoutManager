@@ -8,9 +8,8 @@
 
 #import "IRDiscreteLayoutGrid.h"
 #import "IRDiscreteLayoutGrid+Private.h"
-
-
-NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.grid";
+#import "IRDiscreteLayoutError.h"
+#import "IRDiscreteLayoutGrid+DebugSupport.h"
 
 
 @interface IRDiscreteLayoutGrid ()
@@ -49,14 +48,30 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 
 - (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items {
 
+	NSError *error = nil;
+	
+	IRDiscreteLayoutGrid *grid = [self instantiatedGridWithAvailableItems:items error:&error];
+	if (!grid)
+		NSLog(@"%@ %s: %@", self, __PRETTY_FUNCTION__, error);
+		
+	return grid;
+
+}
+
+- (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items error:(NSError **)outError {
+
 	NSParameterAssert(!self.prototype);
+	
+	outError = outError ? outError : &(NSError *){ nil };
 
 	//	This base implementation simply fills the grid up with some available items at the beginning of the array
 	//	Subclasses can probably swizzle the prototype, and return a new instantiated grid
 	
 	NSUInteger numberOfItems = [items count];
-	if (!numberOfItems)
+	if (!numberOfItems) {
+		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid with no layout items given.", nil);
 		return nil;
+	}
 	
 	NSMutableArray *nonHandledItems = [[items mutableCopy] autorelease];
 	NSMutableArray *consumedItems = [NSMutableArray array];
@@ -76,11 +91,18 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 			if (hasClaimedItem || [instance layoutItemForAreaNamed:name])
 				return;
 			
-			if ([instance setLayoutItem:nextItem forAreaNamed:name error:nil]) {
-				[nonHandledItems removeObject:nextItem];
-				[consumedItems addObject:nextItem];
-				hasClaimedItem = YES;				
-			}
+			//	NSError *error = nil;
+			//	if (![instance setLayoutItem:nextItem forAreaNamed:name error:&error]) {
+			//		NSLog(@"Error: %@", error);
+			//		return;
+			//	}
+
+			if (![instance setLayoutItem:nextItem forAreaNamed:name error:nil])
+				return;
+
+			[nonHandledItems removeObject:nextItem];
+			[consumedItems addObject:nextItem];
+			hasClaimedItem = YES;				
 			
 		}];
 		
@@ -97,19 +119,58 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 	
 	//	The first item provided must be consumed.
 	
-	if (![consumedItems containsObject:[items objectAtIndex:0]])
+	if (![consumedItems containsObject:[items objectAtIndex:0]]) {
+		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid skipping the first given layout item.", nil);
 		return nil;
+	}
 	
-	if (![consumedItems count])
+	if (![consumedItems count]) {
+		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid without consuming any given layout item.", nil);
 		return nil;
+	}
 	
 	if ([instance isFullyPopulated])
 		return instance;
 	
+	//	The instance is not fully populated.  Still allow the result to stand its chance as long as it is the last page
+	//	Issue: disallow leading spaces, must fill area and can not skip an area without filling it
+	
+	__block BOOL hasFoundWhitespace = NO;
+	__block BOOL hasGap = NO;
+
+	[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+		
+		if (item) {
+			
+			if (hasFoundWhitespace)
+				hasGap = YES;
+						
+		} else {
+		
+			hasFoundWhitespace = YES;
+		
+		}
+		
+	}];
+	
+	if (hasGap) {
+		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Prospective grid has unfilled layout areas between filled layout areas.", nil);
+		return nil;
+	}
+	
 	if (![nonHandledItems count])
 	if (!hasSkippedItem)
-	if (self.allowsPartialInstancePopulation)
 		return instance;
+	
+	if (self.allowsPartialInstancePopulation) {
+	
+		//	TBD: disallow spaces between items
+		
+		return instance;
+		
+	}
+	
+	*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Grid prototype forbids partial instantiation with leftover layout areas.", nil);
 	
 	return nil;
 
@@ -150,6 +211,8 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 - (id) copyWithZone:(NSZone *)zone {
 
 	IRDiscreteLayoutGrid *copiedGrid = [[IRDiscreteLayoutGrid allocWithZone:zone] init];
+	copiedGrid.identifier = self.identifier;
+	copiedGrid.prototype = self.prototype;
 	copiedGrid.contentSize = self.contentSize;
 	copiedGrid.layoutAreaNames = [[self.layoutAreaNames copy] autorelease];
 	copiedGrid.layoutAreaNamesToLayoutBlocks = [[self.layoutAreaNamesToLayoutBlocks mutableCopy] autorelease];
@@ -196,17 +259,12 @@ NSString * const IRDiscreteLayoutGridErrorDomain = @"com.iridia.discreteLayout.g
 	NSParameterAssert(self.prototype);
 	NSParameterAssert(anAreaName);
 	
+	outError = outError ? outError : &(NSError *){ nil };
+	
 	IRDiscreteLayoutGridAreaValidatorBlock validatorBlock = [self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName];
 	if (aLayoutItem && validatorBlock && !validatorBlock(self, aLayoutItem)) {
 		
-		NSString *description = [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName];
-		
-		if (outError) {
-			*outError = [NSError errorWithDomain:IRDiscreteLayoutGridErrorDomain code:0 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-				description, NSLocalizedDescriptionKey,
-			nil]];
-		}
-		
+		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName], nil);
 		return NO;
 		
 	}

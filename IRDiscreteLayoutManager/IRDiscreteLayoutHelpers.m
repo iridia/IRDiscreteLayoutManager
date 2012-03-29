@@ -51,7 +51,7 @@ IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForPropor
 		CGFloat xFactor = self.contentSize.width / totalUnitsX;
 		CGFloat yFactor = self.contentSize.height / totalUnitsY;
 		
-		return CGRectIntegral((CGRect){
+		CGRect answer = CGRectIntegral((CGRect){
 			(CGPoint){
 				unitsOffsetX * xFactor,
 				unitsOffsetY * yFactor
@@ -61,6 +61,10 @@ IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForPropor
 				unitsSpanY * yFactor
 			}
 		});
+		
+		NSLog(@"%s { %f %f %f %f %f %f }, %@ => %@", __PRETTY_FUNCTION__, totalUnitsX, totalUnitsY, unitsOffsetX, unitsOffsetY, unitsSpanX, unitsSpanY, NSStringFromCGSize(self.contentSize), NSStringFromCGRect(answer));
+		
+		return answer;
 	
 	} copy] autorelease];
 

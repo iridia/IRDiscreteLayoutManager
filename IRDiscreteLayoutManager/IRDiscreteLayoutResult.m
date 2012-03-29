@@ -41,6 +41,9 @@
 	if (!self)
 		return nil;
 		
+	for (IRDiscreteLayoutGrid *aGrid in newGrids)
+		NSAssert1(aGrid.prototype, @"Grid %@ must be an instance", aGrid);
+
 	self.grids = newGrids;
 	
 	return self;

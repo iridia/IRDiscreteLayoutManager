@@ -154,4 +154,33 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 
 }
 
+- (IRDiscreteLayoutGrid *) bestCounteprartPrototypeForAspectRatio:(CGFloat)aspectRatio {
+
+	NSParameterAssert(self.prototype);
+	NSSet *allIntrospectedGrids = [[self allTransformablePrototypeDestinations] setByAddingObject:self.prototype];
+	
+	IRDiscreteLayoutGrid *bestGrid = nil;
+	
+	for (IRDiscreteLayoutGrid *aGrid in allIntrospectedGrids) {
+		
+		if (!bestGrid) {
+			bestGrid = aGrid;
+			continue;
+		}
+		
+		CGFloat bestGridAspectRatio = bestGrid.contentSize.width / bestGrid.contentSize.height;
+		CGFloat currentGridAspectRatio = aGrid.contentSize.width / aGrid.contentSize.height;
+		
+		if (fabs(aspectRatio - bestGridAspectRatio) < fabs(aspectRatio - currentGridAspectRatio)) {
+			continue;
+		}
+		
+		bestGrid = aGrid;
+		
+	}
+
+	return bestGrid;
+
+}
+
 @end

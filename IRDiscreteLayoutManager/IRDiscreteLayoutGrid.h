@@ -32,6 +32,7 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 //	The -instantiatedGrid returned from a prototype is a grid that can be populated with stuff, and usually its layout areas can’t be changed.
 - (IRDiscreteLayoutGrid *) instantiatedGrid;
 - (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items;	//	Grabs available items for use, preferred over -instantiatedGrid
+- (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items error:(NSError **)outError;
 
 - (void) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName;	//	Will not alert if something gone wrong, use the version with an error pointer and a BOOL return to be safe
 - (BOOL) setLayoutItem:(id)aLayoutItem forAreaNamed:(NSString *)anAreaName error:(NSError **)outError;
@@ -61,6 +62,3 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 //	NO: instantiation returns nil if the grid instance is not fully populated, probably due to validator bailing.
 
 @end
-
-
-extern NSString * const IRDiscreteLayoutGridErrorDomain;

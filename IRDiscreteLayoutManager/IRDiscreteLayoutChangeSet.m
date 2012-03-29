@@ -147,10 +147,41 @@
 			return IRDiscreteLayoutItemChangeNone;
 			
 		})());
+		
+		NSLog(@"emitting change block for item %@ with change %i", [objValue nonretainedObjectValue], change);
 	
 		block([objValue nonretainedObjectValue], change);
 		
 	}];
+
+}
+
+- (NSString *) description {
+
+	NSMutableArray *changes = [NSMutableArray array];
+	
+	[self enumerateChangesWithBlock:^(id item, IRDiscreteLayoutItemChangeType changeType) {
+	
+		[changes addObject:[NSString stringWithFormat:@"Item: %@; Change: %@", item, ((^ {
+		
+			switch (changeType) {
+				case IRDiscreteLayoutItemChangeDeleting:
+					return @"Deleting";
+				case IRDiscreteLayoutItemChangeInserting:
+					return @"Inserting";
+				case IRDiscreteLayoutItemChangeNone:
+					return @"None";
+				case IRDiscreteLayoutItemChangeRelayout:
+					return @"Relayout";
+			}
+			
+			return @"Unknown";
+		
+		})())]];
+		
+	}];
+
+	return [NSString stringWithFormat:@"<%@: 0x%x> { Changes: %@ }", NSStringFromClass([self class]), (unsigned int)self, changes];
 
 }
 
