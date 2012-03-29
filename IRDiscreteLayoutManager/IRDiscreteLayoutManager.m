@@ -94,6 +94,8 @@
 				
 			}];
 			
+			//	Not allowing empti-ness instances
+			
 			if (usedItemIndices)
 				*usedItemIndices = [[outIndices copy] autorelease];
 			
@@ -282,16 +284,38 @@
 					return nil;
 				}
 				
-				NSArray *allInstanceValues = [instancesToScores allKeysForObject:[sortedScores lastObject]];
+				IRDiscreteLayoutGrid *foundInstance = ((^ {
+					
+					NSArray *allInstanceValues = [instancesToScores allKeysForObject:[sortedScores lastObject]];
+					if (![allInstanceValues count])
+						return (IRDiscreteLayoutGrid *)nil;
+					
+					if ([allInstanceValues count] == 1)
+						return (IRDiscreteLayoutGrid *)[(NSValue *)[allInstanceValues objectAtIndex:0] nonretainedObjectValue];
+					
+					//	In case there are many grids with the same score
+					
+					NSArray *sortedGrids = [allInstanceValues sortedArrayUsingComparator: ^ (NSValue *lhs, NSValue *rhs) {
+					
+						IRDiscreteLayoutGrid *lhsGrid = [lhs nonretainedObjectValue];
+						IRDiscreteLayoutGrid *rhsGrid = [rhs nonretainedObjectValue];
+					
+						NSUInteger lhsIndex = [self.delegate layoutManager:self indexOfLayoutGrid:lhsGrid];
+						NSUInteger rhsIndex = [self.delegate layoutManager:self indexOfLayoutGrid:rhsGrid];
+					
+						return (lhsIndex < rhsIndex) ? NSOrderedAscending : (lhsIndex == rhsIndex) ? NSOrderedSame : NSOrderedDescending;
+						
+					}];
+					
+					return (IRDiscreteLayoutGrid *)[[sortedGrids lastObject] nonretainedObjectValue];
 				
-				if ([allInstanceValues count] > 1)
-					NSLog(@"%s: ambiguous scoring among candidate instances %@", __PRETTY_FUNCTION__, allInstanceValues);
+				})());
 				
-				NSValue *foundInstanceValue = [allInstanceValues objectAtIndex:0];
-				IRDiscreteLayoutGrid *foundInstance = (IRDiscreteLayoutGrid *)[foundInstanceValue nonretainedObjectValue];
 				if (foundInstance) {
 
+					NSValue *foundInstanceValue = [NSValue valueWithNonretainedObject:foundInstance];
 					NSIndexSet *itemIndices = [instancesToItemIndices objectForKey:foundInstanceValue];
+					
 					if (itemIndices) {
 						[leftoverItemIndices removeIndexes:itemIndices];
 					}

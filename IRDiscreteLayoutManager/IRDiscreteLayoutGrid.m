@@ -120,42 +120,42 @@
 	if ([instance isFullyPopulated])
 		return instance;
 	
-	//	The instance is not fully populated.  Still allow the result to stand its chance as long as it is the last page
-	//	Issue: disallow leading spaces, must fill area and can not skip an area without filling it
+	BOOL hasGap = (^ {
 	
-	__block BOOL hasFoundWhitespace = NO;
-	__block BOOL hasGap = NO;
+		__block BOOL hasFoundWhitespace = NO;
+		__block BOOL hasGap = NO;
 
-	[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-		
-		if (item) {
+		[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 			
-			if (hasFoundWhitespace)
-				hasGap = YES;
-						
-		} else {
+			if (item) {
+				
+				if (hasFoundWhitespace)
+					hasGap = YES;
+							
+			} else {
+			
+				hasFoundWhitespace = YES;
+			
+			}
+			
+		}];
 		
-			hasFoundWhitespace = YES;
-		
-		}
-		
-	}];
+		return hasGap;
+	
+	})();
+	
+	//	If although the grid is not fully populated, it has used up every single item, and has no gap, it’s okay
+	
+	if (!hasGap)
+	if ([consumedItems count] == [items count])
+	if (self.allowsPartialInstancePopulation)
+		return instance;
+	
+	//	Otherwise, if it has not used up every item provided and it has at least one gap, dismiss it
 	
 	if (hasGap) {
 		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Prospective grid has unfilled layout areas between filled layout areas.", nil);
 		return nil;
-	}
-	
-	if (![nonHandledItems count])
-	if (!hasSkippedItem)
-		return instance;
-	
-	if (self.allowsPartialInstancePopulation) {
-	
-		//	TBD: disallow spaces between items
-		
-		return instance;
-		
 	}
 	
 	*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Grid prototype forbids partial instantiation with leftover layout areas.", nil);
