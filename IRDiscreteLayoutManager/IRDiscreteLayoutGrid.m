@@ -48,13 +48,7 @@
 
 - (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items {
 
-	NSError *error = nil;
-	
-	IRDiscreteLayoutGrid *grid = [self instantiatedGridWithAvailableItems:items error:&error];
-	if (!grid)
-		NSLog(@"%@ %s: %@", self, __PRETTY_FUNCTION__, error);
-		
-	return grid;
+	return [self instantiatedGridWithAvailableItems:items error:nil];
 
 }
 
@@ -91,12 +85,6 @@
 			if (hasClaimedItem || [instance layoutItemForAreaNamed:name])
 				return;
 			
-			//	NSError *error = nil;
-			//	if (![instance setLayoutItem:nextItem forAreaNamed:name error:&error]) {
-			//		NSLog(@"Error: %@", error);
-			//		return;
-			//	}
-
 			if (![instance setLayoutItem:nextItem forAreaNamed:name error:nil])
 				return;
 

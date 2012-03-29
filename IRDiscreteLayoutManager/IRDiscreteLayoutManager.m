@@ -23,13 +23,7 @@
 
 - (IRDiscreteLayoutResult *) calculatedResult {
 
-	NSError *error = nil;
-	IRDiscreteLayoutResult *result = [self calculatedResultWithReference:nil strategy:IRDefaultLayoutStrategy error:&error];
-	
-	if (!result)
-		NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
-	
-	return result;
+	return [self calculatedResultWithReference:nil strategy:IRDefaultLayoutStrategy error:nil];
 
 }
 
@@ -217,10 +211,8 @@
 					
 						__block float_t instanceScore = 0;	//	TBD: Fix Me
 						
-						if ([instance isFullyPopulated]) {
-							NSLog(@"Adding 4 points for full grid population");
+						if ([instance isFullyPopulated])
 							instanceScore += 4;
-						}
 						
 						//	Several aspects affect the score of the instance.
 						
@@ -236,7 +228,6 @@
 								
 									case IRDiscreteLayoutItemChangeDeleting:
 									case IRDiscreteLayoutItemChangeInserting: {
-										NSLog(@"Subtracting 1 point for item deletion or insertion");
 										instanceScore -= 1;
 										break;
 									}
@@ -261,7 +252,6 @@
 						
 							if (lastIndex != NSNotFound)
 							if (idx != (lastIndex + 1)) {
-								NSLog(@"Subtracting 1 point for space left in grid");
 								instanceScore -= 1;
 							}
 							
@@ -273,16 +263,12 @@
 						[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 						
 							if (validatorBlock) {
-								NSLog(@"Adding 1 point for successful item validation");
 								instanceScore += 1;
 							} else {
-								NSLog(@"Subtracting 1 point for lack of item validation");
 								instanceScore -= 1;
 							}
 							
 						}];
-						
-						NSLog(@"Instance %@ has score %f", instance, instanceScore);
 						
 						[instancesToScores setObject:[NSNumber numberWithFloat:instanceScore] forKey:instanceValue];
 						
@@ -297,8 +283,6 @@
 				}
 				
 				NSArray *allInstanceValues = [instancesToScores allKeysForObject:[sortedScores lastObject]];
-				
-				NSLog(@"instancesToScores %@", instancesToScores);
 				
 				if ([allInstanceValues count] > 1)
 					NSLog(@"%s: ambiguous scoring among candidate instances %@", __PRETTY_FUNCTION__, allInstanceValues);

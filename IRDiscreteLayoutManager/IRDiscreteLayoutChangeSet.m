@@ -148,8 +148,6 @@
 			
 		})());
 		
-		NSLog(@"emitting change block for item %@ with change %i", [objValue nonretainedObjectValue], change);
-	
 		block([objValue nonretainedObjectValue], change);
 		
 	}];

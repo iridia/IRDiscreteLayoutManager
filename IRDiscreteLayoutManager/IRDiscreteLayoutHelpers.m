@@ -61,9 +61,7 @@ IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForPropor
 				unitsSpanY * yFactor
 			}
 		});
-		
-		NSLog(@"%s { %f %f %f %f %f %f }, %@ => %@", __PRETTY_FUNCTION__, totalUnitsX, totalUnitsY, unitsOffsetX, unitsOffsetY, unitsSpanX, unitsSpanY, NSStringFromCGSize(self.contentSize), NSStringFromCGRect(answer));
-		
+			
 		return answer;
 	
 	} copy] autorelease];
