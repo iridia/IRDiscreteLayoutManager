@@ -340,7 +340,11 @@
 	
 	}
 		
-	return [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
+	IRDiscreteLayoutResult *result = [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
+	
+	//	NSLog(@"%s: %@", __PRETTY_FUNCTION__, result);
+	
+	return result;
 
 }
 

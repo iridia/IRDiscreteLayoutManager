@@ -48,7 +48,13 @@
 
 - (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items {
 
-	return [self instantiatedGridWithAvailableItems:items error:nil];
+	NSError *error = nil;
+	IRDiscreteLayoutGrid *grid = [self instantiatedGridWithAvailableItems:items error:&error];
+	
+	//	if (!grid)
+	//		NSLog(@"%s: %@ -> %@", __PRETTY_FUNCTION__, items, error);
+	
+	return grid;
 
 }
 
