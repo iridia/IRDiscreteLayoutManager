@@ -111,13 +111,6 @@
 		
 	}
 	
-	//	The first item provided must be consumed.
-	
-	if (![consumedItems containsObject:[items objectAtIndex:0]]) {
-		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid skipping the first given layout item.", nil);
-		return nil;
-	}
-	
 	if (![consumedItems count]) {
 		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid without consuming any given layout item.", nil);
 		return nil;
