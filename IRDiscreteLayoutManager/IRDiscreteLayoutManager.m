@@ -37,8 +37,10 @@
 	NSUInteger const numberOfItems = [self.dataSource numberOfItemsForLayoutManager:self];
 	NSUInteger const numberOfGrids = [self.delegate numberOfLayoutGridsForLayoutManager:self];
 	
-	if (!numberOfItems || !numberOfGrids)
+	if (!numberOfItems || !numberOfGrids) {
+		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGenericError, @"No items or layout grids exist for use.", nil);
 		return nil;
+	}
 	
 	NSMutableIndexSet *leftoverItemIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, numberOfItems }];
 	NSMutableArray *returnedGrids = [NSMutableArray array];
