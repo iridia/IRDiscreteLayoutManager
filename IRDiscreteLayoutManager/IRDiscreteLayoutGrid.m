@@ -135,15 +135,14 @@
 				if ([instance layoutItemForAreaNamed:layoutAreaName])
 					return;
 				
-				NSError *error = nil;
-				if (![instance setLayoutItem:item forAreaNamed:layoutAreaName error:&error])
+				if (![instance setLayoutItem:item forAreaNamed:layoutAreaName error:nil])
 					return;
 				
 				*stopAreaEnum = YES;
 				
 			}];
 			
-		}];		
+		}];
 		
 	}];
 	
@@ -289,12 +288,12 @@
 	NSParameterAssert(self.prototype);
 	NSParameterAssert(anAreaName);
 	
-	outError = outError ? outError : &(NSError *){ nil };
-	
 	IRDiscreteLayoutGridAreaValidatorBlock validatorBlock = [self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName];
 	if (aLayoutItem && validatorBlock && !validatorBlock(self, aLayoutItem)) {
 		
-		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName], nil);
+		if (outError)
+			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName], nil);
+		
 		return NO;
 		
 	}
