@@ -11,7 +11,6 @@
 #import "IRDiscreteLayoutChangeSet.h"
 #import "IRDiscreteLayoutGridCandidateInfo.h"
 
-
 @implementation IRDiscreteLayoutManager
 
 @synthesize dataSource, delegate;
@@ -204,8 +203,6 @@
 				
 				nil]];
 				
-				NSLog(@"cands %@", candidates);
-				
 				if (![candidates count]) {
 					*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during scored grid election.", nil);
 					return nil;
@@ -274,8 +271,6 @@
 	}
 		
 	IRDiscreteLayoutResult *result = [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
-	
-	//	NSLog(@"%s: %@", __PRETTY_FUNCTION__, result);
 	
 	return result;
 

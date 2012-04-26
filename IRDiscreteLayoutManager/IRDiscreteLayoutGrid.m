@@ -53,11 +53,8 @@
 	IRDiscreteLayoutGrid *grid = [self instantiatedGridWithAvailableItems:items error:&error];
 	
 	if (!grid) {
-		NSLog(@"%s: %@ %@ -> %@", __PRETTY_FUNCTION__, self, items, error);
 		return nil;
 	}
-	
-	NSLog(@"%s: %@ -> %@", __PRETTY_FUNCTION__, self, items);
 	
 	return grid;
 
@@ -81,28 +78,82 @@
 	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
 	NSMutableArray *consumedItems = [NSMutableArray array];
 	
-	[items enumerateObjectsUsingBlock:^(id<IRDiscreteLayoutItem> item, NSUInteger idx, BOOL *stop) {
+	//	We need to try all the possible combinations for the layout areas
+	//	That is, for areas A and B we need to test both A B and B A
 	
-		if ([instance isFullyPopulated]) {
-			*stop = YES;
-			return;
-		}
-
-		for (NSString *layoutAreaName in instance.layoutAreaNames) {
-			if (![instance layoutItemForAreaNamed:layoutAreaName]) {
-				NSError *error = nil;
-				if ([instance setLayoutItem:item forAreaNamed:layoutAreaName error:&error]) {
-					NSLog(@"Put item %@ index %lu in area %@", item, idx, layoutAreaName);
-					[consumedItems addObject:item];
-					break;
-				} else {
-					NSLog(@"error putting item %@ index %lu in area %@: %@", item, idx, layoutAreaName, error);
-				}
+	__block NSArray * (^possibleCombinations)(NSArray *) = [^ (NSArray *self) {
+	
+		NSCParameterAssert([self isKindOfClass:[NSArray class]]);
+		
+		NSUInteger length = [self count];
+		if (length <= 1)
+			return (NSArray *)[NSArray arrayWithObject:self];
+		
+		NSMutableArray *answer = [NSMutableArray array];
+		NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:(NSRange){ 0, length }];
+		
+		for (NSUInteger i = 0; i < length; i++) {
+		
+			NSMutableIndexSet *usedIndices = [[indexSet mutableCopy] autorelease];
+			[usedIndices removeIndex:i];
+			
+			NSArray *otherObjects = [self objectsAtIndexes:usedIndices];
+			NSCParameterAssert([otherObjects isKindOfClass:[NSArray class]]);
+			
+			for (NSArray *combination in possibleCombinations(otherObjects)) {
+				
+				NSCParameterAssert([combination isKindOfClass:[NSArray class]]);
+				
+				NSArray *usedCombination = [[combination copy] autorelease];
+				NSArray *baseObjs = [NSArray arrayWithObject:[self objectAtIndex:i]];
+				NSArray *addedAnswer = [baseObjs arrayByAddingObjectsFromArray:usedCombination];
+				
+				[answer addObject:addedAnswer];
+				
 			}
+		
 		}
+		
+		return (NSArray *)[[answer copy] autorelease];
+			
+	} copy];
+	
+	NSArray *possibleLayoutAreaNameCombinations = possibleCombinations(self.layoutAreaNames);
+	
+	[possibleLayoutAreaNameCombinations enumerateObjectsUsingBlock:^(NSArray *combination, NSUInteger idx, BOOL *stopCombinationEnum) {
+	
+		[items enumerateObjectsUsingBlock:^(id<IRDiscreteLayoutItem> item, NSUInteger idx, BOOL *stopItemEnum) {
+		
+			if ([instance isFullyPopulated]) {
+				*stopItemEnum = YES;
+				*stopCombinationEnum = YES;
+				return;
+			}
+			
+			[combination enumerateObjectsUsingBlock:^(NSString *layoutAreaName, NSUInteger idx, BOOL *stopAreaEnum) {
+				
+				if ([instance layoutItemForAreaNamed:layoutAreaName])
+					return;
+				
+				NSError *error = nil;
+				if (![instance setLayoutItem:item forAreaNamed:layoutAreaName error:&error])
+					return;
+				
+				*stopAreaEnum = YES;
+				
+			}];
+			
+		}];		
 		
 	}];
 	
+	[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+
+		if (item)
+			[consumedItems addObject:item];
+		
+	}];
+
 	if (![consumedItems count]) {
 		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid without consuming any given layout item.", nil);
 		return nil;
@@ -125,7 +176,6 @@
 							
 			} else {
 			
-				NSLog(@"layout area named %@ is empty", name);
 				hasFoundWhitespace = YES;
 			
 			}

@@ -112,14 +112,13 @@
 	
 	answer /= [[grid layoutAreaNames] count];
 	
-	NSLog(@"%s %@ %f", __PRETTY_FUNCTION__, otherGrid, answer);
 	return answer;
 
 }
 
 - (NSString *) description {
 	
-	return [NSString stringWithFormat:@"%@ { Grid = %@, Score = %f, Delegate Index = %lu }", [super description], grid, score, delegateIndex];
+	return [NSString stringWithFormat:@"%@ { Grid = %@, Score = %f, Delegate Index = %iu }", [super description], grid, score, delegateIndex];
 	
 }
 
