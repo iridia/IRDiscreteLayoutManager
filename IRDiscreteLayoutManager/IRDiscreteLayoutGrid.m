@@ -10,6 +10,7 @@
 #import "IRDiscreteLayoutGrid+Private.h"
 #import "IRDiscreteLayoutError.h"
 #import "IRDiscreteLayoutGrid+DebugSupport.h"
+#import "IRDiscreteLayoutItem.h"
 
 
 @interface IRDiscreteLayoutGrid ()
@@ -51,8 +52,9 @@
 	NSError *error = nil;
 	IRDiscreteLayoutGrid *grid = [self instantiatedGridWithAvailableItems:items error:&error];
 	
-	//	if (!grid)
-	//		NSLog(@"%s: %@ -> %@", __PRETTY_FUNCTION__, items, error);
+	if (!grid) {
+		return nil;
+	}
 	
 	return grid;
 
@@ -73,44 +75,84 @@
 		return nil;
 	}
 	
-	NSMutableArray *nonHandledItems = [[items mutableCopy] autorelease];
+	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
 	NSMutableArray *consumedItems = [NSMutableArray array];
 	
-	IRDiscreteLayoutGrid *instance = [self instantiatedGrid];
+	//	We need to try all the possible combinations for the layout areas
+	//	That is, for areas A and B we need to test both A B and B A
 	
-	__block BOOL canContinue = (numberOfItems > 0);
-	__block BOOL hasSkippedItem = NO;
-		
-	while (canContinue) {
+	__block NSArray * (^possibleCombinations)(NSArray *) = [^ (NSArray *self) {
 	
-		id nextItem = [nonHandledItems objectAtIndex:0];
-		__block BOOL hasClaimedItem = NO;
-
-		[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+		NSCParameterAssert([self isKindOfClass:[NSArray class]]);
 		
-			if (hasClaimedItem || [instance layoutItemForAreaNamed:name])
-				return;
+		NSUInteger length = [self count];
+		if (length <= 1)
+			return (NSArray *)[NSArray arrayWithObject:self];
+		
+		NSMutableArray *answer = [NSMutableArray array];
+		NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:(NSRange){ 0, length }];
+		
+		for (NSUInteger i = 0; i < length; i++) {
+		
+			NSMutableIndexSet *usedIndices = [[indexSet mutableCopy] autorelease];
+			[usedIndices removeIndex:i];
 			
-			if (![instance setLayoutItem:nextItem forAreaNamed:name error:nil])
+			NSArray *otherObjects = [self objectsAtIndexes:usedIndices];
+			NSCParameterAssert([otherObjects isKindOfClass:[NSArray class]]);
+			
+			for (NSArray *combination in possibleCombinations(otherObjects)) {
+				
+				NSCParameterAssert([combination isKindOfClass:[NSArray class]]);
+				
+				NSArray *usedCombination = [[combination copy] autorelease];
+				NSArray *baseObjs = [NSArray arrayWithObject:[self objectAtIndex:i]];
+				NSArray *addedAnswer = [baseObjs arrayByAddingObjectsFromArray:usedCombination];
+				
+				[answer addObject:addedAnswer];
+				
+			}
+		
+		}
+		
+		return (NSArray *)[[answer copy] autorelease];
+			
+	} copy];
+	
+	NSArray *possibleLayoutAreaNameCombinations = possibleCombinations(self.layoutAreaNames);
+	
+	[possibleLayoutAreaNameCombinations enumerateObjectsUsingBlock:^(NSArray *combination, NSUInteger idx, BOOL *stopCombinationEnum) {
+	
+		[items enumerateObjectsUsingBlock:^(id<IRDiscreteLayoutItem> item, NSUInteger idx, BOOL *stopItemEnum) {
+		
+			if ([instance isFullyPopulated]) {
+				*stopItemEnum = YES;
+				*stopCombinationEnum = YES;
 				return;
-
-			[nonHandledItems removeObject:nextItem];
-			[consumedItems addObject:nextItem];
-			hasClaimedItem = YES;				
+			}
+			
+			[combination enumerateObjectsUsingBlock:^(NSString *layoutAreaName, NSUInteger idx, BOOL *stopAreaEnum) {
+				
+				if ([instance layoutItemForAreaNamed:layoutAreaName])
+					return;
+				
+				if (![instance setLayoutItem:item forAreaNamed:layoutAreaName error:nil])
+					return;
+				
+				*stopAreaEnum = YES;
+				
+			}];
 			
 		}];
 		
-		if (!hasClaimedItem) {
-		
-			[nonHandledItems removeObject:nextItem];
-			hasSkippedItem = YES;
-			
-		}
-		
-		canContinue = !![nonHandledItems count];
-		
-	}
+	}];
 	
+	[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+
+		if (item)
+			[consumedItems addObject:item];
+		
+	}];
+
 	if (![consumedItems count]) {
 		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid without consuming any given layout item.", nil);
 		return nil;
@@ -122,14 +164,14 @@
 	BOOL hasGap = (^ {
 	
 		__block BOOL hasFoundWhitespace = NO;
-		__block BOOL hasGap = NO;
+		__block BOOL answer = NO;
 
 		[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
 			
 			if (item) {
 				
 				if (hasFoundWhitespace)
-					hasGap = YES;
+					answer = YES;
 							
 			} else {
 			
@@ -139,7 +181,7 @@
 			
 		}];
 		
-		return hasGap;
+		return answer;
 	
 	})();
 	
@@ -246,12 +288,12 @@
 	NSParameterAssert(self.prototype);
 	NSParameterAssert(anAreaName);
 	
-	outError = outError ? outError : &(NSError *){ nil };
-	
 	IRDiscreteLayoutGridAreaValidatorBlock validatorBlock = [self.layoutAreaNamesToValidatorBlocks objectForKey:anAreaName];
 	if (aLayoutItem && validatorBlock && !validatorBlock(self, aLayoutItem)) {
 		
-		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName], nil);
+		if (outError)
+			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area named %@", aLayoutItem, anAreaName], nil);
+		
 		return NO;
 		
 	}

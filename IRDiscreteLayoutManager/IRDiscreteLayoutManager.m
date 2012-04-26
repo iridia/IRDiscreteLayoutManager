@@ -9,7 +9,7 @@
 #import "IRDiscreteLayoutError.h"
 #import "IRDiscreteLayoutManager.h"
 #import "IRDiscreteLayoutChangeSet.h"
-
+#import "IRDiscreteLayoutGridCandidateInfo.h"
 
 @implementation IRDiscreteLayoutManager
 
@@ -173,29 +173,9 @@
 			case IRCompareScoreLayoutStrategy: {
 			
 				id <IRDiscreteLayoutItem> headItem = [self.dataSource layoutManager:self itemAtIndex:[leftoverItemIndices firstIndex]];
+				IRDiscreteLayoutGrid *lastGridContainingHeadItem = [lastResult gridContainingItem:headItem];
 				
-				IRDiscreteLayoutGrid *lastGridContainingHeadItem = ((^ {
-					
-					__block IRDiscreteLayoutGrid *foundGrid = nil;
-					
-					for (IRDiscreteLayoutGrid *grid in lastResult.grids) {
-						
-						[grid enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-						
-							if (foundGrid)
-								return;
-						
-							if (item == headItem) {
-								foundGrid = grid;
-							}
-							
-						}];
-						
-					};
-					
-					return foundGrid;
-					
-				})());
+				NSMutableArray *allCandidateInfos = [NSMutableArray array];
 			
 				NSMutableDictionary *instancesToScores = [NSMutableDictionary dictionaryWithCapacity:numberOfGrids];
 				NSMutableDictionary *instancesToItemIndices = [NSMutableDictionary dictionaryWithCapacity:numberOfGrids];
@@ -203,128 +183,76 @@
 				for (NSUInteger i = 0; i < numberOfGrids; i++) {
 					
 					IRDiscreteLayoutGrid *prototype = [self.delegate layoutManager:self layoutGridAtIndex:i];
-					NSIndexSet *instanceItemIndices = nil;
-					IRDiscreteLayoutGrid *instance = instanceFromPrototype(prototype, NO, &instanceItemIndices);
+					NSIndexSet *indices = nil;
+					IRDiscreteLayoutGrid *instance = instanceFromPrototype(prototype, NO, &indices);
 					
 					if (instance) {
 					
-						NSValue *instanceValue = [NSValue valueWithNonretainedObject:instance];
+						IRDiscreteLayoutGridCandidateInfo *candidateInfo = [IRDiscreteLayoutGridCandidateInfo infoWithGrid:instance itemIndices:indices referenceGrid:lastGridContainingHeadItem delegateIndex:i];
 						
-						if (instanceItemIndices)
-							[instancesToItemIndices	 setObject:instanceItemIndices forKey:instanceValue];
-					
-						__block float_t instanceScore = 0;	//	TBD: Fix Me
-						
-						if ([instance isFullyPopulated])
-							instanceScore += 4;
-						
-						//	Several aspects affect the score of the instance.
-						
-						if (lastGridContainingHeadItem) {
-						
-							//	For now it’s a pretty simple “take one point off if changed” algorithm
-						
-							IRDiscreteLayoutChangeSet *changeSet = [IRDiscreteLayoutChangeSet changeSetFromGrid:lastGridContainingHeadItem toGrid:instance];
-							
-							[changeSet enumerateChangesWithBlock:^(id item, IRDiscreteLayoutItemChangeType changeType) {
-							
-								switch (changeType) {
-								
-									case IRDiscreteLayoutItemChangeDeleting:
-									case IRDiscreteLayoutItemChangeInserting: {
-										instanceScore -= 1;
-										break;
-									}
-									
-									case IRDiscreteLayoutItemChangeRelayout:
-									case IRDiscreteLayoutItemChangeNone: {
-										break;
-									}
-								
-								}
-								
-							}];
-						
-						}
-						
-						
-						//	instanceItemIndices contains a bunch of item indices; find seams and detract score for each seam in space
-						
-						__block NSUInteger lastIndex = NSNotFound;
-						
-						[instanceItemIndices enumerateIndexesUsingBlock: ^ (NSUInteger idx, BOOL *stop) {
-						
-							if (lastIndex != NSNotFound)
-							if (idx != (lastIndex + 1)) {
-								instanceScore -= 1;
-							}
-							
-						}];
-						
-						
-						//	A bunch of other faithful assumptions: having instantiated, more checks in place means more specificality
-						
-						[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-						
-							if (validatorBlock) {
-								instanceScore += 1;
-							} else {
-								instanceScore -= 1;
-							}
-							
-						}];
-						
-						[instancesToScores setObject:[NSNumber numberWithFloat:instanceScore] forKey:instanceValue];
+						[allCandidateInfos addObject:candidateInfo];
 						
 					}
 					
 				}
 				
-				NSArray *sortedScores = [[instancesToScores allValues] sortedArrayUsingSelector:@selector(compare:)];
-				if (![sortedScores count]) {
+				NSArray *candidates = [allCandidateInfos sortedArrayUsingDescriptors:[NSArray arrayWithObjects:
+				
+					[NSSortDescriptor sortDescriptorWithKey:@"score" ascending:NO],
+					[NSSortDescriptor sortDescriptorWithKey:@"delegateIndex" ascending:YES],
+				
+				nil]];
+				
+				if (![candidates count]) {
 					*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during scored grid election.", nil);
 					return nil;
 				}
 				
-				IRDiscreteLayoutGrid *foundInstance = ((^ {
+				IRDiscreteLayoutGridCandidateInfo *foundCandidateInfo = ((^ {
+				
+					CGFloat bestScore = ((IRDiscreteLayoutGridCandidateInfo *)[candidates objectAtIndex:0]).score;
 					
-					NSArray *allInstanceValues = [instancesToScores allKeysForObject:[sortedScores lastObject]];
-					if (![allInstanceValues count])
-						return (IRDiscreteLayoutGrid *)nil;
+					NSArray *allBestCandidates = [candidates filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(IRDiscreteLayoutGridCandidateInfo *aCandidate, NSDictionary *bindings) {
+						return aCandidate.score == bestScore;
+					}]];
 					
-					if ([allInstanceValues count] == 1)
-						return (IRDiscreteLayoutGrid *)[(NSValue *)[allInstanceValues objectAtIndex:0] nonretainedObjectValue];
-					
-					//	In case there are many grids with the same score
-					
-					NSArray *sortedGrids = [allInstanceValues sortedArrayUsingComparator: ^ (NSValue *lhs, NSValue *rhs) {
-					
-						IRDiscreteLayoutGrid *lhsGrid = [lhs nonretainedObjectValue];
-						IRDiscreteLayoutGrid *rhsGrid = [rhs nonretainedObjectValue];
-					
-						NSUInteger lhsIndex = [self.delegate layoutManager:self indexOfLayoutGrid:lhsGrid];
-						NSUInteger rhsIndex = [self.delegate layoutManager:self indexOfLayoutGrid:rhsGrid];
-					
-						return (lhsIndex < rhsIndex) ? NSOrderedAscending : (lhsIndex == rhsIndex) ? NSOrderedSame : NSOrderedDescending;
-						
-					}];
-					
-					return (IRDiscreteLayoutGrid *)[[sortedGrids lastObject] nonretainedObjectValue];
+					return [allBestCandidates objectAtIndex:arc4random_uniform([allBestCandidates count])];
 				
 				})());
 				
-				if (foundInstance) {
-
-					NSValue *foundInstanceValue = [NSValue valueWithNonretainedObject:foundInstance];
-					NSIndexSet *itemIndices = [instancesToItemIndices objectForKey:foundInstanceValue];
+				IRDiscreteLayoutGrid *foundGrid = foundCandidateInfo.grid;
+				
+				if ([self.delegate respondsToSelector:@selector(layoutManager:targetGridForEnqueueingProposedGrid:fromCandidates:toResult:)]) {
+				
+					IRDiscreteLayoutResult *interimResult = [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
 					
-					if (itemIndices) {
-						[leftoverItemIndices removeIndexes:itemIndices];
+					NSMutableArray *allFoundGrids = [NSMutableArray arrayWithCapacity:[candidates count]];
+					for (IRDiscreteLayoutGridCandidateInfo *candidateInfo in candidates)
+						[allFoundGrids addObject:candidateInfo.grid];
+					
+					IRDiscreteLayoutGrid *overriddenGrid = [self.delegate layoutManager:self targetGridForEnqueueingProposedGrid:foundGrid fromCandidates:allFoundGrids toResult:interimResult];
+					
+					if (overriddenGrid != foundGrid) {
+					
+						for (IRDiscreteLayoutGridCandidateInfo *candidateInfo in candidates) {
+						
+							if (candidateInfo.grid == overriddenGrid) {
+								
+								foundCandidateInfo = candidateInfo;
+								break;
+								
+							}
+						
+						}
+					
 					}
 					
-					[returnedGrids addObject:foundInstance];
-				
+					foundGrid = overriddenGrid;
+					
 				}
+				
+				[leftoverItemIndices removeIndexes:foundCandidateInfo.itemIndices];
+				[returnedGrids addObject:foundCandidateInfo.grid];
 				
 				break;
 			
@@ -343,8 +271,6 @@
 	}
 		
 	IRDiscreteLayoutResult *result = [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
-	
-	//	NSLog(@"%s: %@", __PRETTY_FUNCTION__, result);
 	
 	return result;
 
