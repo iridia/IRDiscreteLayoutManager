@@ -177,9 +177,6 @@
 				
 				NSMutableArray *allCandidateInfos = [NSMutableArray array];
 			
-				NSMutableDictionary *instancesToScores = [NSMutableDictionary dictionaryWithCapacity:numberOfGrids];
-				NSMutableDictionary *instancesToItemIndices = [NSMutableDictionary dictionaryWithCapacity:numberOfGrids];
-				
 				for (NSUInteger i = 0; i < numberOfGrids; i++) {
 					
 					IRDiscreteLayoutGrid *prototype = [self.delegate layoutManager:self layoutGridAtIndex:i];
