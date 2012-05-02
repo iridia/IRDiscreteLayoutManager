@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "IRDiscreteLayoutItem.h"
 
-@class IRDiscreteLayoutArea;
+@class IRDiscreteLayoutArea, IRDiscreteLayoutGrid;
 
 #ifndef __IRDiscreteLayoutArea__
 #define __IRDiscreteLayoutArea__
 
-typedef BOOL (^IRDiscreteLayoutAreaValidatorBlock) (id item);
-typedef CGRect (^IRDiscreteLayoutAreaLayoutBlock) (id item);
-typedef id (^IRDiscreteLayoutAreaDisplayBlock) (id item);
+typedef BOOL (^IRDiscreteLayoutAreaValidatorBlock) (IRDiscreteLayoutArea *self, id item);
+typedef CGRect (^IRDiscreteLayoutAreaLayoutBlock) (IRDiscreteLayoutArea *self, id item);
+typedef id (^IRDiscreteLayoutAreaDisplayBlock) (IRDiscreteLayoutArea *self, id item);
 
 #endif	/* __IRDiscreteLayoutArea__ */
 
@@ -30,5 +30,7 @@ typedef id (^IRDiscreteLayoutAreaDisplayBlock) (id item);
 @property (nonatomic, readwrite, copy) IRDiscreteLayoutAreaValidatorBlock validatorBlock;
 @property (nonatomic, readwrite, copy) IRDiscreteLayoutAreaLayoutBlock layoutBlock;
 @property (nonatomic, readwrite, copy) IRDiscreteLayoutAreaDisplayBlock displayBlock;
+
+@property (nonatomic, readwrite, weak) IRDiscreteLayoutGrid *grid;
 
 @end

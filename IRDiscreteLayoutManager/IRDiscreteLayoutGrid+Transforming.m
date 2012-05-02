@@ -6,7 +6,9 @@
 //  Copyright 2011 Iridia Productions. All rights reserved.
 //
 
+#import "IRDiscreteLayoutArea.h"
 #import "IRDiscreteLayoutGrid+Transforming.h"
+#import "IRDiscreteLayoutGrid+SubclassEyesOnly.h"
 
 NSString * const kIRDiscreteLayoutGridTransformingMap = @"kIRDiscreteLayoutGridTransformingMap";
 NSString * const kIRDiscreteLayoutGridTransformingGrid = @"kIRDiscreteLayoutGridTransformingGrid";
@@ -93,7 +95,7 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 		
 	NSMutableDictionary *ownTransformingMap = [[self class] transformingMapForGridPrototype:self];
 	
-	if ([[ownTransformingMap allKeys] count] != [self.layoutAreaNames count])
+	if ([[ownTransformingMap allKeys] count] != [self.layoutAreas count])
 		return nil;
 		
 	/*
@@ -119,11 +121,13 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 		
 		__block BOOL gridFullfillsLayoutTransformPreconditions = NO;
 	
-		[self.layoutAreaNames enumerateObjectsUsingBlock: ^ (NSString *aLayoutAreaName, NSUInteger idx, BOOL *stop) {
+		[self.layoutAreas enumerateObjectsUsingBlock: ^ (IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stop) {
+		
+			NSString *aLayoutAreaName = area.identifier;
 		
 			if (![[[ownTransformingMap objectForKey:aLayoutAreaName] allKeys] containsObject:aProbableGrid])
 				return;
-				
+			
 			gridFullfillsLayoutTransformPreconditions = YES;
 			
 		}];
@@ -142,12 +146,16 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 	if (self.prototype == newGrid)
 		return self;
 	
-	IRDiscreteLayoutGrid *returnedGrid = [newGrid instantiatedGrid];
+	IRDiscreteLayoutGrid *returnedGrid = [newGrid copy];
+	returnedGrid.prototype = newGrid;
 	
-	[self enumerateLayoutAreaNamesWithBlock: ^ (NSString *anAreaName) {
-
-		[returnedGrid setLayoutItem:[self layoutItemForAreaNamed:anAreaName] forAreaNamed:(__bridge NSString *)(CFDictionaryGetValue((__bridge CFMutableDictionaryRef)[[self class] transformingMapForGridPrototype:self.prototype areaName:anAreaName], (__bridge const void *)(newGrid)))];
-
+	[self.layoutAreas enumerateObjectsUsingBlock: ^ (IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stop) {
+	
+		NSString *anAreaName = area.identifier;
+		NSString *otherAreaName = (__bridge NSString *)(CFDictionaryGetValue((__bridge CFMutableDictionaryRef)[[self class] transformingMapForGridPrototype:self.prototype areaName:anAreaName], (__bridge const void *)(newGrid)));
+		
+		[[returnedGrid areaWithIdentifier:otherAreaName] setItem:area.item];
+		
 	}];
 		
 	return returnedGrid;

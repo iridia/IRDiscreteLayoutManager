@@ -31,25 +31,25 @@ CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize
 
 }
 
-IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask) {
+IRDiscreteLayoutAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask) {
 
-	return [ ^ (IRDiscreteLayoutGrid *self, id anItem) {
+	return [ ^ (IRDiscreteLayoutArea *self, id anItem) {
 	
-		if (CGSizeEqualToSize(defaultBounds, self.contentSize))
+		if (CGSizeEqualToSize(defaultBounds, self.grid.contentSize))
 			return size;
 		else
-			return IRAutoresizedRectMake(size, defaultBounds, self.contentSize, autoresizingMask);
+			return IRAutoresizedRectMake(size, defaultBounds, self.grid.contentSize, autoresizingMask);
 	
 	} copy];
 
 }
 
-IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (CGFloat totalUnitsX, CGFloat totalUnitsY, CGFloat unitsOffsetX, CGFloat unitsOffsetY, CGFloat unitsSpanX, CGFloat unitsSpanY) {
+IRDiscreteLayoutAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (CGFloat totalUnitsX, CGFloat totalUnitsY, CGFloat unitsOffsetX, CGFloat unitsOffsetY, CGFloat unitsSpanX, CGFloat unitsSpanY) {
 
-	return [ ^ (IRDiscreteLayoutGrid *self, id anItem) {
-		
-		CGFloat xFactor = self.contentSize.width / totalUnitsX;
-		CGFloat yFactor = self.contentSize.height / totalUnitsY;
+	return [ ^ (IRDiscreteLayoutArea *self, id anItem) {
+	
+		CGFloat xFactor = self.grid.contentSize.width / totalUnitsX;
+		CGFloat yFactor = self.grid.contentSize.height / totalUnitsY;
 		
 		CGRect answer = CGRectIntegral((CGRect){
 			(CGPoint){

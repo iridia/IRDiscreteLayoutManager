@@ -8,6 +8,7 @@
 
 #import "IRDiscreteLayoutGridCandidateInfo.h"
 #import "IRDiscreteLayoutChangeSet.h"
+#import "IRDiscreteLayoutArea.h"
 
 @interface IRDiscreteLayoutGridCandidateInfo ()
 
@@ -49,12 +50,11 @@
 	
 	if (grid) {
 	
-		if ([grid isFullyPopulated])
-			answer += [grid.layoutAreaNames count];
+		__block BOOL fullyPopulated = YES;
 		
-		[grid enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-					
-			if (validatorBlock) {
+		[grid.layoutAreas enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stop) {
+
+			if (area.validatorBlock) {
 				
 				answer += 1;
 				
@@ -64,8 +64,14 @@
 				
 			}
 			
+			if (!area.item)
+				fullyPopulated = NO;
+			
 		}];
-	
+		
+		if (fullyPopulated)
+			answer += [grid.layoutAreas count];
+		
 	}
 	
 	if (otherGrid) {
@@ -110,7 +116,7 @@
 	
 	}
 	
-	answer /= [[grid layoutAreaNames] count];
+	answer /= [grid.layoutAreas count];
 	
 	return answer;
 

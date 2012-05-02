@@ -9,6 +9,7 @@
 #import "IRDiscreteLayoutResult.h"
 #import "IRDiscreteLayoutGrid.h"
 #import "IRDiscreteLayoutGrid+DebugSupport.h"
+#import "IRDiscreteLayoutArea.h"
 #import "IRDiscreteLayoutItem.h"
 
 
@@ -57,9 +58,9 @@
 
 	[self.grids enumerateObjectsUsingBlock: ^ (IRDiscreteLayoutGrid *grid, NSUInteger idx, BOOL *stopGridEnumeration) {
 	
-		[grid.layoutAreaNames enumerateObjectsUsingBlock: ^ (NSString *name, NSUInteger idx, BOOL *stopLayoutAreaEnumeration) {
-
-			if ([[grid layoutItemForAreaNamed:name] isEqual:item]) {
+		[grid.layoutAreas enumerateObjectsUsingBlock: ^ (IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stopLayoutAreaEnumeration) {
+		
+			if ([area.item isEqual:item]) {
 			
 				foundGrid = grid;
 				*stopLayoutAreaEnumeration = YES;

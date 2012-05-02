@@ -10,8 +10,6 @@
 
 @interface IRDiscreteLayoutGrid (DebugSupport)
 
-@property (nonatomic, readwrite, copy) NSString *identifier;
-
 - (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level;
 
 @end

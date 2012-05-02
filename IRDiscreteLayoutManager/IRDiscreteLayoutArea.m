@@ -7,8 +7,11 @@
 //
 
 #import "IRDiscreteLayoutArea.h"
+#import "IRDiscreteLayoutGrid.h"
+#import "IRDiscreteLayoutError.h"
 
 @implementation IRDiscreteLayoutArea
+@synthesize identifier, item, validatorBlock, layoutBlock, displayBlock, grid;
 
 - (id) copyWithZone:(NSZone *)zone {
 
@@ -21,6 +24,27 @@
 	answer.displayBlock = self.displayBlock;
 	
 	return answer;
+
+}
+
+- (BOOL) setItem:(id<IRDiscreteLayoutItem>)aLayoutItem error:(NSError **)outError {
+
+	NSParameterAssert(self.grid.prototype);
+	NSParameterAssert(self.identifier);
+	
+	IRDiscreteLayoutAreaValidatorBlock vb = self.validatorBlock;
+	if (aLayoutItem && vb && !vb(self, aLayoutItem)) {
+		
+		if (outError)
+			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area %@", aLayoutItem, self], nil);
+		
+		return NO;
+		
+	}
+	
+	self.item = aLayoutItem;
+
+	return YES;
 
 }
 

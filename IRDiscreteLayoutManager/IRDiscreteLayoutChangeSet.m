@@ -8,6 +8,7 @@
 
 #import "IRDiscreteLayoutChangeSet.h"
 #import "IRDiscreteLayoutGrid.h"
+#import "IRDiscreteLayoutArea.h"
 
 @interface IRDiscreteLayoutChangeSet ()
 
@@ -46,12 +47,12 @@
 
 	NSSet *fromItems = ((^ {
 	
-		NSMutableSet *fromItems = [NSMutableSet setWithCapacity:[self.fromGrid numberOfLayoutAreas]];
-	
-		[self.fromGrid enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+		NSMutableSet *fromItems = [NSMutableSet setWithCapacity:[self.fromGrid.layoutAreas count]];
 		
-			if (item)
-				[fromItems addObject:item];
+		[self.fromGrid.layoutAreas enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stop) {
+			
+			if (area.item)
+				[fromItems addObject:area.item];
 			
 		}];
 		
@@ -61,12 +62,12 @@
 	
 	NSSet *toItems = ((^ {
 	
-		NSMutableSet *toItems = [NSMutableSet setWithCapacity:[self.toGrid numberOfLayoutAreas]];
+		NSMutableSet *toItems = [NSMutableSet setWithCapacity:[self.toGrid.layoutAreas count]];
 	
-		[self.toGrid enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
-		
-			if (item)
-				[toItems addObject:item];
+		[self.toGrid.layoutAreas enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stop) {
+			
+			if (area.item)
+				[toItems addObject:area.item];
 			
 		}];
 		
@@ -86,15 +87,18 @@
 	
 		NSValue *objValue = [NSValue valueWithNonretainedObject:obj];
 	
+		IRDiscreteLayoutArea *fromArea = [self.fromGrid areaForItem:obj];
+		IRDiscreteLayoutArea *toArea = [self.toGrid areaForItem:obj];
+
 		BOOL containedBefore = [fromItems containsObject:obj];
 		BOOL containedAfter = [toItems containsObject:obj];
 		
 		if (containedBefore && containedAfter) {
 		
-			IRDiscreteLayoutGridAreaLayoutBlock fromLayoutBlock = [self.fromGrid layoutBlockForAreaNamed:[self.fromGrid layoutAreaNameForItem:obj]];
-			IRDiscreteLayoutGridAreaLayoutBlock toLayoutBlock = [self.toGrid layoutBlockForAreaNamed:[self.toGrid layoutAreaNameForItem:obj]];
-			
-			if (fromLayoutBlock && toLayoutBlock && !CGRectEqualToRect(fromLayoutBlock(self.fromGrid, obj), toLayoutBlock(self.toGrid, obj))) {
+			IRDiscreteLayoutAreaLayoutBlock fromLayoutBlock = fromArea.layoutBlock;
+			IRDiscreteLayoutAreaLayoutBlock toLayoutBlock = toArea.layoutBlock;
+		
+			if (fromLayoutBlock && toLayoutBlock && !CGRectEqualToRect(fromLayoutBlock(fromArea, obj), toLayoutBlock(toArea, obj))) {
 				
 				[itemsToChanges setObject:kRelayout forKey:objValue];
 				
