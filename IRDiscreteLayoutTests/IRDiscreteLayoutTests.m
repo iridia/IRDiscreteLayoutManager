@@ -11,9 +11,9 @@
 
 @interface IRDiscreteLayoutTests () <IRDiscreteLayoutManagerDelegate, IRDiscreteLayoutManagerDataSource>
 
-@property (nonatomic, readwrite, retain) IRDiscreteLayoutManager *layoutManager;
-@property (nonatomic, readwrite, retain) NSArray *layoutGrids;
-@property (nonatomic, readwrite, retain) NSArray *layoutItems;
+@property (nonatomic, readwrite, strong) IRDiscreteLayoutManager *layoutManager;
+@property (nonatomic, readwrite, strong) NSArray *layoutGrids;
+@property (nonatomic, readwrite, strong) NSArray *layoutItems;
 
 - (id<IRDiscreteLayoutItem>) randomLayoutItem;
 
@@ -28,21 +28,21 @@
 
   [super setUp];
   
-  self.layoutManager = [[[IRDiscreteLayoutManager alloc] init] autorelease];
+  self.layoutManager = [[IRDiscreteLayoutManager alloc] init];
   self.layoutManager.delegate = self;
   self.layoutManager.dataSource = self;
 	
 	IRDiscreteLayoutGrid *portraitGrid = [IRDiscreteLayoutGrid prototype];
-	[portraitGrid registerLayoutAreaNamed:@"A" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 0, 3, 1)];
-	[portraitGrid registerLayoutAreaNamed:@"B" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 1, 3, 1)];
-	[portraitGrid registerLayoutAreaNamed:@"C" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 3, 0, 2, 2)];
-	[portraitGrid registerLayoutAreaNamed:@"D" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 2, 5, 1)];
+	[portraitGrid registerLayoutAreaNamed:@"A" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 0, 3, 1) displayBlock:nil];
+	[portraitGrid registerLayoutAreaNamed:@"B" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 1, 3, 1) displayBlock:nil];
+	[portraitGrid registerLayoutAreaNamed:@"C" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 3, 0, 2, 2) displayBlock:nil];
+	[portraitGrid registerLayoutAreaNamed:@"D" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 2, 5, 1) displayBlock:nil];
 	
 	IRDiscreteLayoutGrid *landscapeGrid = [IRDiscreteLayoutGrid prototype];
-	[landscapeGrid registerLayoutAreaNamed:@"A" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 0, 0, 1, 1)];
-	[landscapeGrid registerLayoutAreaNamed:@"B" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 0, 1, 1, 1)];
-	[landscapeGrid registerLayoutAreaNamed:@"C" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 1, 0, 1, 2)];
-	[landscapeGrid registerLayoutAreaNamed:@"D" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 2, 0, 1, 2)];
+	[landscapeGrid registerLayoutAreaNamed:@"A" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 0, 0, 1, 1) displayBlock:nil];
+	[landscapeGrid registerLayoutAreaNamed:@"B" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 0, 1, 1, 1) displayBlock:nil];
+	[landscapeGrid registerLayoutAreaNamed:@"C" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 1, 0, 1, 2) displayBlock:nil];
+	[landscapeGrid registerLayoutAreaNamed:@"D" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 2, 0, 1, 2) displayBlock:nil];
 	
 	portraitGrid.contentSize = (CGSize){ 768, 1024 };
 	landscapeGrid.contentSize = (CGSize){ 1024, 768 };
@@ -90,6 +90,13 @@
 
 }
 
+
+- (NSInteger) layoutManager:(IRDiscreteLayoutManager *)manager indexOfLayoutItem:(id<IRDiscreteLayoutItem>)item {
+
+	return [self.layoutItems indexOfObject:item];
+
+}
+
 - (NSUInteger) numberOfLayoutGridsForLayoutManager:(IRDiscreteLayoutManager *)manager {
 
   return [self.layoutGrids count];
@@ -104,7 +111,7 @@
 
 - (id<IRDiscreteLayoutItem>) randomLayoutItem {
 
-	IRDiscreteLayoutItem *item = [[[IRDiscreteLayoutItem alloc] init] autorelease];
+	IRDiscreteLayoutItem *item = [[IRDiscreteLayoutItem alloc] init];
 	item.title = [NSString stringWithFormat:@"Randomized item %i", rand()];
 	
 	return item;

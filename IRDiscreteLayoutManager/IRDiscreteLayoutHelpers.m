@@ -33,20 +33,20 @@ CGRect IRAutoresizedRectMake (CGRect originalRect, CGSize originalBounds, CGSize
 
 IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForConstantSizeMake (CGRect size, CGSize defaultBounds, UIViewAutoresizing autoresizingMask) {
 
-	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
+	return [ ^ (IRDiscreteLayoutGrid *self, id anItem) {
 	
 		if (CGSizeEqualToSize(defaultBounds, self.contentSize))
 			return size;
 		else
 			return IRAutoresizedRectMake(size, defaultBounds, self.contentSize, autoresizingMask);
 	
-	} copy] autorelease];
+	} copy];
 
 }
 
 IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake (CGFloat totalUnitsX, CGFloat totalUnitsY, CGFloat unitsOffsetX, CGFloat unitsOffsetY, CGFloat unitsSpanX, CGFloat unitsSpanY) {
 
-	return [[ ^ (IRDiscreteLayoutGrid *self, id anItem) {
+	return [ ^ (IRDiscreteLayoutGrid *self, id anItem) {
 		
 		CGFloat xFactor = self.contentSize.width / totalUnitsX;
 		CGFloat yFactor = self.contentSize.height / totalUnitsY;
@@ -64,6 +64,6 @@ IRDiscreteLayoutGridAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForPropor
 			
 		return answer;
 	
-	} copy] autorelease];
+	} copy];
 
 };

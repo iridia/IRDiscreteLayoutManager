@@ -15,11 +15,6 @@
 
 @synthesize dataSource, delegate;
 
-- (void) dealloc {
-
-	[super dealloc];
-
-}
 
 - (IRDiscreteLayoutResult *) calculatedResult {
 
@@ -99,7 +94,7 @@
 			//	Not allowing empti-ness instances
 			
 			if (usedItemIndices)
-				*usedItemIndices = [[outIndices copy] autorelease];
+				*usedItemIndices = [outIndices copy];
 			
 		}
 		
@@ -122,7 +117,7 @@
 				
 				NSMutableIndexSet * availableLayoutGridPrototypeIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, numberOfGrids }];
 				
-				__block IRDiscreteLayoutGrid * (^randomGrid)(NSUInteger *) = [[^ (NSUInteger *outIndex) {
+				__block IRDiscreteLayoutGrid * (^randomGrid)(NSUInteger *) = [^ (NSUInteger *outIndex) {
 			
 					outIndex = outIndex ? outIndex : &(NSUInteger){ 0 };
 					
@@ -138,7 +133,7 @@
 					*outIndex = index;
 					return [self.delegate layoutManager:self layoutGridAtIndex:index];
 					
-				} copy] autorelease];
+				} copy];
 				
 				BOOL hasFoundValidGrid = NO;
 				while (!hasFoundValidGrid) {

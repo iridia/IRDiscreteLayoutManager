@@ -14,12 +14,12 @@
 
 
 @interface IRDiscreteLayoutGrid ()
-@property (nonatomic, readwrite, retain) IRDiscreteLayoutGrid *prototype;
-@property (nonatomic, readwrite, retain) NSArray *layoutAreaNames;
-@property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToValidatorBlocks;
-@property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToLayoutBlocks;
-@property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToLayoutItems;
-@property (nonatomic, readwrite, retain) NSMutableDictionary *layoutAreaNamesToDisplayBlocks;
+@property (nonatomic, readwrite, strong) IRDiscreteLayoutGrid *prototype;
+@property (nonatomic, readwrite, strong) NSArray *layoutAreaNames;
+@property (nonatomic, readwrite, strong) NSMutableDictionary *layoutAreaNamesToValidatorBlocks;
+@property (nonatomic, readwrite, strong) NSMutableDictionary *layoutAreaNamesToLayoutBlocks;
+@property (nonatomic, readwrite, strong) NSMutableDictionary *layoutAreaNamesToLayoutItems;
+@property (nonatomic, readwrite, strong) NSMutableDictionary *layoutAreaNamesToDisplayBlocks;
 @end
 
 
@@ -32,7 +32,7 @@
 
 + (IRDiscreteLayoutGrid *) prototype {
 
-	return [[[self alloc] init] autorelease];
+	return [[self alloc] init];
 
 }
 
@@ -43,7 +43,7 @@
 	IRDiscreteLayoutGrid *returnedGrid = [self copy];
 	returnedGrid.prototype = self;
 	
-	return [returnedGrid autorelease];
+	return returnedGrid;
 
 }
 
@@ -94,7 +94,7 @@
 		
 		for (NSUInteger i = 0; i < length; i++) {
 		
-			NSMutableIndexSet *usedIndices = [[indexSet mutableCopy] autorelease];
+			NSMutableIndexSet *usedIndices = [indexSet mutableCopy];
 			[usedIndices removeIndex:i];
 			
 			NSArray *otherObjects = [self objectsAtIndexes:usedIndices];
@@ -104,7 +104,7 @@
 				
 				NSCParameterAssert([combination isKindOfClass:[NSArray class]]);
 				
-				NSArray *usedCombination = [[combination copy] autorelease];
+				NSArray *usedCombination = [combination copy];
 				NSArray *baseObjs = [NSArray arrayWithObject:[self objectAtIndex:i]];
 				NSArray *addedAnswer = [baseObjs arrayByAddingObjectsFromArray:usedCombination];
 				
@@ -114,7 +114,7 @@
 		
 		}
 		
-		return (NSArray *)[[answer copy] autorelease];
+		return (NSArray *)[answer copy];
 			
 	} copy];
 	
@@ -211,31 +211,17 @@
 	if (!self)
 		return nil;
 		
-	layoutAreaNames = [[NSArray array] retain];
-	layoutAreaNamesToLayoutBlocks = [[NSMutableDictionary dictionary] retain];
-	layoutAreaNamesToLayoutItems = [[NSMutableDictionary dictionary] retain];
-	layoutAreaNamesToValidatorBlocks = [[NSMutableDictionary dictionary] retain];
-	layoutAreaNamesToDisplayBlocks = [[NSMutableDictionary dictionary] retain];
+	layoutAreaNames = [NSArray array];
+	layoutAreaNamesToLayoutBlocks = [NSMutableDictionary dictionary];
+	layoutAreaNamesToLayoutItems = [NSMutableDictionary dictionary];
+	layoutAreaNamesToValidatorBlocks = [NSMutableDictionary dictionary];
+	layoutAreaNamesToDisplayBlocks = [NSMutableDictionary dictionary];
 	allowsPartialInstancePopulation = NO;
 	
 	return self;
 
 }
 
-- (void) dealloc {
-
-	[prototype release];
-	[layoutAreaNames release];
-	[layoutAreaNamesToLayoutBlocks release];
-	[layoutAreaNamesToValidatorBlocks release];
-	[layoutAreaNamesToLayoutItems release];
-	[layoutAreaNamesToDisplayBlocks release];
-	
-	[populationInspectorBlock release];
-	
-	[super dealloc];
-
-}
 
 - (id) copyWithZone:(NSZone *)zone {
 
@@ -243,11 +229,11 @@
 	copiedGrid.identifier = self.identifier;
 	copiedGrid.prototype = self.prototype;
 	copiedGrid.contentSize = self.contentSize;
-	copiedGrid.layoutAreaNames = [[self.layoutAreaNames copy] autorelease];
-	copiedGrid.layoutAreaNamesToLayoutBlocks = [[self.layoutAreaNamesToLayoutBlocks mutableCopy] autorelease];
-	copiedGrid.layoutAreaNamesToLayoutItems = [[self.layoutAreaNamesToLayoutItems mutableCopy] autorelease];
-	copiedGrid.layoutAreaNamesToValidatorBlocks = [[self.layoutAreaNamesToValidatorBlocks mutableCopy] autorelease];
-	copiedGrid.layoutAreaNamesToDisplayBlocks = [[self.layoutAreaNamesToDisplayBlocks mutableCopy] autorelease];
+	copiedGrid.layoutAreaNames = [self.layoutAreaNames copy];
+	copiedGrid.layoutAreaNamesToLayoutBlocks = [self.layoutAreaNamesToLayoutBlocks mutableCopy];
+	copiedGrid.layoutAreaNamesToLayoutItems = [self.layoutAreaNamesToLayoutItems mutableCopy];
+	copiedGrid.layoutAreaNamesToValidatorBlocks = [self.layoutAreaNamesToValidatorBlocks mutableCopy];
+	copiedGrid.layoutAreaNamesToDisplayBlocks = [self.layoutAreaNamesToDisplayBlocks mutableCopy];
 	copiedGrid.allowsPartialInstancePopulation = self.allowsPartialInstancePopulation;
 	return copiedGrid;
 
@@ -261,13 +247,13 @@
 	[[self mutableArrayValueForKey:@"layoutAreaNames"] addObject:aName];
 	
 	if (aValidatorBlock)
-		[self.layoutAreaNamesToValidatorBlocks setObject:[[aValidatorBlock copy] autorelease] forKey:aName];
+		[self.layoutAreaNamesToValidatorBlocks setObject:[aValidatorBlock copy] forKey:aName];
 	
 	if (aLayoutBlock)
-		[self.layoutAreaNamesToLayoutBlocks setObject:[[aLayoutBlock copy] autorelease] forKey:aName];
+		[self.layoutAreaNamesToLayoutBlocks setObject:[aLayoutBlock copy] forKey:aName];
 		
 	if (aDisplayBlock)
-		[self.layoutAreaNamesToDisplayBlocks setObject:[[aDisplayBlock copy] autorelease] forKey:aName];
+		[self.layoutAreaNamesToDisplayBlocks setObject:[aDisplayBlock copy] forKey:aName];
 
 }
 

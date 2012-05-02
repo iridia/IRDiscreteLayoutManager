@@ -29,6 +29,8 @@ typedef id (^IRDiscreteLayoutGridAreaDisplayBlock) (IRDiscreteLayoutGrid *self, 
 - (NSUInteger) numberOfLayoutAreas;
 - (NSArray *) layoutAreaNames;
 
+@property (nonatomic, readonly, strong) NSArray *layoutAreas;
+
 //	The -instantiatedGrid returned from a prototype is a grid that can be populated with stuff, and usually its layout areas can’t be changed.
 - (IRDiscreteLayoutGrid *) instantiatedGrid;
 - (IRDiscreteLayoutGrid *) instantiatedGridWithAvailableItems:(NSArray *)items;	//	Grabs available items for use, preferred over -instantiatedGrid

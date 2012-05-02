@@ -34,7 +34,7 @@
 		return nil;
 	
 	grid = gridInstance;
-	itemIndices = [gridItemIndices retain];
+	itemIndices = gridItemIndices;
 	referenceGrid = referenceGridInstance;
 	score = [self scoreMutatingFromGrid:referenceGrid];
 	delegateIndex = index;

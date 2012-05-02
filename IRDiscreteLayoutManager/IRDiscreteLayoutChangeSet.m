@@ -11,8 +11,8 @@
 
 @interface IRDiscreteLayoutChangeSet ()
 
-@property (nonatomic, readwrite, retain) IRDiscreteLayoutGrid *fromGrid;
-@property (nonatomic, readwrite, retain) IRDiscreteLayoutGrid *toGrid;
+@property (nonatomic, readwrite, strong) IRDiscreteLayoutGrid *fromGrid;
+@property (nonatomic, readwrite, strong) IRDiscreteLayoutGrid *toGrid;
 
 @end
 
@@ -22,7 +22,7 @@
 
 + (id) changeSetFromGrid:(IRDiscreteLayoutGrid *)fromGrid toGrid:(IRDiscreteLayoutGrid *)toGrid {
 
-	return [[[self alloc] initWithSourceGrid:fromGrid destinationGrid:toGrid] autorelease];
+	return [[self alloc] initWithSourceGrid:fromGrid destinationGrid:toGrid];
 
 }
 
@@ -32,21 +32,13 @@
 	if (!self)
 		return nil;
 	
-	fromGrid = [inFromGrid retain];
-	toGrid = [inToGrid retain];
+	fromGrid = inFromGrid;
+	toGrid = inToGrid;
 	
 	return self;
 
 }
 
-- (void) dealloc {
-	
-	[fromGrid release];
-	[toGrid release];
-
-	[super dealloc];
-
-}
 
 - (void) enumerateChangesWithBlock:(void (^)(id, IRDiscreteLayoutItemChangeType))block {
 

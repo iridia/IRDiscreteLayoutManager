@@ -14,7 +14,7 @@
 
 @interface IRDiscreteLayoutResult ()
 
-@property (nonatomic, readwrite, retain) NSArray *grids;
+@property (nonatomic, readwrite, strong) NSArray *grids;
 
 @end
 
@@ -25,7 +25,7 @@
 
 + (IRDiscreteLayoutResult *) resultWithGrids:(NSArray *)grids {
 
-	return [[[self alloc] initWithGrids:grids] autorelease];
+	return [[self alloc] initWithGrids:grids];
 
 }
 
@@ -50,12 +50,6 @@
 
 }
 
-- (void) dealloc {
-
-	[grids release];
-	[super dealloc];
-
-}
 
 - (IRDiscreteLayoutGrid *) gridContainingItem:(id<IRDiscreteLayoutItem>)item {
 
