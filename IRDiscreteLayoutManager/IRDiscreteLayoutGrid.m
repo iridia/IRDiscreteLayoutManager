@@ -91,14 +91,11 @@
 	
 	[possibleLayoutAreaNameCombinations enumerateObjectsUsingBlock:^(NSArray *combination, NSUInteger idx, BOOL *stopCombinationEnum) {
 	
+		for (IRDiscreteLayoutArea *area in instance.layoutAreas)
+			area.item = nil;
+	
 		[items enumerateObjectsUsingBlock:^(id<IRDiscreteLayoutItem> item, NSUInteger idx, BOOL *stopItemEnum) {
 		
-			if ([instance isFullyPopulated]) {
-				*stopItemEnum = YES;
-				*stopCombinationEnum = YES;
-				return;
-			}
-			
 			[combination enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stopAreaEnum) {
 			
 				if (area.item)
@@ -109,11 +106,19 @@
 				
 				*stopAreaEnum = YES;
 				
-				NSLog(@"worked on comb %@", combination);
-				
 			}];
 			
+			if ([instance isFullyPopulated]) {
+				*stopItemEnum = YES;
+				*stopCombinationEnum = YES;
+				return;
+			}
+			
 		}];
+		
+		if ([[instance class] canInstantiateGrid:instance withItems:items error:outError]) {
+			*stopCombinationEnum = YES;
+		}
 		
 	}];
 	
@@ -126,6 +131,10 @@
 	
 	if ([[instance class] canInstantiateGrid:instance withItems:items error:outError])
 		return instance;
+	
+	if (outError) {
+		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGenericError, @"Unable to create a satisfactory layout grid instance with provided items.", nil);
+	}
 	
 	return nil;
 	
@@ -171,8 +180,6 @@
 	}
 	
 	copiedGrid.layoutAreas = deepCopiedLayoutAreas;
-	
-	NSLog(@"%@ %@ -> %@ %@", self, self.layoutAreas, copiedGrid, copiedGrid.layoutAreas);
 	
 	return copiedGrid;
 
