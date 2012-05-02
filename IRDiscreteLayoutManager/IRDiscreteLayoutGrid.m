@@ -138,7 +138,9 @@
 	
 	if ([instance hasGap]) {
 		
-		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Prospective grid has unfilled layout areas between filled layout areas.", nil);
+		if (outError) {
+			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Prospective grid has unfilled layout areas between filled layout areas.", nil);
+		}
 		return NO;
 		
 	}
