@@ -109,6 +109,12 @@
 
 }
 
+- (NSInteger) layoutManager:(IRDiscreteLayoutManager *)manager indexOfLayoutGrid:(IRDiscreteLayoutGrid *)grid {
+
+	return [self.layoutGrids indexOfObject:grid];
+
+}
+
 - (id<IRDiscreteLayoutItem>) randomLayoutItem {
 
 	IRDiscreteLayoutItem *item = [[IRDiscreteLayoutItem alloc] init];
