@@ -48,4 +48,10 @@
 
 }
 
+- (NSString *) description {
+
+	return [NSString stringWithFormat:@"<%@: 0x%x> { Identifier: %@, Item: %@ } ", NSStringFromClass([self class]), (unsigned int)self, self.identifier, self.item];
+
+}
+
 @end
