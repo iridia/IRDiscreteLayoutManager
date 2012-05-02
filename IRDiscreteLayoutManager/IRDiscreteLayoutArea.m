@@ -14,6 +14,12 @@
 
 	IRDiscreteLayoutArea *answer = [[[self class] alloc] init];
 	
+	answer.identifier = self.identifier;
+	answer.item = self.item;
+	answer.validatorBlock = self.validatorBlock;
+	answer.layoutBlock = self.layoutBlock;
+	answer.displayBlock = self.displayBlock;
+	
 	return answer;
 
 }
