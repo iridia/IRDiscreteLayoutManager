@@ -14,7 +14,7 @@
 
 - (NSString *) description {
 
-	return [NSString stringWithFormat:@"<%@: 0x%x> { Identifier: %@ } ", NSStringFromClass([self class]), (unsigned int)self, self.identifier];
+	return [NSString stringWithFormat:@"<%@: 0x%x> { Identifier: %@, Prototype: %@, Areas: %@ } ", NSStringFromClass([self class]), (unsigned int)self, self.identifier, self.prototype, self.layoutAreas];
 
 }
 
