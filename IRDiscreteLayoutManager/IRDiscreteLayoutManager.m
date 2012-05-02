@@ -10,16 +10,12 @@
 #import "IRDiscreteLayoutManager.h"
 #import "IRDiscreteLayoutChangeSet.h"
 #import "IRDiscreteLayoutGridCandidateInfo.h"
+#import "IRDiscreteLayoutArea.h"
 
 @implementation IRDiscreteLayoutManager
 
 @synthesize dataSource, delegate;
 
-- (void) dealloc {
-
-	[super dealloc];
-
-}
 
 - (IRDiscreteLayoutResult *) calculatedResult {
 
@@ -54,9 +50,9 @@
 		//	We don’t want to give the grid too many items to use, but we still want them to skip some items for convenience.
 		//	Currently, the maximum number of skipped items is hard coded to 20 — we’ll overprovision grid instantiation
 		
-		NSAssert1([prototype numberOfLayoutAreas] > 0, @"Grid %@ must contain at least one layout area available for item association.", prototype);
+		NSAssert1([prototype.layoutAreas count] > 0, @"Grid %@ must contain at least one layout area available for item association.", prototype);
 		
-		NSUInteger const prospectiveItemsCount = [prototype numberOfLayoutAreas] + 20;
+		NSUInteger const prospectiveItemsCount = [prototype.layoutAreas count] + 20;
 		NSUInteger *itemIndices = malloc(sizeof(NSUInteger) * prospectiveItemsCount);
 		NSUInteger numberOfProvidedItems = [leftoverItemIndices getIndexes:itemIndices maxCount:prospectiveItemsCount inIndexRange:NULL];
 		
@@ -70,17 +66,17 @@
 		
 		})());
 		
-		IRDiscreteLayoutGrid *instance = [prototype instantiatedGridWithAvailableItems:providedLayoutItems];
+		IRDiscreteLayoutGrid *instance = [prototype instanceWithItems:providedLayoutItems error:nil];
 		
 		if (instance) {
 
 			NSMutableIndexSet *outIndices = usedItemIndices ? [NSMutableIndexSet indexSet] : nil;
 			
-			[instance enumerateLayoutAreasWithBlock:^(NSString *name, id item, IRDiscreteLayoutGridAreaValidatorBlock validatorBlock, IRDiscreteLayoutGridAreaLayoutBlock layoutBlock, IRDiscreteLayoutGridAreaDisplayBlock displayBlock) {
+			[instance.layoutAreas enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stop) {
 				
-				if (item) {
+				if (area.item) {
 					
-					NSUInteger itemIndex = [self.dataSource layoutManager:self indexOfLayoutItem:item];
+					NSUInteger itemIndex = [self.dataSource layoutManager:self indexOfLayoutItem:area.item];
 					NSParameterAssert(itemIndex != NSNotFound);
 					NSParameterAssert([leftoverItemIndices containsIndex:itemIndex]);
 					
@@ -99,7 +95,7 @@
 			//	Not allowing empti-ness instances
 			
 			if (usedItemIndices)
-				*usedItemIndices = [[outIndices copy] autorelease];
+				*usedItemIndices = [outIndices copy];
 			
 		}
 		
@@ -122,7 +118,7 @@
 				
 				NSMutableIndexSet * availableLayoutGridPrototypeIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, numberOfGrids }];
 				
-				__block IRDiscreteLayoutGrid * (^randomGrid)(NSUInteger *) = [[^ (NSUInteger *outIndex) {
+				__block IRDiscreteLayoutGrid * (^randomGrid)(NSUInteger *) = [^ (NSUInteger *outIndex) {
 			
 					outIndex = outIndex ? outIndex : &(NSUInteger){ 0 };
 					
@@ -138,7 +134,7 @@
 					*outIndex = index;
 					return [self.delegate layoutManager:self layoutGridAtIndex:index];
 					
-				} copy] autorelease];
+				} copy];
 				
 				BOOL hasFoundValidGrid = NO;
 				while (!hasFoundValidGrid) {

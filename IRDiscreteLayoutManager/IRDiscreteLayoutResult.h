@@ -18,6 +18,6 @@
 
 - (IRDiscreteLayoutGrid *) gridContainingItem:(id<IRDiscreteLayoutItem>)item;
 
-@property (nonatomic, readonly, retain) NSArray *grids;
+@property (nonatomic, readonly, strong) NSArray *grids;
 
 @end

@@ -11,8 +11,8 @@
 
 @interface IRDiscreteLayoutItem ()
 
-@property (nonatomic, readwrite, retain) NSArray *representedMediaItems;
-@property (nonatomic, readwrite, retain) NSDictionary *itemsToTypes;
+@property (nonatomic, readwrite, strong) NSArray *representedMediaItems;
+@property (nonatomic, readwrite, strong) NSDictionary *itemsToTypes;
 
 @end
 
@@ -27,7 +27,7 @@
 		return nil;
 		
 	CFMutableDictionaryRef cfItemsToTypes = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
-	self.itemsToTypes = (NSDictionary *)cfItemsToTypes;
+	self.itemsToTypes = (__bridge NSDictionary *)cfItemsToTypes;
 	self.representedMediaItems = [NSArray array];
 	CFRelease(cfItemsToTypes);
 	
@@ -35,22 +35,13 @@
 
 }
 
-- (void) dealloc {
-
-	[title release];
-	[representedMediaItems release];
-	[itemsToTypes release];
-	
-	[super dealloc];
-
-}
 
 - (BOOL) addMediaItem:(id)anItem withType:(CFStringRef)typeUTI {
 
 	if ([[self.itemsToTypes allKeys] containsObject:anItem])
 		return NO;
 
-	CFDictionaryAddValue((CFMutableDictionaryRef)self.itemsToTypes, anItem, typeUTI);
+	CFDictionaryAddValue((__bridge CFMutableDictionaryRef)self.itemsToTypes, (__bridge const void *)(anItem), typeUTI);
 	[[self mutableArrayValueForKey:@"representedMediaItems"] addObject:anItem];
 	return YES;
 
@@ -61,7 +52,7 @@
 	if ([[self.itemsToTypes allKeys] containsObject:anItem])
 		return NO;
 	
-	CFDictionaryRemoveValue((CFMutableDictionaryRef)self.itemsToTypes, anItem);
+	CFDictionaryRemoveValue((__bridge CFMutableDictionaryRef)self.itemsToTypes, (__bridge const void *)(anItem));
 	[[self mutableArrayValueForKey:@"representedMediaItems"] removeObject:anItem];
 	return YES;
 
@@ -72,7 +63,7 @@
 	NSString *potentialType = [itemsToTypes objectForKey:anItem];
 	
 	if (potentialType)
-		return (CFStringRef)potentialType;
+		return (__bridge CFStringRef)potentialType;
 
 	if ([anItem isKindOfClass:[NSURL class]])
 		return kUTTypeURL;
