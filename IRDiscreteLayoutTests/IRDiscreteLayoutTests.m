@@ -7,7 +7,7 @@
 //
 
 #import "IRDiscreteLayoutTests.h"
-
+#import "NSArray+IRDiscreteLayoutAdditions.h"
 
 @interface IRDiscreteLayoutTests () <IRDiscreteLayoutManagerDelegate, IRDiscreteLayoutManagerDataSource>
 
@@ -140,6 +140,25 @@
 
 	NSLog(@"Calculated: %@", [self.layoutManager calculatedResult]);
 
-} 
+}
+
+- (void) testPermutation {
+
+	__block BOOL hasStopped = NO;
+
+	[@[@"A", @"B", @"C"] irdlEnumeratePossibleCombinationsWithBlock:^(NSArray *combination, BOOL *stop) {
+	
+		STAssertFalse(hasStopped, @"Enumeration must stop when *stop is set to YES");
+		
+		NSLog(@"blo %@ %i", combination, *stop);
+		
+		if ([combination isEqualToArray:@[@"C", @"A", @"B"]]) {
+			*stop = YES;
+			hasStopped = YES;
+		}
+		
+	}];
+
+}
 
 @end

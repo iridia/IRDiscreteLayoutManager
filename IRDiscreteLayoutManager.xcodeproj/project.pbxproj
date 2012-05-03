@@ -11,6 +11,9 @@
 		FF0D6DF6151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0D6DF4151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m */; };
 		FF0FA3E6152453D400B34D19 /* IRDiscreteLayoutError.h in Headers */ = {isa = PBXBuildFile; fileRef = FF0FA3E4152453D400B34D19 /* IRDiscreteLayoutError.h */; };
 		FF0FA3E7152453D400B34D19 /* IRDiscreteLayoutError.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0FA3E5152453D400B34D19 /* IRDiscreteLayoutError.m */; };
+		FF123C011552A558005DE21F /* NSArray+IRDiscreteLayoutAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = FF9736FF15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.mm */; };
+		FF24B3AE1552AAFA00DD9379 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FF24B3AD1552AAFA00DD9379 /* libstdc++.dylib */; };
+		FF24B3B11552AC4A00DD9379 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FF24B3B01552AC4A00DD9379 /* libc++.dylib */; };
 		FF2BFEE2140AC72300604E8D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */; };
 		FF2BFEE3140AC72300604E8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8726F81408BC08002FE6FC /* UIKit.framework */; };
 		FF2BFEE4140AC72300604E8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF55E1991407CE8400D8F3C7 /* Foundation.framework */; };
@@ -40,7 +43,7 @@
 		FF87270A1408E08A002FE6FC /* IRDiscreteLayoutResult.h in Headers */ = {isa = PBXBuildFile; fileRef = FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */; };
 		FF87270B1408E08A002FE6FC /* IRDiscreteLayoutResult.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */; };
 		FF97370015511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = FF9736FE15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.h */; };
-		FF97370115511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FF9736FF15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.m */; };
+		FF97370115511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = FF9736FF15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.mm */; };
 		FF9737041551205A00D6E7A9 /* IRDiscreteLayoutGrid+SubclassEyesOnly.h in Headers */ = {isa = PBXBuildFile; fileRef = FF9737021551205A00D6E7A9 /* IRDiscreteLayoutGrid+SubclassEyesOnly.h */; };
 		FFC0D7521408B80700B891BB /* IRDiscreteLayoutItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */; settings = {ATTRIBUTES = (); }; };
 		FFF5809D151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF5809B151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h */; };
@@ -65,6 +68,8 @@
 		FF0D6DF4151B1A28006DBFEE /* IRDiscreteLayoutChangeSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutChangeSet.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutChangeSet.m; sourceTree = "<group>"; };
 		FF0FA3E4152453D400B34D19 /* IRDiscreteLayoutError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutError.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutError.h; sourceTree = "<group>"; };
 		FF0FA3E5152453D400B34D19 /* IRDiscreteLayoutError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutError.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutError.m; sourceTree = "<group>"; };
+		FF24B3AD1552AAFA00DD9379 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		FF24B3B01552AC4A00DD9379 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		FF2BFEE0140AC72300604E8D /* IRDiscreteLayoutTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IRDiscreteLayoutTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF2BFEE1140AC72300604E8D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		FF2BFEE9140AC72300604E8D /* IRDiscreteLayoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IRDiscreteLayoutTests-Info.plist"; sourceTree = "<group>"; };
@@ -98,7 +103,7 @@
 		FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutResult.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutResult.h; sourceTree = "<group>"; };
 		FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IRDiscreteLayoutResult.m; path = IRDiscreteLayoutManager/IRDiscreteLayoutResult.m; sourceTree = "<group>"; };
 		FF9736FE15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+IRDiscreteLayoutAdditions.h"; path = "IRDiscreteLayoutManager/NSArray+IRDiscreteLayoutAdditions.h"; sourceTree = "<group>"; };
-		FF9736FF15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+IRDiscreteLayoutAdditions.m"; path = "IRDiscreteLayoutManager/NSArray+IRDiscreteLayoutAdditions.m"; sourceTree = "<group>"; };
+		FF9736FF15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSArray+IRDiscreteLayoutAdditions.mm"; path = "IRDiscreteLayoutManager/NSArray+IRDiscreteLayoutAdditions.mm"; sourceTree = "<group>"; };
 		FF9737021551205A00D6E7A9 /* IRDiscreteLayoutGrid+SubclassEyesOnly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IRDiscreteLayoutGrid+SubclassEyesOnly.h"; path = "IRDiscreteLayoutManager/IRDiscreteLayoutGrid+SubclassEyesOnly.h"; sourceTree = "<group>"; };
 		FFC0D7511408B80700B891BB /* IRDiscreteLayoutItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRDiscreteLayoutItem.h; path = IRDiscreteLayoutManager/IRDiscreteLayoutItem.h; sourceTree = "<group>"; };
 		FFF5809B151C55DC00C5C799 /* IRDiscreteLayoutGrid+DebugSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IRDiscreteLayoutGrid+DebugSupport.h"; path = "IRDiscreteLayoutManager/IRDiscreteLayoutGrid+DebugSupport.h"; sourceTree = "<group>"; };
@@ -127,6 +132,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF24B3B11552AC4A00DD9379 /* libc++.dylib in Frameworks */,
+				FF24B3AE1552AAFA00DD9379 /* libstdc++.dylib in Frameworks */,
 				FF55E19A1407CE8400D8F3C7 /* Foundation.framework in Frameworks */,
 				FF8726F91408BC08002FE6FC /* UIKit.framework in Frameworks */,
 				FF8726FC1408BC0E002FE6FC /* MobileCoreServices.framework in Frameworks */,
@@ -168,8 +175,6 @@
 		FF55E18B1407CE8400D8F3C7 = {
 			isa = PBXGroup;
 			children = (
-				FF0FA3E4152453D400B34D19 /* IRDiscreteLayoutError.h */,
-				FF0FA3E5152453D400B34D19 /* IRDiscreteLayoutError.m */,
 				FF55E1A61407CED100D8F3C7 /* README.md */,
 				FFF580A5151C57DA00C5C799 /* IRDiscreteLayout.h */,
 				FF55E19E1407CE8400D8F3C7 /* IRDiscreteLayoutManager.h */,
@@ -195,8 +200,10 @@
 				FF8726FE1408BCA1002FE6FC /* IRDiscreteLayoutItem.m */,
 				FF8727081408E08A002FE6FC /* IRDiscreteLayoutResult.h */,
 				FF8727091408E08A002FE6FC /* IRDiscreteLayoutResult.m */,
+				FF0FA3E4152453D400B34D19 /* IRDiscreteLayoutError.h */,
+				FF0FA3E5152453D400B34D19 /* IRDiscreteLayoutError.m */,
 				FF9736FE15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.h */,
-				FF9736FF15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.m */,
+				FF9736FF15511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.mm */,
 				FF55E19C1407CE8400D8F3C7 /* Supporting Files */,
 				FF2BFEE7140AC72300604E8D /* Tests */,
 				FF2BFF28140AC82600604E8D /* Shared */,
@@ -217,6 +224,8 @@
 		FF55E1981407CE8400D8F3C7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FF24B3B01552AC4A00DD9379 /* libc++.dylib */,
+				FF24B3AD1552AAFA00DD9379 /* libstdc++.dylib */,
 				FF55E1991407CE8400D8F3C7 /* Foundation.framework */,
 				FF8726FB1408BC0E002FE6FC /* MobileCoreServices.framework */,
 				FF8726F81408BC08002FE6FC /* UIKit.framework */,
@@ -362,6 +371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF2BFEF0140AC72300604E8D /* IRDiscreteLayoutTests.m in Sources */,
+				FF123C011552A558005DE21F /* NSArray+IRDiscreteLayoutAdditions.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +391,7 @@
 				FF752F3F1547F71A0006FCA7 /* IRDiscreteLayoutGridCandidateInfo.m in Sources */,
 				FF427031155116280053D1CA /* IRDiscreteLayoutArea.m in Sources */,
 				FF42703A155116AF0053D1CA /* IRDiscreteLayoutGrid+Deprecated.m in Sources */,
-				FF97370115511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.m in Sources */,
+				FF97370115511D1900D6E7A9 /* NSArray+IRDiscreteLayoutAdditions.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,7 +458,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -461,10 +471,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				OTHER_LDFLAGS = (
-					"-all_load",
-					"-ObjC",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv6 armv7 i386";
 			};
@@ -477,16 +484,13 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				OTHER_LDFLAGS = (
-					"-all_load",
-					"-ObjC",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv6 armv7 i386";
@@ -500,7 +504,6 @@
 				DSTROOT = /tmp/IRDiscreteLayoutManager.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IRDiscreteLayoutManager/IRDiscreteLayoutManager-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -514,7 +517,6 @@
 				DSTROOT = /tmp/IRDiscreteLayoutManager.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IRDiscreteLayoutManager/IRDiscreteLayoutManager-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
