@@ -10,6 +10,6 @@
 
 @interface NSArray (IRDiscreteLayoutAdditions)
 
-- (NSArray *) irdlPossibleCombinations;
+- (void) irdlEnumeratePossibleCombinationsWithBlock:(void(^)(NSArray *combination, BOOL *stop))block;
 
 @end

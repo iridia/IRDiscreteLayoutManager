@@ -87,10 +87,9 @@
 	}
 	
 	IRDiscreteLayoutGrid *instance = [self newInstance];
-	NSArray *possibleLayoutAreaNameCombinations = [instance.layoutAreas irdlPossibleCombinations];
 	
-	[possibleLayoutAreaNameCombinations enumerateObjectsUsingBlock:^(NSArray *combination, NSUInteger idx, BOOL *stopCombinationEnum) {
-	
+	[instance.layoutAreas irdlEnumeratePossibleCombinationsWithBlock:^(NSArray *combination, BOOL *stopCombinationEnum) {
+		
 		for (IRDiscreteLayoutArea *area in instance.layoutAreas)
 			area.item = nil;
 	
