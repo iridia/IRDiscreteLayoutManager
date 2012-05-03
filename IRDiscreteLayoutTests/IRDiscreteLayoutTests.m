@@ -32,21 +32,33 @@
   self.layoutManager.delegate = self;
   self.layoutManager.dataSource = self;
 	
-	IRDiscreteLayoutGrid *portraitGrid = [IRDiscreteLayoutGrid prototype];
-	[portraitGrid registerLayoutAreaNamed:@"A" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 0, 3, 1) displayBlock:nil];
-	[portraitGrid registerLayoutAreaNamed:@"B" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 1, 3, 1) displayBlock:nil];
-	[portraitGrid registerLayoutAreaNamed:@"C" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 3, 0, 2, 2) displayBlock:nil];
-	[portraitGrid registerLayoutAreaNamed:@"D" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(5, 3, 0, 2, 5, 1) displayBlock:nil];
+	IRDiscreteLayoutArea * (^area)(NSString *, float_t, float_t, float_t, float_t, float_t, float_t) = ^ (NSString *identifier, float_t a, float_t b, float_t c, float_t d, float_t e, float_t f) {
 	
-	IRDiscreteLayoutGrid *landscapeGrid = [IRDiscreteLayoutGrid prototype];
-	[landscapeGrid registerLayoutAreaNamed:@"A" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 0, 0, 1, 1) displayBlock:nil];
-	[landscapeGrid registerLayoutAreaNamed:@"B" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 0, 1, 1, 1) displayBlock:nil];
-	[landscapeGrid registerLayoutAreaNamed:@"C" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 1, 0, 1, 2) displayBlock:nil];
-	[landscapeGrid registerLayoutAreaNamed:@"D" validatorBlock:nil layoutBlock:IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(3, 2, 2, 0, 1, 2) displayBlock:nil];
+		IRDiscreteLayoutArea *area = [[IRDiscreteLayoutArea alloc] initWithIdentifier:identifier];
+		area.layoutBlock = IRDiscreteLayoutGridAreaLayoutBlockForProportionsMake(a, b, c, d, e, f);
+		
+		return area;
 	
-	portraitGrid.contentSize = (CGSize){ 768, 1024 };
-	landscapeGrid.contentSize = (CGSize){ 1024, 768 };
+	};
 	
+	IRDiscreteLayoutGrid *portraitGrid = [[IRDiscreteLayoutGrid alloc] initWithIdentifier:@"portraitGrid" contentSize:(CGSize){ 768, 1024 } layoutAreas:[NSArray arrayWithObjects:
+	
+		area(@"A", 5, 3, 0, 0, 3, 1),
+		area(@"B", 5, 3, 0, 1, 3, 1),
+		area(@"C", 5, 3, 3, 0, 2, 2),
+		area(@"D", 5, 3, 0, 2, 5, 1),
+		
+	nil]];
+	
+	IRDiscreteLayoutGrid *landscapeGrid = [[IRDiscreteLayoutGrid alloc] initWithIdentifier:@"landscapeGrid" contentSize:(CGSize){ 1024, 768 } layoutAreas:[NSArray arrayWithObjects:
+	
+		area(@"A", 3, 2, 0, 0, 1, 1),
+		area(@"B", 3, 2, 0, 1, 1, 1),
+		area(@"C", 3, 2, 1, 0, 1, 2),
+		area(@"D", 3, 2, 2, 0, 1, 2),
+	
+	nil]];
+
 	[IRDiscreteLayoutGrid markAreaNamed:@"A" inGridPrototype:portraitGrid asEquivalentToAreaNamed:@"A" inGridPrototype:landscapeGrid];
 	[IRDiscreteLayoutGrid markAreaNamed:@"B" inGridPrototype:portraitGrid asEquivalentToAreaNamed:@"B" inGridPrototype:landscapeGrid];
 	[IRDiscreteLayoutGrid markAreaNamed:@"C" inGridPrototype:portraitGrid asEquivalentToAreaNamed:@"C" inGridPrototype:landscapeGrid];

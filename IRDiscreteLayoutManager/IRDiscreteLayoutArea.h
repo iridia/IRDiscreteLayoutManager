@@ -22,6 +22,8 @@ typedef id (^IRDiscreteLayoutAreaDisplayBlock) (IRDiscreteLayoutArea *self, id i
 
 @interface IRDiscreteLayoutArea : NSObject <NSCopying>
 
+- (id) initWithIdentifier:(NSString *)identifier;
+
 @property (nonatomic, readwrite, copy) NSString *identifier;
 @property (nonatomic, readwrite, strong) id<IRDiscreteLayoutItem> item;
 

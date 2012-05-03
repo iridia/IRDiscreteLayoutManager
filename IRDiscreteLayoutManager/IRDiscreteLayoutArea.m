@@ -13,6 +13,18 @@
 @implementation IRDiscreteLayoutArea
 @synthesize identifier, item, validatorBlock, layoutBlock, displayBlock, grid;
 
+- (id) initWithIdentifier:(NSString *)inIdentifier {
+
+	self = [super init];
+	if (!self)
+		return nil;
+	
+	identifier = inIdentifier;
+	
+	return self;
+
+}
+
 - (id) copyWithZone:(NSZone *)zone {
 
 	IRDiscreteLayoutArea *answer = [[[self class] alloc] init];
