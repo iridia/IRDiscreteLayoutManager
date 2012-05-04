@@ -17,6 +17,7 @@
 - (IRDiscreteLayoutResult *) initWithGrids:(NSArray *)grids;
 
 - (IRDiscreteLayoutGrid *) gridContainingItem:(id<IRDiscreteLayoutItem>)item;
+- (IRDiscreteLayoutGrid *) bestGridMatchingItemsInInstance:(IRDiscreteLayoutGrid *)instance;
 
 @property (nonatomic, readonly, strong) NSArray *grids;
 
