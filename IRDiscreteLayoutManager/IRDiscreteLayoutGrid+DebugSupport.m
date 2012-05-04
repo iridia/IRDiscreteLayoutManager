@@ -14,19 +14,38 @@
 
 - (NSString *) description {
 
-	return [NSString stringWithFormat:@"<%@: 0x%x> { Identifier: %@, Prototype: %@, Areas: %@ } ", NSStringFromClass([self class]), (unsigned int)self, self.identifier, self.prototype, self.layoutAreas];
+	return [self descriptionWithLocale:nil indent:0];
 
 }
 
+#if TARGET_IPHONE_SIMULATOR
+
+- (BOOL) isNSDictionary__ {
+
+	return YES;
+
+}
+
+#endif
+
 - (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level {
 
-	return [[NSDictionary dictionaryWithObjectsAndKeys:
-	
-		[self description], @"Identity",
-		self.prototype, @"Prototype",
-		self.layoutAreas, @"Areas",
+	return [NSString stringWithFormat:
 		
-	nil] descriptionWithLocale:locale indent:level];
+		@"<%@: %p %@ >",
+		
+		NSStringFromClass([self class]),
+		self,
+
+		[[NSDictionary dictionaryWithObjectsAndKeys:
+		
+			self.identifier, @"Identifier",
+			self.layoutAreas, @"Areas",
+			self.prototype, @"Prototype",
+			
+		nil] descriptionWithLocale:locale indent:level]
+	
+	];
 
 }
 

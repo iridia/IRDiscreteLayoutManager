@@ -76,6 +76,37 @@
 
 }
 
+- (IRDiscreteLayoutGrid *) bestGridMatchingItemsInInstance:(IRDiscreteLayoutGrid *)instance {
+
+	NSMutableDictionary *gridsToScores = [NSMutableDictionary dictionaryWithCapacity:[instance.layoutAreas count]];
+	NSUInteger (^gridScore)(IRDiscreteLayoutGrid *) = ^ (IRDiscreteLayoutGrid *grid) {
+		return [[gridsToScores objectForKey:[NSValue valueWithNonretainedObject:grid]] unsignedIntegerValue];
+	};
+	void (^setGridScore)(IRDiscreteLayoutGrid *, NSUInteger) = ^ (IRDiscreteLayoutGrid *grid, NSUInteger score) {
+		[gridsToScores setObject:[NSNumber numberWithUnsignedInteger:score] forKey:[NSValue valueWithNonretainedObject:grid]];
+	};
+	
+	for (IRDiscreteLayoutArea *area in instance.layoutAreas) {
+		id<IRDiscreteLayoutItem> item = area.item;
+		IRDiscreteLayoutGrid *enclosingGrid = [self gridContainingItem:item];
+		if (enclosingGrid) {
+			setGridScore(enclosingGrid, gridScore(enclosingGrid) + 1);
+		}
+	}
+	
+	NSArray *sortedGridValues = [[gridsToScores allKeys] sortedArrayUsingComparator:^(NSValue *lhs, NSValue *rhs) {
+	
+		return [[gridsToScores objectForKey:lhs] compare:[gridsToScores objectForKey:rhs]];
+		
+	}];
+	
+	if ([sortedGridValues count])
+		return [[sortedGridValues lastObject] nonretainedObjectValue];
+	
+	return nil;
+
+}
+
 - (NSString *) description {
 	
 	NSMutableString *returnedString = [NSMutableString string];

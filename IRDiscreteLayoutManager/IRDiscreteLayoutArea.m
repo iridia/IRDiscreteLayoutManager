@@ -60,10 +60,43 @@
 
 }
 
-- (NSString *) description {
+#if TARGET_IPHONE_SIMULATOR
 
-	return [NSString stringWithFormat:@"<%@: 0x%x> { Identifier: %@, Item: %@ } ", NSStringFromClass([self class]), (unsigned int)self, self.identifier, self.item];
+- (BOOL) isNSDictionary__ {
 
+	return YES;
+
+}
+
+#endif
+
+- (NSString *) descriptionWithLocale:(id)locale indent:(NSUInteger)level {
+
+	return [NSString stringWithFormat:
+		
+		@"<%@: %p %@ >",
+		
+		NSStringFromClass([self class]),
+		self,
+
+		[[NSDictionary dictionaryWithObjectsAndKeys:
+		
+			self.identifier, @"Identifier",
+			[NSString stringWithFormat:@"<%@: %p>", NSStringFromClass([self.item class]), self.item], @"Item",
+			
+		nil] descriptionWithLocale:locale indent:level]
+	
+	];
+
+}
+
+- (BOOL) isEqual:(IRDiscreteLayoutArea *)otherArea {
+
+	if (![otherArea isKindOfClass:[IRDiscreteLayoutArea class]])
+		return NO;
+		
+	return [self.item isEqual:otherArea.item];
+	
 }
 
 @end
