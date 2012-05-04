@@ -19,7 +19,7 @@
 @property (nonatomic, readwrite, assign) CGSize contentSize;
 
 - (IRDiscreteLayoutGrid *) instanceWithItems:(NSArray *)items error:(NSError **)outError;
-+ (BOOL) canInstantiateGrid:(IRDiscreteLayoutGrid *)instance withItems:(NSArray *)providedItems error:(NSError **)outError;
+- (BOOL) canInstantiateGrid:(IRDiscreteLayoutGrid *)instance withItems:(NSArray *)providedItems error:(NSError **)outError;
 
 - (IRDiscreteLayoutArea *) areaWithIdentifier:(NSString *)identifier;
 - (IRDiscreteLayoutArea *) areaForItem:(id<IRDiscreteLayoutItem>)item;

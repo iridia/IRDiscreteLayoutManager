@@ -115,7 +115,7 @@
 			
 		}];
 		
-		if ([[instance class] canInstantiateGrid:instance withItems:items error:outError]) {
+		if ([instance.prototype canInstantiateGrid:instance withItems:items error:outError]) {
 			*stopCombinationEnum = YES;
 		}
 		
@@ -128,7 +128,7 @@
 		return nil;
 	}
 	
-	if ([[instance class] canInstantiateGrid:instance withItems:items error:outError])
+	if ([instance.prototype canInstantiateGrid:instance withItems:items error:outError])
 		return instance;
 	
 	if (outError) {
@@ -139,8 +139,10 @@
 	
 }
 
-+ (BOOL) canInstantiateGrid:(IRDiscreteLayoutGrid *)instance withItems:(NSArray *)providedItems error:(NSError **)outError {
+- (BOOL) canInstantiateGrid:(IRDiscreteLayoutGrid *)instance withItems:(NSArray *)providedItems error:(NSError **)outError {
 
+	NSParameterAssert([self isPrototype]);
+	
 	if ([instance isFullyPopulated])
 		return YES;
 	
@@ -251,6 +253,15 @@
 	
 	return answer;
 
+}
+
+- (BOOL) isEqual:(IRDiscreteLayoutGrid *)otherGrid {
+
+	if (![otherGrid isKindOfClass:[IRDiscreteLayoutGrid class]])
+		return NO;
+		
+	return [self.layoutAreas isEqualToArray:otherGrid.layoutAreas];
+	
 }
 
 @end
