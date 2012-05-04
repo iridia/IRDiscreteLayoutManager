@@ -215,7 +215,7 @@
 				
 				IRDiscreteLayoutGrid *foundGrid = foundCandidateInfo.grid;
 				
-				if ([self.delegate respondsToSelector:@selector(layoutManager:targetGridForEnqueueingProposedGrid:fromCandidates:toResult:)]) {
+				if ([self.delegate respondsToSelector:@selector(layoutManager:targetForProposedGrid:amongCandidates:addedToResult:replacingGrid:inReference:)]) {
 				
 					IRDiscreteLayoutResult *interimResult = [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
 					
@@ -223,7 +223,7 @@
 					for (IRDiscreteLayoutGridCandidateInfo *candidateInfo in candidates)
 						[allFoundGrids addObject:candidateInfo.grid];
 					
-					IRDiscreteLayoutGrid *overriddenGrid = [self.delegate layoutManager:self targetGridForEnqueueingProposedGrid:foundGrid fromCandidates:allFoundGrids toResult:interimResult];
+					IRDiscreteLayoutGrid *overriddenGrid = [self.delegate layoutManager:self targetForProposedGrid:foundGrid amongCandidates:allFoundGrids addedToResult:interimResult replacingGrid:lastGridContainingHeadItem inReference:lastResult];
 					
 					if (overriddenGrid != foundGrid) {
 					
