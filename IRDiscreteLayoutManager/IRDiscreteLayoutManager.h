@@ -38,6 +38,8 @@ enum {
 
 @optional
 
+- (NSArray *) layoutManager:(IRDiscreteLayoutManager *)manager targetItemsForProposedItems:(NSArray *)proposedItems instantiatingGrid:(IRDiscreteLayoutGrid *)prototype addedToResult:(IRDiscreteLayoutResult *)interimResult replacingGrid:(IRDiscreteLayoutGrid *)replacedGrid inReference:(IRDiscreteLayoutResult *)lastResult;
+
 - (IRDiscreteLayoutGrid *) layoutManager:(IRDiscreteLayoutManager *)manager targetForProposedGrid:(IRDiscreteLayoutGrid *)proposedGrid amongCandidates:(NSArray *)candidatesSortedByScore addedToResult:(IRDiscreteLayoutResult *)interimResult replacingGrid:(IRDiscreteLayoutGrid *)replacedGrid inReference:(IRDiscreteLayoutResult *)lastResult;
 
 @end

@@ -41,6 +41,15 @@
 	NSMutableIndexSet *leftoverItemIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, numberOfItems }];
 	NSMutableArray *returnedGrids = [NSMutableArray array];
 	
+	IRDiscreteLayoutGrid * (^lastGridContainingHeadItem)(void) = ^ {
+
+		id <IRDiscreteLayoutItem> headItem = [self.dataSource layoutManager:self itemAtIndex:[leftoverItemIndices firstIndex]];
+		IRDiscreteLayoutGrid *grid = [lastResult gridContainingItem:headItem];
+		
+		return grid;
+	
+	};
+	
 	IRDiscreteLayoutGrid * (^instanceFromPrototype)(IRDiscreteLayoutGrid *, BOOL, NSIndexSet **) = ^ (IRDiscreteLayoutGrid *prototype, BOOL dequeueUsedItems, NSIndexSet **usedItemIndices) {
 	
 		//	If dequeueUsedItems is YES, removes item indices from the leftover index set too
@@ -62,16 +71,24 @@
 			for (unsigned int i = 0; i < numberOfProvidedItems; i++)
 				[prospectiveItems addObject:[self.dataSource layoutManager:self itemAtIndex:itemIndices[i]]];
 			
-			return prospectiveItems;
+			if ([self.delegate respondsToSelector:@selector(layoutManager:targetItemsForProposedItems:instantiatingGrid:addedToResult:)]) {
+			
+				IRDiscreteLayoutResult *interimResult = [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
+				IRDiscreteLayoutGrid *lastGrid = lastGridContainingHeadItem();
+				
+				return [self.delegate layoutManager:self targetItemsForProposedItems:prospectiveItems instantiatingGrid:prototype addedToResult:interimResult replacingGrid:lastGrid inReference:lastResult];
+			
+			}
+			
+			return (NSArray *)prospectiveItems;
 		
 		})());
 		
 		IRDiscreteLayoutGrid *instance = [prototype instanceWithItems:providedLayoutItems error:nil];
-		
-		if (instance) {
-
-			NSMutableIndexSet *outIndices = usedItemIndices ? [NSMutableIndexSet indexSet] : nil;
+		NSMutableIndexSet *outIndices = usedItemIndices ? [NSMutableIndexSet indexSet] : nil;
 			
+		if (instance) {
+		
 			[instance.layoutAreas enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stop) {
 				
 				if (area.item) {
@@ -91,13 +108,11 @@
 				}
 				
 			}];
-			
-			//	Not allowing empti-ness instances
-			
-			if (usedItemIndices)
-				*usedItemIndices = [outIndices copy];
-			
+		
 		}
+
+		if (usedItemIndices)
+			*usedItemIndices = [outIndices copy];
 		
 		free(itemIndices);
 		
@@ -168,8 +183,7 @@
 		
 			case IRCompareScoreLayoutStrategy: {
 			
-				id <IRDiscreteLayoutItem> headItem = [self.dataSource layoutManager:self itemAtIndex:[leftoverItemIndices firstIndex]];
-				IRDiscreteLayoutGrid *lastGridContainingHeadItem = [lastResult gridContainingItem:headItem];
+				IRDiscreteLayoutGrid *lastResultantGrid = lastGridContainingHeadItem();
 				
 				NSMutableArray *allCandidateInfos = [NSMutableArray array];
 			
@@ -181,7 +195,7 @@
 					
 					if (instance) {
 					
-						IRDiscreteLayoutGridCandidateInfo *candidateInfo = [IRDiscreteLayoutGridCandidateInfo infoWithGrid:instance itemIndices:indices referenceGrid:lastGridContainingHeadItem delegateIndex:i];
+						IRDiscreteLayoutGridCandidateInfo *candidateInfo = [IRDiscreteLayoutGridCandidateInfo infoWithGrid:instance itemIndices:indices referenceGrid:lastResultantGrid delegateIndex:i];
 						
 						[allCandidateInfos addObject:candidateInfo];
 						
@@ -223,7 +237,7 @@
 					for (IRDiscreteLayoutGridCandidateInfo *candidateInfo in candidates)
 						[allFoundGrids addObject:candidateInfo.grid];
 					
-					IRDiscreteLayoutGrid *overriddenGrid = [self.delegate layoutManager:self targetForProposedGrid:foundGrid amongCandidates:allFoundGrids addedToResult:interimResult replacingGrid:lastGridContainingHeadItem inReference:lastResult];
+					IRDiscreteLayoutGrid *overriddenGrid = [self.delegate layoutManager:self targetForProposedGrid:foundGrid amongCandidates:allFoundGrids addedToResult:interimResult replacingGrid:lastResultantGrid inReference:lastResult];
 					
 					if (overriddenGrid != foundGrid) {
 					
