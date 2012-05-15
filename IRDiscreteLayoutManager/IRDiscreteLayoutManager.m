@@ -227,10 +227,9 @@
 				
 				})());
 				
-				IRDiscreteLayoutGrid *foundGrid = foundCandidateInfo.grid;
-				
 				if ([self.delegate respondsToSelector:@selector(layoutManager:targetForProposedGrid:amongCandidates:addedToResult:replacingGrid:inReference:)]) {
 				
+					IRDiscreteLayoutGrid *foundGrid = foundCandidateInfo.grid;
 					IRDiscreteLayoutResult *interimResult = [IRDiscreteLayoutResult resultWithGrids:returnedGrids];
 					
 					NSMutableArray *allFoundGrids = [NSMutableArray arrayWithCapacity:[candidates count]];
@@ -253,8 +252,6 @@
 						}
 					
 					}
-					
-					foundGrid = overriddenGrid;
 					
 				}
 				
