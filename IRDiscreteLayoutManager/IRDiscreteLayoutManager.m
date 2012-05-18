@@ -28,14 +28,16 @@
 	NSParameterAssert(self.dataSource);
 	NSParameterAssert(self.delegate);
 	
-	outError = outError ? outError : &(NSError *){ nil };
-	
 	NSUInteger const numberOfItems = [self.dataSource numberOfItemsForLayoutManager:self];
 	NSUInteger const numberOfGrids = [self.delegate numberOfLayoutGridsForLayoutManager:self];
 	
 	if (!numberOfItems || !numberOfGrids) {
-		*outError = IRDiscreteLayoutError(IRDiscreteLayoutGenericError, @"No items or layout grids exist for use.", nil);
+		
+		if (outError)
+			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGenericError, @"No items or layout grids exist for use.", nil);
+		
 		return nil;
+		
 	}
 	
 	NSMutableIndexSet *leftoverItemIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, numberOfItems }];
@@ -160,8 +162,12 @@
 					IRDiscreteLayoutGrid * const foundGrid = randomGrid(&foundGridIndex);
 					
 					if (!foundGrid) {
-						*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during random grid election.", nil);
+					
+						if (outError)
+							*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during random grid election.", nil);
+						
 						return nil;
+						
 					}
 					
 					[availableLayoutGridPrototypeIndices removeIndex:foundGridIndex];
@@ -211,8 +217,12 @@
 				nil]];
 				
 				if (![candidates count]) {
-					*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during scored grid election.", nil);
+					
+					if (outError)
+						*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerPrototypeSearchFailureError, @"Unable to find an eligible layout grid prototype for leftover layout items during scored grid election.", nil);
+					
 					return nil;
+					
 				}
 				
 				IRDiscreteLayoutGridCandidateInfo *foundCandidateInfo = ((^ {
@@ -268,8 +278,12 @@
 		//	We might allow empty pages in the future, but not now.  If you want them, deal with them at the calling site.
 		
 		if (lastLeftoverItemIndicesCount == [leftoverItemIndices count]) {
-			*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerItemExhaustionFailureError, @"Unable to exhaust all layout items during random grid election.", nil);
+			
+			if (outError)
+				*outError = IRDiscreteLayoutError(IRDiscreteLayoutManagerItemExhaustionFailureError, @"Unable to exhaust all layout items during random grid election.", nil);
+			
 			return nil;
+			
 		}
 	
 	}
