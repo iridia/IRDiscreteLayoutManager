@@ -47,8 +47,8 @@ enum {
 
 @interface IRDiscreteLayoutManager : NSObject
 
-@property (nonatomic, readwrite, unsafe_unretained) id<IRDiscreteLayoutManagerDataSource> dataSource;
-@property (nonatomic, readwrite, unsafe_unretained) id<IRDiscreteLayoutManagerDelegate> delegate;
+@property (nonatomic, readwrite, weak) id<IRDiscreteLayoutManagerDataSource> dataSource;
+@property (nonatomic, readwrite, weak) id<IRDiscreteLayoutManagerDelegate> delegate;
 
 - (IRDiscreteLayoutResult *) calculatedResultWithReference:(IRDiscreteLayoutResult *)lastResult strategy:(IRDiscreteLayoutStrategy)strategy error:(NSError **)outError;
 - (IRDiscreteLayoutResult *) calculatedResult;	//	For lazy people.
