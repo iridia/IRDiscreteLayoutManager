@@ -39,22 +39,40 @@
 
 }
 
+- (void) setItem:(id<IRDiscreteLayoutItem>)aLayoutItem {
+
+	[self setItem:aLayoutItem error:nil];
+
+}
+
 - (BOOL) setItem:(id<IRDiscreteLayoutItem>)aLayoutItem error:(NSError **)outError {
 
+	if (aLayoutItem == item)
+		return YES;
+	
 	NSParameterAssert(self.grid.prototype);
 	NSParameterAssert(self.identifier);
 	
-	IRDiscreteLayoutAreaValidatorBlock vb = self.validatorBlock;
-	if (aLayoutItem && vb && !vb(self, aLayoutItem)) {
+	if (aLayoutItem) {
+	
+		IRDiscreteLayoutAreaValidatorBlock vb = self.validatorBlock;
 		
-		if (outError)
-			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area %@", aLayoutItem, self], nil);
-		
-		return NO;
-		
+		if (vb && !vb(self, aLayoutItem)) {
+			
+			if (outError)
+				*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridItemValidationFailureError, [NSString stringWithFormat:@"Item %@ is not accepted by the validator block of area %@", aLayoutItem, self], nil);
+			
+			return NO;
+			
+		}
+	
 	}
 	
-	self.item = aLayoutItem;
+	[self willChangeValueForKey:@"item"];
+	
+	item = aLayoutItem;
+	
+	[self didChangeValueForKey:@"item"];
 
 	return YES;
 
