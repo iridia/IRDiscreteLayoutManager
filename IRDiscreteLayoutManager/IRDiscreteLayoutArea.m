@@ -39,9 +39,9 @@
 
 }
 
-- (void) setItem:(id<IRDiscreteLayoutItem>)item {
+- (void) setItem:(id<IRDiscreteLayoutItem>)aLayoutItem {
 
-	[self setItem:item error:nil];
+	[self setItem:aLayoutItem error:nil];
 
 }
 
