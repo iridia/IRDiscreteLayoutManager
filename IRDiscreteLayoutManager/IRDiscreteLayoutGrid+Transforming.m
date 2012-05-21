@@ -153,9 +153,22 @@ NSString * const kIRDiscreteLayoutGridTransformingGridAreaName = @"kIRDiscreteLa
 	
 		NSString *anAreaName = area.identifier;
 		NSString *otherAreaName = (__bridge NSString *)(CFDictionaryGetValue((__bridge CFMutableDictionaryRef)[[self class] transformingMapForGridPrototype:self.prototype areaName:anAreaName], (__bridge const void *)(newGrid)));
+
+		IRDiscreteLayoutArea *setArea = [returnedGrid areaWithIdentifier:otherAreaName];
+
+#if !defined(NS_BLOCK_ASSERTIONS)
 		
-		[[returnedGrid areaWithIdentifier:otherAreaName] setItem:area.item];
+		NSError *error = nil;
 		
+		BOOL didSetItem = [setArea setItem:area.item error:&error];
+		NSCAssert1(didSetItem, @"failed to set item for a proposed corresponding transformation target: %@", error);
+
+#else
+
+		[setArea setItem:area.item error:nil];
+
+#endif
+
 	}];
 		
 	return returnedGrid;
