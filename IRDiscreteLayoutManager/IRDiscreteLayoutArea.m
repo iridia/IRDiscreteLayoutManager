@@ -41,7 +41,7 @@
 
 - (void) setItem:(id<IRDiscreteLayoutItem>)item {
 
-	[self setItem:nil error:nil];
+	[self setItem:item error:nil];
 
 }
 
