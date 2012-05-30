@@ -51,7 +51,7 @@ IRDiscreteLayoutAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportion
 		CGFloat xFactor = self.grid.contentSize.width / totalUnitsX;
 		CGFloat yFactor = self.grid.contentSize.height / totalUnitsY;
 		
-		CGRect answer = CGRectIntegral((CGRect){
+		CGRect answer = (CGRect){
 			(CGPoint){
 				unitsOffsetX * xFactor,
 				unitsOffsetY * yFactor
@@ -60,9 +60,18 @@ IRDiscreteLayoutAreaLayoutBlock IRDiscreteLayoutGridAreaLayoutBlockForProportion
 				unitsSpanX * xFactor,
 				unitsSpanY * yFactor
 			}
-		});
-			
-		return answer;
+		};
+		
+		CGPoint topLeft = (CGPoint){ roundf(CGRectGetMinX(answer)), roundf(CGRectGetMinY(answer)) };
+		CGPoint bottomRight = (CGPoint){ roundf(CGRectGetMaxX(answer)), roundf(CGRectGetMaxY(answer)) };
+		
+		return (CGRect) {
+			topLeft,
+			(CGSize) {
+				bottomRight.x - topLeft.x,
+				bottomRight.y - topLeft.y,
+			}
+		};
 	
 	} copy];
 
