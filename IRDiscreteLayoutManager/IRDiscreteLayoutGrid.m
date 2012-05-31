@@ -78,48 +78,75 @@
 
 	NSParameterAssert(!self.prototype);
 	
-	NSUInteger numberOfItems = [self.layoutAreas count];
-	if (!numberOfItems) {
+	if (![self.layoutAreas count]) {
 		if (outError) {
-			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid with no layout items given.", nil);
+			*outError = IRDiscreteLayoutError(IRDiscreteLayoutGridFulfillmentFailureError, @"Could not instantiate a grid with no layout areas.", nil);
 		}
 		return nil;
 	}
 	
 	IRDiscreteLayoutGrid *instance = [self newInstance];
+	NSMutableIndexSet *itemIndices = [NSMutableIndexSet indexSetWithIndexesInRange:(NSRange){ 0, [items count] }];
+	for (IRDiscreteLayoutArea *area in instance.layoutAreas) {
 	
-	[instance.layoutAreas irdlEnumeratePossibleCombinationsWithBlock:^(NSArray *combination, BOOL *stopCombinationEnum) {
+		__block NSUInteger usedIndex = NSNotFound;
 		
-		for (IRDiscreteLayoutArea *area in instance.layoutAreas)
-			area.item = nil;
-	
-		[items enumerateObjectsUsingBlock:^(id<IRDiscreteLayoutItem> item, NSUInteger idx, BOOL *stopItemEnum) {
+		[itemIndices enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
 		
-			[combination enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stopAreaEnum) {
-			
-				if (area.item)
-					return;
-					
-				if (![area setItem:item error:nil])
-					return;
-				
-				*stopAreaEnum = YES;
-				
-			}];
-			
-			if ([instance isFullyPopulated]) {
-				*stopItemEnum = YES;
-				*stopCombinationEnum = YES;
-				return;
+			id<IRDiscreteLayoutItem> item = [items objectAtIndex:idx];
+		
+			if ([area setItem:item error:nil]) {
+				usedIndex = idx;
+				*stop = YES;
 			}
 			
 		}];
 		
-		if ([instance.prototype canInstantiateGrid:instance withItems:items error:outError]) {
-			*stopCombinationEnum = YES;
-		}
+		if (usedIndex != NSNotFound)
+			[itemIndices removeIndex:usedIndex];
 		
-	}];
+	}
+	
+//	BOOL hasValidator = NO;
+//	for (IRDiscreteLayoutArea *area in instance.layoutAreas)
+//		if (area.validatorBlock)
+//			hasValidator = YES;
+//	
+//	[instance.layoutAreas irdlEnumeratePossibleCombinationsWithBlock:^(NSArray *combination, BOOL *stopCombinationEnum) {
+//	
+//		if (!hasValidator)
+//			*stopCombinationEnum = YES;
+//		
+//		for (IRDiscreteLayoutArea *area in instance.layoutAreas)
+//			area.item = nil;
+//		
+//		[items enumerateObjectsUsingBlock:^(id<IRDiscreteLayoutItem> item, NSUInteger idx, BOOL *stopItemEnum) {
+//		
+//			[combination enumerateObjectsUsingBlock:^(IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stopAreaEnum) {
+//			
+//				if (area.item)
+//					return;
+//					
+//				if (![area setItem:item error:nil])
+//					return;
+//				
+//				*stopAreaEnum = YES;
+//				
+//			}];
+//			
+//			if ([instance isFullyPopulated]) {
+//				*stopItemEnum = YES;
+//				*stopCombinationEnum = YES;
+//				return;
+//			}
+//			
+//		}];
+//		
+//		if ([instance.prototype canInstantiateGrid:instance withItems:items error:outError]) {
+//			*stopCombinationEnum = YES;
+//		}
+//		
+//	}];
 	
 	if (![[instance items] count]) {
 		if (outError) {

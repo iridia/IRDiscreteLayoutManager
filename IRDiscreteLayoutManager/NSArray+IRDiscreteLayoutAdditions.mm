@@ -27,10 +27,11 @@
 	
 	do {
 	
-		NSMutableArray *combination = [NSMutableArray arrayWithCapacity:count];
-		
-		for (int i = 0; i < count; i++)
-			[combination addObject:[self objectAtIndex:items[i]]];
+		id objects[count];
+		for (NSUInteger i = 0; i < count; i++)
+			objects[i] = [self objectAtIndex:items[i]];
+			
+		NSArray *combination = [NSArray arrayWithObjects:objects count:count];
 		
 		block(combination, &stop);
 	

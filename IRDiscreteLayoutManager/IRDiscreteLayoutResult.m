@@ -54,25 +54,12 @@
 
 - (IRDiscreteLayoutGrid *) gridContainingItem:(id<IRDiscreteLayoutItem>)item {
 
-	__block IRDiscreteLayoutGrid *foundGrid = nil;
+	for (IRDiscreteLayoutGrid *grid in self.grids)
+		for (IRDiscreteLayoutArea *area in grid.layoutAreas)
+			if (area.item == item)	//	-isEqual: is not useful, and too slow
+				return grid;
 
-	[self.grids enumerateObjectsUsingBlock: ^ (IRDiscreteLayoutGrid *grid, NSUInteger idx, BOOL *stopGridEnumeration) {
-	
-		[grid.layoutAreas enumerateObjectsUsingBlock: ^ (IRDiscreteLayoutArea *area, NSUInteger idx, BOOL *stopLayoutAreaEnumeration) {
-		
-			if ([area.item isEqual:item]) {
-			
-				foundGrid = grid;
-				*stopLayoutAreaEnumeration = YES;
-				*stopGridEnumeration = YES;
-			
-			}
-			
-		}];
-		
-	}];
-	
-	return foundGrid;
+	return nil;
 
 }
 
